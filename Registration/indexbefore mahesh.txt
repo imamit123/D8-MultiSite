@@ -1,0 +1,283 @@
+<?php
+session_start();
+include 'basic.php';
+//echo $_SESSION['export_result'];?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>IDG EVENT</title>
+        <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+        <!-- JAVASCRIPT to clear search text when the field is clicked -->
+        <script type="text/javascript">
+
+        </script>
+
+        <link rel="stylesheet" href="jquery-ui.css">
+
+
+
+        <style>.ui-widget label {
+    display: inline-block;
+    margin-right: 30px;
+    text-align: right;
+    width: 33%;
+}
+        .tftextinput3 {
+    width: 40%;
+}
+        span {
+    margin-left: 11px;
+}
+#a1 {
+    display: block;
+    margin: 0 0 0 20px !important;
+    width: 44% !important;
+}
+#a2 {
+    margin: 0 0 0 10px !important;
+    width: 44% !important;
+}
+#a5 {
+    margin-top: 0 !important;
+    width: 44% !important;
+}
+#a6,#a7,#a8 {
+    width: 40% !important;
+    margin-top: 0 !important;
+}
+
+ #a4,#a3{
+    display: block;
+    width: 40% !important;}
+	 #tfheader > input {
+        margin-bottom: 22px;
+        margin-left: 80px;
+    }
+        </style>
+       
+
+
+        <script src="jquery-1.10.2.js"></script>
+        <script src="jquery-ui.js"></script>
+        <script>
+		$(document).ready(function(){
+                    
+         
+				$('#tfheader').on('click','.button1',function(){
+					var form_value = $('#tfnewsearch').serialize();
+					var dataString = form_value + '&details_another_form=1';
+					$.ajax({
+						type: "GET",
+						url: "search.php",
+						data: dataString,
+						dataType: 'json',
+						success: function(data) {
+							$('#searchbox').val("");
+							$('#searchcmpny').val("");
+							$('#searchemail').val("");
+							$('#searchmobile').val("");
+							$('#a1').html(data['first_name']);
+							$('#a2').html(data['last_name']);
+							$('#a3').html(data['comapny_name']);
+							$('#a4').html(data['reference']);
+							$('#a5').html(data['email_id']);
+							$('#a6').html(data['mobile_number']);
+                                                        $('#a7').html(data['type']);
+							$('#a8').html(data['designation']);
+							var reg = data['registered'];
+							if (reg == 1) {
+								$('#chkbox').prop('checked', true);
+							} else {
+								$('#chkbox').prop('checked', false);
+							}
+							$('#big-text-div').html(data['id']);
+						}
+					});
+				});
+				$('#tfheader').on('click','#button2',function(){
+					var form_value = $('#tfnewsearch').serialize();
+					var dataString = form_value + '&add_user=1';
+					$.ajax({
+						type: "GET",
+						url: "save.php",
+						data: dataString,
+						dataType: 'json',
+						success: function(data) {
+							$('#searchbox').val("");
+							$('#searchcmpny').val("");
+							$('#searchemail').val("");
+							$('#searchmobile').val("");
+							$('#a1').html(data['first_name']);
+							$('#a2').html(data['last_name']);
+							$('#a3').html(data['comapny_name']);
+							$('#a4').html("");
+							$('#a5').html(data['email_id']);
+							$('#a6').html(data['mobile_number']);
+                                                        $('#a7').html("");$('#a8').html("");
+							$('#big-text-div').html(data['id']);
+						}
+					});
+				});
+				$('form').on( "submit", function( event ) {
+					var form_values = $(this).serialize();
+					var id = $('#big-text-div').html();
+					var dataString = "form_sub=1&"+form_values+'&id='+id;
+					console.log(dataString);
+					$.ajax({
+						type: "GET",
+						url: "search.php",
+						data: dataString,
+						success: function(data) {
+							//console.log(data);
+							alert(data);
+                                                       $('#chkbox').prop('checked', false);
+                                                        location.reload();
+                                                         
+						}
+					});
+					event.preventDefault();
+				});
+			});
+            function search(txt) {
+                var txt_new = document.getElementById("searchbox").value;
+                //alert(txt_new);                
+                var dataString = 'name=' + txt_new ;
+                var availableTags;
+                $.ajax({
+                    type: "GET",
+                    url: "search.php",
+                    data: dataString,
+                    success: function(data) {
+                      //  console.log(data)
+                        var data1 = data;
+                        availableTags = data1.split(",");
+                        $("#searchbox").autocomplete({
+                            source: availableTags
+                        });
+                    }
+                });
+            }
+           
+            function search_company(txt) {
+                var txt_new = document.getElementById("searchcmpny").value;
+                //alert(txt_new);                
+                var dataString = 'company=' + txt_new ;
+                var availableTags;
+                $.ajax({
+                    type: "GET",
+                    url: "search.php",
+                    data: dataString,
+                    success: function(data) {
+                     // console.log(data)
+                        var data1 = data;
+                        availableTags = data1.split(",");
+                        $("#searchcmpny").autocomplete({
+                            source: availableTags
+                        });
+                    }
+                });
+            }
+             function search_email(txt) {
+                var txt_new = document.getElementById("searchemail").value;
+                //alert(txt_new);                
+                var dataString = 'email=' + txt_new ;
+                var availableTags;
+                $.ajax({
+                    type: "GET",
+                    url: "search.php",
+                    data: dataString,
+                    success: function(data) {
+                      //console.log(data)
+                        var data1 = data;
+                        availableTags = data1.split(",");
+                        $("#searchemail").autocomplete({
+                            source: availableTags
+                        });
+                    }
+                });
+            }
+            
+            function search_mobile(txt) {
+                var txt_new = document.getElementById("searchmobile").value;
+                //alert(txt_new);                
+                var dataString = 'mobile=' + txt_new ;
+                var availableTags;
+                $.ajax({
+                    type: "GET",
+                    url: "search.php",
+                    data: dataString,
+                    success: function(data) {
+                      //console.log(data)
+                        var data1 = data;
+                        availableTags = data1.split(",");
+                        $("#searchmobile").autocomplete({
+                            source: availableTags
+                        });
+                    }
+                });
+            }
+            function cleardata(txt){
+                
+                if(txt == "searchbox")
+                {
+                    $("#searchcmpny").val("");
+                    $("#searchemail").val("");
+                    $("#searchmobile").val("");
+                }else if(txt == "searchcmpny")
+                {
+                    $("#searchbox").val("");
+                    $("#searchemail").val("");
+                    $("#searchmobile").val("");
+                }
+                else if(txt == "searchemail")
+                {
+                    $("#searchbox").val("");
+                    $("#searchcmpny").val("");
+                    $("#searchmobile").val("");
+                }
+                 else if(txt == "searchmobile")
+                {
+                    $("#searchbox").val("");
+                    $("#searchcmpny").val("");
+                    $("#searchemail").val("");
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <!-- HTML for SEARCH BAR -->
+        <div id="tfheader">
+            <p>Search By</p>
+            <form id="tfnewsearch" method="get" >	
+                <div class="ui-widget">
+                    <p><label for="tags">Name<span>:</span> </label><input type="text" id="searchbox"   onkeyup="search(this.value);" class="tftextinput3" name="searchbox" size="21" maxlength="120" value="" placeholder="Search Name"></p>
+                    <p><label for="tags">Company<span>:</span></label><input type="text" id="searchcmpny"   onkeyup="search_company(this.value);" class="tftextinput3" name="searchcmpny" size="21" maxlength="120" value="" placeholder="Search Company"></p>
+                    <p><label for="tags">Email<span>:</span> </label><input type="text" id="searchemail"  onkeyup="search_email(this.value);" class="tftextinput3"  name="searchmail" size="21" maxlength="120" value="" placeholder="Search Email"></p>
+                    <p><label for="tags">Mobile<span>:</span> </label><input type="text" id="searchmobile"   onkeyup="search_mobile(this.value);"class="tftextinput3" name="searchmobile" size="21" maxlength="120" value="" placeholder="Search Mobile"></p>
+                </div>
+            </form>
+            <div class="tfclear"></div>
+            <input  class="button1" type="button" value="Search">
+            <input  id="button2" class="button2" type="button" value="Add">
+        </div>
+        <div id="rightcontainer">
+            <div id= "small-div">
+                <div  id="a4"></div>
+                <div id="a1"></div>
+                <div id="a2"></div>
+                <div id="a3"></div>               
+                <div id="a5"></div>
+                <div id="a6"></div>
+                <div id="a7"></div>
+                <div id="a8"></div>
+            </div>
+            <div id="big-text-div">
+               </div>
+            <form name="sub-form" class="sub-form" action="">
+                <label><input class="checkbox12" name="chkbox" id="chkbox" type="checkbox"  value="1">Register</label><br>
+                <input id="btn2" class="button2" type="submit" value="Register">
+                <input id="btn3" class="button2" type="button" value="Export" onclick="window.location = 'download.php';">
+            </form>
+        </div>
+    </body>
+</html>
