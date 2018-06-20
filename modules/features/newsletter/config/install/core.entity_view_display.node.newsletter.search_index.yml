@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_index
+    - node.type.newsletter
+  module:
+    - user
+id: node.newsletter.search_index
+targetEntityType: node
+bundle: newsletter
+mode: search_index
+content:
+  links:
+    weight: 100
+    region: content
+hidden: {  }

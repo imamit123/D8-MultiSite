@@ -1,0 +1,25 @@
+name: 'Common Content type'
+description: 'Provides Common Content type content type and related configuration. '
+type: module
+core: 8.x
+dependencies:
+  - cio_home_page
+  - comment
+  - entity_reference_revisions
+  - entityblock
+  - field
+  - field_group
+  - file
+  - image
+  - metatag
+  - node
+  - options
+  - paragraphs
+  - path
+  - slideshow_paragraph
+  - social_media
+  - taxonomy
+  - taxonomy_cio
+  - text
+  - user
+version: 8.x-10.1

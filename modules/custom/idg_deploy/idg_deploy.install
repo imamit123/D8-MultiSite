@@ -1,0 +1,30 @@
+/**
+ * @file
+ * site deployment install functions
+ */
+
+/**
+ * Implements hook_install().
+ */
+function idg_deploy_install() {
+  //idg_deploy_set_uuid('e732b460-add4-47a7-8c00-e4dedbb42900');
+  for ($i = 7001; $i < 8000; $i++) {
+    $candidate = 'idg_deploy_update_' . $i;
+    if (function_exists($candidate)) {
+      $candidate();
+    }
+  }
+}
+
+/**
+ * Update dependencies and revert features
+ */
+function idg_deploy_update_7003() {
+$modules = array(
+      'features',
+      'features_ui',
+    );
+    $message = HookUpdateDeployTools\Modules::enable($modules);
+    return $message;
+  //idg_deploy_update_dependencies();
+}

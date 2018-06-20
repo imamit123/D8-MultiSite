@@ -1,0 +1,15 @@
+name: Monitoring Test
+description: Monitoring base test module.
+package: Monitoring
+# core: 8.x
+hidden: TRUE
+type: module
+
+dependencies:
+ - monitoring:monitoring
+
+# Information added by Drupal.org packaging script on 2017-09-11
+version: '8.x-1.4'
+core: '8.x'
+project: 'monitoring'
+datestamp: 1505140157

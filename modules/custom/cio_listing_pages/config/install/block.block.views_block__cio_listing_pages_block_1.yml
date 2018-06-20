@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.cio_listing_pages
+  module:
+    - block_class
+    - node
+    - views
+  theme:
+    - cio
+third_party_settings:
+  block_class:
+    classes: ''
+id: views_block__cio_listing_pages_block_1
+theme: cio
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:cio_listing_pages-block_1'
+settings:
+  id: 'views_block:cio_listing_pages-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility:
+  node_type:
+    id: node_type
+    bundles:
+      author_page: author_page
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'

@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: news_letter_content
+label: 'News Letter Content'
+behavior_plugins: {  }

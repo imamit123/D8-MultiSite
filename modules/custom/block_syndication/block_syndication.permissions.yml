@@ -1,0 +1,3 @@
+administer block_syndication:
+  title: 'Block syndication to micro-site.'
+  description: 'Administer permissions for content push to micro-site.'

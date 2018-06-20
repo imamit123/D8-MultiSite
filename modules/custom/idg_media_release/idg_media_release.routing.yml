@@ -1,0 +1,16 @@
+idg_media_release.mail:
+  path: '/fetch-media-release'
+  defaults:
+    _controller: '\Drupal\idg_media_release\Controller\MediaReleaseController::idg_media_release_mail'
+    _title: 'media Release'
+  requirements:
+    _permission: 'access content'
+
+idg_media_release.config:
+  path: '/admin/config/media-release/config'
+  defaults:
+    _form: '\Drupal\idg_media_release\Form\IdgMediareleaseForm'
+    _title: 'Media Release Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+

@@ -1,0 +1,10 @@
+name: 'Slideshow paragraph'
+type: module
+core: 8.x
+dependencies:
+  - field
+  - file
+  - image
+  - paragraphs
+  - text
+version: 8.x-8.0

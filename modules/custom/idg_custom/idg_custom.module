@@ -1,0 +1,317 @@
+<?php
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_theme($existing, $type, $theme, $path) {
+  return array(
+    'google_ads_first' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-first',
+    ),
+    'google_ads_second' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-second',
+    ),
+    'google_ads_third' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-third',
+    ),
+    'google_ads_fourth' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-fourth',
+    ),
+    'google_ads_fifth' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-fifth',
+    ),
+     'home_recommended' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'home-recommended',
+    ),
+     'inside_recommended' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'inside-recommended',
+    ),
+    'google_ads_sixth' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-sixth',
+    ),
+     'google_ads_seventh' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-seventh',
+    ),
+     'google_ads_eighth' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-eighth',
+    ),
+     'google_ads_kaiads' => array(
+        'variables' => array('variable' => NULL,'bkid' => NULL),
+        'template' => 'google-ads-kaiads',
+    ),
+     'google_ads_front' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-front',
+    ),
+     'google_ads_special' => array(
+        'variables' => array('variable' => NULL,'path' => NULL,'var1' => NULL),
+        'template' => 'google-ads-special',
+    ),
+
+  );
+}
+
+function idg_custom_form_node_common_content_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+    $form['field_local_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+function idg_custom_form_node_common_content_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+    $form['field_local_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_webform_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_webform_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_home_page_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_home_page_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_poll_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_poll_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_story_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_story_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_editors_pick_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_editors_pick_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+function idg_custom_form_node_partner_content_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_partner_content_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_partner_tab_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_partner_tab_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_cio100_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_cio100_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_author_profile_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_author_profile_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+function idg_custom_form_node_computerworld_homepage_content_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_FORM_ID_alter().
+ */
+
+function idg_custom_form_node_computerworld_homepage_content_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+    $form['field_guid_version']['#disabled'] = TRUE;
+    $form['field_guid']['#disabled'] = TRUE;
+    $form['field_new_guid_version']['#disabled'] = TRUE;
+    $form['field_new_guid']['#disabled'] = TRUE;
+}
+
+/* 
+ * change page title
+ */
+function idg_custom_page_attachments_alter(array &$page) {
+    $urlArray = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $segments = explode('/', $urlArray);
+    $numSegments = count($segments);
+    $currentSegment = $segments[$numSegments - 2];
+    $config = \Drupal::config('system.site');
+    $variables['site_name'] = $config->get('name');
+    if ($currentSegment == 'search' && $_REQUEST['keys']){
+    $page['#attached']['html_head'][] = [
+        [
+          '#tag' => 'title',
+          '#value' => $_REQUEST['keys'].' | Search Results | '.$variables['site_name'],
+        ],
+        'title'
+    ];
+  }
+}

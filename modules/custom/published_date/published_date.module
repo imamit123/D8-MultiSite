@@ -1,0 +1,60 @@
+<?php
+
+use \Drupal\node\Entity\Node;
+use \Drupal\file\Entity\File;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+
+function published_date_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_common_content_form') {
+     $form['field_first_publish_date']['#access'] = FALSE;
+     $form['field_set_publish']['#access'] = FALSE;
+    }elseif($form_id == 'node_common_content_edit_form'){
+       $node = $form_state->getFormObject()->getEntity();
+       if($node->isPublished()){
+            $form['field_set_publish']['#access'] = FALSE;
+            $form['field_first_publish_date']['#disabled'] = TRUE;
+        }else{
+
+            $form['field_first_publish_date']['#access'] = FALSE;
+            $form['field_set_publish']['#access'] = FALSE;
+        }
+       }
+}
+
+// function published_date_submit($form, FormStateInterface $form_state){
+//   $node = $form_state->getFormObject()->getEntity();
+//   $node_array = $node->toArray();
+//   $set_publish_value = $node_array['field_set_publish'][0]['value']; echo "<br/>";
+//   $created =  $node_array['created'][0]['value']; echo "<br/>";
+//   $publish_date =  $node_array['field_first_publish_date'][0]['value']; echo "<br/>";
+//   if ($node->isPublished() && $set_publish_value == 0) {
+//     $published_at = REQUEST_TIME;
+//     $node->set('field_first_publish_date', $published_at);
+//     $set_publish_value = 1;
+//     $node->set('field_set_publish', $set_publish_value);
+//     $node->save();
+//   }
+//   else{
+//        $form['field_first_publish_date']['#access'] = FALSE;
+//        $form['field_set_publish']['#access'] = FALSE;
+//     }
+// }
+
+
+function published_date_entity_presave(Drupal\Core\Entity\EntityInterface $entity)   {
+  if ($entity instanceof NodeInterface) {
+    $set_publish_value = $entity->field_set_publish->value;
+    if ($entity->isPublished() && $set_publish_value == 0) {
+      $entity->field_amit->value = 'testing';     //set value for field
+      $published_at = REQUEST_TIME;
+      $entity->field_first_publish_date->value = $published_at;
+      $set_publish_value = 1;
+      $entity->field_set_publish->value = $set_publish_value;
+    } else{
+       $form['field_first_publish_date']['#access'] = FALSE;
+       $form['field_set_publish']['#access'] = FALSE;
+    }
+
+  }
+}

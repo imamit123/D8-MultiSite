@@ -1,0 +1,50 @@
+<?php
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use \Drupal\Core\Routing;
+/**
+ * Implements hook_node_presave().
+ */
+function guid_gen_node_presave(Drupal\node\NodeInterface $node) {
+  global $base_url; 
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+  if ($node->bundle() == 'common_content' || $node->bundle() == 'author_profile') {
+    // Create new GUID.    
+    if ($node->hasField('field_new_guid') && !$node->get('field_new_guid')->getValue() && $node->isNew()) {
+      // Else Get Max GUID value from Database.
+      //else {
+        //die('else');
+        $con = \Drupal\Core\Database\Database::getConnection();
+        $query = db_select('node__field_new_guid', 'n')
+               ->condition('bundle', 'common_content');
+        $query->fields('n', array('field_new_guid_value'));
+        $result = $query->execute()->fetchAll();
+        if (count($result)) {
+          $guids_arr = json_decode(json_encode($result), true);
+          $guids = array_unique(array_column($guids_arr, 'field_new_guid_value'));
+          $guids = array_filter($guids, 'is_numeric');
+          rsort($guids);
+          if (isset($guids[0])) {
+            $max_guid = $guids[0];
+            if (!empty($max_guid) && is_numeric($max_guid)) {
+              $inc_guid = $max_guid + 1;
+              //\Drupal::state()->set('max_guid', $inc_guid);
+              $node->set('field_new_guid', $inc_guid);
+            }
+          }
+        }  
+      //}
+    }
+    // Update new GUID Version.
+    if (!$node->isNew() && ($path_args[1] == 'node') && (is_numeric($path_args[2])) && ($path_args[3] == 'edit')) {
+      $new_guid_version = 1;
+      if ($node->hasField('field_new_guid_version') && $node->get('field_new_guid_version')->getValue()) {
+        $new_guid_version = $node->get('field_new_guid_version')->getValue()[0]['value'];
+        $new_guid_version += 1;
+      }
+      $node->set('field_new_guid_version', $new_guid_version);
+    }
+  }
+}

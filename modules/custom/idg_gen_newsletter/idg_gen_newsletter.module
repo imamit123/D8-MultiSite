@@ -1,0 +1,2304 @@
+<?php
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\Entity\Node;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\taxonomy\Entity\Term;
+
+
+function idg_gen_newsletter_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  
+	// echo '<pre>'; print_r($form);die();
+    if ($form_id == 'node_newsletter_edit_form' || $form_id == 'node_newsletter_form'){
+       $form['#attached']['library'][] = 'idg_gen_newsletter/form-script';
+        unset($form['actions']['preview']);
+       //$form['field_site_url']['#disabled'] = TRUE;
+      // echo '<pre>';print_r($form['field_site_url']);die;    
+      // break;
+   }
+ }
+
+// function idg_gen_newsletter_node_view
+/*
+function idg_gen_newsletter_entity_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if($entity->gettype() == 'newsletter' && $_REQUEST['download']==='yes'){
+    // $node = \Drupal::routeMatch()->getParameter('node');
+    // $nid = $node->id();
+    // $entity_type = 'node';
+    // $view_builder = \Drupal::entityTypeManager()->getViewBuilder($entity_type);
+    // $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
+    // $node = $storage->load($nid);
+    // $build = $view_builder->view($node, $view_mode);
+    // $output = render($build);
+    $output = $entity->get('field_newsletter_html')->value;
+    $filename = "index.html";
+    $fp = fopen($_SERVER['DOCUMENT_ROOT'] . "/index.html","wb");
+    fwrite($fp, $output);
+    fclose($fp);
+    if(file_exists($filename)){
+      //Get file type and set it as Content Type
+      $finfo = finfo_open(FILEINFO_MIME_TYPE);
+      header('Content-Type: ' . finfo_file($finfo, $filename));
+      finfo_close($finfo);
+
+      //Use Content-Disposition: attachment to specify the filename
+      header('Content-Disposition: attachment; filename='.basename($filename));
+      //No cache
+      header('Expires: 0');
+      header('Cache-Control: must-revalidate');
+      header('Pragma: public');
+
+      //Define file size
+      header('Content-Length: ' . filesize($filename));
+
+      ob_clean();
+      flush();
+      readfile($filename);
+      exit;
+      unlink($filename);
+    }
+  }
+}*/
+
+
+function idg_gen_newsletter_node_presave(Drupal\node\NodeInterface $node) {
+  if($node->gettype() == 'newsletter'){
+    //Get site name and site url as key and element in array
+    $newsletter_type_id = $node->get('field_select_newsletter_type')->target_id;
+    $type_term = Term::load($newsletter_type_id);
+    $type = $type_term->Label();
+    $sites = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree('idg_sites');
+    foreach ($sites as $site) {
+      $site_term =  Term::load($site->tid);
+      $site_name = $site_term->Label();
+      $site_url = $site_term->get('field_site_url')->value;
+      $sites_arr[$site_name] = $site_url;
+    }
+    $site_url = 'http://'. $_SERVER['HTTP_HOST'];
+    switch ($type) {
+      case 'thedailybyte':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = thedailybyte_body($node, $sites_arr, $site_url);
+        //$node_head = thedailybyte_head();
+        break;
+      case 'CIOPerspective':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = cio_perspective_body($node, $sites_arr, $site_url);
+        //$node_head = cio_perspective_head();
+        break;
+      case 'CIOPeer2Peer':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = cio_peer2peer_body($node, $sites_arr, $site_url);
+        //$node_head = cio_peer2peer_head();
+        break;
+      case 'ChannelWorldSpecial':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = channelworld_specials_body($node, $sites_arr, $site_url);
+        //$node_head = channelworld_specials_head();
+        break;
+      case 'ChannelWorldInsights':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = channelworld_insights_body($node, $sites_arr, $site_url);
+        //$node_head = channelworld_insights_head();
+        break;
+      case 'ComputerworldCompass':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = computerworld_compass_body($node, $sites_arr, $site_url);
+        //$node_head = computerworld_compass_head();
+        break;
+      case 'ComputerworldPathways':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = computerworld_pathways_body($node, $sites_arr, $site_url);
+        //$node_head = computerworld_pathways_head();
+        break;
+      case 'CsoAlert':
+        // $site_url = 'http://local-idgnews.gailabs.com';
+        $node_body = cso_alert_body($node, $sites_arr, $site_url);
+        //$node_head = cso_alert_head();
+        break;
+
+      default:
+        # code...
+        break;
+    }
+    $node->set('field_newsletter_html', $node_head . $node_body);
+    // $node->field_html_head->format('full_html')
+    $node->set('body', $node_head . $node_body);
+    $node->body->format ='full_html';
+  }
+}
+
+
+/* Define newsletter contents for every news letter*/
+function thedailybyte_body($News_node, $site_arr, $src_url){
+    $news_html_body = '<style type="text/css">table {border-collapse: collapse;}
+
+  body { overflow-x: hidden; overflow-y: scroll; Margin: 0; padding: 0; min-width: 100%; background-color: #00aeef; }table { border-spacing: 0; font-family: sans-serif; color: #333333; }td { /*padding: 0;*/ }img { border: 0;display:block;outline:none; }.wrapper { width: 100%; table-layout: fixed; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }.webkit { max-width: 540px; }.outer { Margin: 0 auto; width: 100%; max-width: 500px; }.inner { padding: 5px 0px; }.contents { width: 100%; }p { Margin: 0; }a { color: #828282; }a { text-decoration: none; border: 0px none; }.h1 { font-size: 21px; font-weight: bold; Margin-bottom: 18px; }.h2 { font-size: 18px; font-weight: bold; Margin-bottom: 12px; }.full-width-image img { height: auto; max-width: 500px; padding: 10px 0; width: 100%; }.two-column { text-align: left; font-size: 0; }.two-column .column { width: 100%; display: inline-block; vertical-align: top; }.column.col1 { height: auto; max-width: 247px; }.column.col2 { height: auto; max-width: 247px; }.column.text-col1 { height: auto; max-width: 330px; }.column.text-col2 { height: auto; max-width: 168px; }.two-column .contents { font-size: 14px; text-align: left; }.two-column .text { padding-top: 10px; }.followus { font-size: 21px; font-weight: bold; text-align: right; }.full-width-image { text-align: center; }.texttd { padding: 5px 0; }.left-sidebar { text-align: center; font-size: 0; }.left-sidebar .column { width: 100%; display: inline-block; vertical-align: middle; }.left-sidebar .left { max-width: 100px; }.left-sidebar .right { max-width: 300px; }.left-sidebar .img1 { width: 100%; max-width: 33px; height: auto; }.left-sidebar .img2 { width: 100%; max-width: 60px; height: auto; }.left-sidebar .contents { font-size: 14px; text-align: left; }.left-sidebar a { color: #85ab70; }.inner.contents.sections { padding: 3px 0px; ; }.column.footerimg { width: 105px; }.column.footertext { max-width: 390px !important; }.space-top { margin-top: 8px; margin-bottom: 2px; }.space-bottom { margin-top: 2px; margin-bottom: 8px; }.texttd.sponseredtd { background: #efefef none repeat scroll 0 0; }.column.text-col1 img {display: inline-block !important;}
+
+    /*Media Queries*/
+
+    @media screen and (max-width: 400px) {
+
+    .two-column .column, .three-column .column { max-width: 100% !important; }
+
+    .two-column img { max-width: 100% !important; }
+
+    /*logo centering*/
+
+   
+
+    .column.col1 { max-width: auto !important; }
+
+    .column.col2 { width: auto; }
+
+    .inner > h3 { text-align: left !important; }
+
+    .inner { padding: 4px 0; }
+
+    .copyright { text-align: left !important; }
+
+    .logo_resp {
+
+        max-width: 190% !important;
+
+      }
+
+    }
+
+    </style>
+    <div style="font-size:1px; color:#262626; display:none; overflow:hidden; visibility:hidden;"></div><center class="wrapper"><div class="webkit" style="max-width: 540px; "><!--[if (gte mso 9)|(IE)]><table width="500" align="center" style="border-collapse: collapse;"><tr><td><![endif]--><table class="outer" align="center" bgcolor="#FFFFFF" style="border-collapse: collapse;"><!-- table start --><tr><td class="contents"><div style="padding:8px 5px 8px 5px;font-family:Arial;font-size:13px;color:#333333;text-align:center;line-height:120%; background-color:#fff; color:#5a5a5a;  width:95%; float:none; margin:auto;"> View in <a href="http://crm.idgindia.net/newsletter/thedailybyte/'.date('Y/M/d').'/index.html" target="_blank" style="text-decoration:none; border:0px;color:#64a8a2;"> Browser</a> | Add <a href="mailto:thedailybyte@idgindia.net " style="text-decoration:none;color:#64a8a2;">thedailybyte@idgindia.net </a> to your address book<br />
+      </div></td></tr>
+    <tr>
+      <td bgcolor="#363639" class="one-column inner" style="padding-top:12px; padding-bottom:3px">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td><img width="305" height="26" style="padding-left:10px;" src="/themes/idgnews/images/daily_byte_white.png" class="logo_resp" alt="dailybytelogo"></td>
+              <td align="right"><table width="105" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                  <tr>
+                    <td><a href="http://www.idg.in" target="_blank" style="display:inline-block; height:30px; display:block; padding-right:10px;"><img width="80" height="30" alt="IDG Logo" src="/themes/idgnews/images/IDG-Logo.png"></a></td>
+                  </tr>
+                </tbody>
+              </table></td>
+            </tr>
+          </tbody>
+        </table></td>
+    </tr>
+        <tr><td style="padding:0px;"><img  style="font-size:0px; border:none;" width="553" src="/themes/idgnews/images/color_wave.png" alt="color wave"  align="top" /></td></tr><tr><td class="two-column" style="border-bottom: 1px solid rgb(221, 221, 221);font-size: 0;"><!--[if (gte mso 9)|(IE)]><table width="100%"><tr><td width="60%" valign="middle"><![endif]--><div class="column text-col1" style="height: auto;max-width: 330px;display: inline-block;"><table width= "100%" border="0" cellspacing="0" cellpadding="0" style="padding: 5px;"><tr><td><span style="font-size: 9px; display: block; text-align: right; width: 67px; height:10px; padding-right: 5px;">Powered By</span></td><td style="padding-right: 5px;"><a target="_blank" href="http://www.channelworld.in/"><img src="/themes/idgnews/images/channeworld_logo.png" width="76" height="16" alt="channelworld" /></a></td><td style="padding-right: 5px;"><a target="_blank" href="http://www.computerworld.in/"><img src="/themes/idgnews/images/computerworld_logo.png" width="81" height="16" alt="computerworld" /></a></td><td style="padding-right: 5px;"><a target="_blank" href="http://www.cio.in/"><img src="/themes/idgnews/images/cio_1_logo.png" width="27" height="18" alt="cio" /></a></td>
+          <td style="padding-right: 5px;"><a href="http://www.csoonline.in/"><img src="/themes/idgnews/images/cso.png" alt="" width="27" height="18" /></a></td>
+          </tr></table></div><!--[if (gte mso 9)|(IE)]></td><td width="40%" valign="middle"><![endif]--><div class="column text-col2" style="    height: auto;max-width: 168px;display: inline-block; width: 100%;"><table width="100%"><tbody><tr>
+            <td class="inner" style="padding: 2px 10px; text-transform: capitalize; font-family: sans-serif; font-size: 12px; text-align: right;">'.date('j M Y').'</td></tr></tbody></table></div><!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]--></td></tr>';
+
+    //Get Newsletter content from Paragraphs
+
+    $Paragraphs = $News_node->get('field_news_content');
+    $content_index = 0;
+    
+  foreach ($Paragraphs as $Paragraph) {
+      $content_index ++;
+      $news_content = Paragraph::load($Paragraph->target_id);
+      $title = $news_content->get('field_actnewsletter_title')->value;
+      $teaser = $news_content->get('field_teaser')->value;
+      $content_url = $news_content->get('field_site_url')->value;
+      $content_guid = $news_content->get('field_content_guid')->value;
+      $url_title = end(explode('/', $content_url));
+      foreach ($site_arr as $site => $url) {
+        //echo  "<pre>"; echo $site_arr;
+        if (strrpos($content_url,$url, 0) === 0){
+        $content_site_name = $site;
+      }
+    }
+    if($content_index == 1 || $content_index > 6){
+      $news_html_body .= '<tr><td valign="bottom" align="center" class="texttd"><!-- CONTENT TABLE // --><table width="100%" cellspacing="0" cellpadding="4" border="0"><tbody><tr><td valign="bottom" class="textContent" style=" color: #5a5a5a; padding:10px 10px 0px 10px;"><div> <a target="_blank" href="'.$content_url.'?utm_source=thedailybyte&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='. date('d/m/Y').'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" style="font-size:22px;  text-decoration: none; color:#5a5a5a;font-family: Georgia, \'Times New Roman\', Times, serif; font-weight:bold;">'.$title. '</a> </div><p style="margin:0;"><span style="line-height: 20px; font-style: normal; font-family: Georgia,&quot;Times New Roman&quot;,Times,serif; color: rgb(90, 90, 90); font-size: 12px; font-weight: bold;">'.$content_site_name.'</span></p><p class="story-data" style="font-size:16px; font-family:Arial; line-height:20px; margin:4px 0 0 0 ;">'.$teaser. '</p></td></tr></tbody></table><!--  CONTENT TABLE --></td></tr>';
+      }
+      else{
+        if($content_index == 2){
+          $news_html_body .= '<tr><td valign="bottom" align="center" class="texttd"><!-- CONTENT TABLE // --><table width="100%" cellspacing="0" cellpadding="4" border="0"><tbody><tr><td valign="bottom" class="textContent" style="font-family:sans-serif; line-height:25px; color: #5a5a5a; padding:10px 10px 5px 10px;"><strong style="font-size:18px; line-height:25px; color:#5a5a5a;"> Today\'s Must-Read  Stories </strong><br></td></tr><tr><td style="padding:0px 10px 10px 10px;"><table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody>';
+        }
+        $news_html_body .=  '<tr><td valign="middle" style="padding-bottom: 1px;">
+        <img width="6" height="6" style="display:inline; padding: 2px;" src="/themes/idgnews/images/bullet.png">&nbsp;<a style="font-size:14px; font-family:Arial, Helvetica, sans-serif; color:#64a8a2; text-transform:capitalize; text-decoration: none;" href="'.$content_url.'?utm_source=thedailybyte&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='. date('d/m/Y').'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'">'. $title .'</a></td></tr>';
+    }
+    if($content_index == 6){
+      $news_html_body .= '</tbody></table></td></tr></tbody></table><!--  CONTENT TABLE --></td></tr>';
+      }
+    }
+    $news_html_body .= '<tr>
+      <td style="line-height:15px;">&nbsp;</td></tr><tr>
+      <td style="border-top:2px solid rgb(221, 221, 221);">
+      <table width="100%" cellspacing="0" cellpadding="0" border="0">
+      <tbody >
+      <tr>
+      <td style="padding:15px 10px 10px 10px; font-size:11px; font-family:Georgia, \'Times New Roman\', Times, serif;"><strong style="color:#5a5a5a;">ABOUT THIS EMAIL</strong><br>
+      <span style="font-size:12px; color:#5a5a5a; font-family:Arial, Helvetica, sans-serif;">This is an automated email. Please do not reply directly to this email. You received this message because you have subscribed to one of the IDG newsletters. <a style="border: 0px none; color: rgb(51, 51, 51);" target="_blank" href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#">Unsubscribe</a></span></td>
+      </tr>
+      </tbody>
+      </table></td>
+      </tr>
+      <tr>
+      <td style="padding:0px 0px 5px 10px;">
+      <span style="font-size:11px; color:#5a5a5a; font-family:Arial, Helvetica, sans-serif;">Copyright 2005 - 2018 | IDG Media Private Ltd | All rights reserved.</span></td>
+      </tr>
+      <tr>
+      <td></td>
+      </tr>
+      </table>
+      <!--[if (gte mso 9)|(IE)]>
+      </td>
+      </tr>
+      </table>
+      <![endif]--> 
+      </div>
+      </center>
+      </body>
+      </html>';
+      return $news_html_body;
+}
+
+/*function thedailybyte_head(){
+$news_html_head = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title></title><!--[if (gte mso 9)|(IE)]><style type="text/css">table {border-collapse: collapse;}</style><![endif]--><style type="text/css">body { overflow-x: hidden; overflow-y: scroll; Margin: 0; padding: 0; min-width: 100%; background-color: #00aeef; }table { border-spacing: 0; font-family: sans-serif; color: #333333; }td { /*padding: 0; }img { border: 0;display:block;outline:none; }.wrapper { width: 100%; table-layout: fixed; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }.webkit { max-width: 540px; }.outer { Margin: 0 auto; width: 100%; max-width: 500px; }.inner { padding: 5px 0px; }.contents { width: 100%; }p { Margin: 0; }a { color: #828282; }a { text-decoration: none; border: 0px none; }.h1 { font-size: 21px; font-weight: bold; Margin-bottom: 18px; }.h2 { font-size: 18px; font-weight: bold; Margin-bottom: 12px; }.full-width-image img { height: auto; max-width: 500px; padding: 10px 0; width: 100%; }.two-column { text-align: left; font-size: 0; }.two-column .column { width: 100%; display: inline-block; vertical-align: top; }.column.col1 { height: auto; max-width: 247px; }.column.col2 { height: auto; max-width: 247px; }.column.text-col1 { height: auto; max-width: 330px; }.column.text-col2 { height: auto; max-width: 168px; }.two-column .contents { font-size: 14px; text-align: left; }.two-column .text { padding-top: 10px; }.followus { font-size: 21px; font-weight: bold; text-align: right; }.full-width-image { text-align: center; }.texttd { padding: 5px 0; }.left-sidebar { text-align: center; font-size: 0; }.left-sidebar .column { width: 100%; display: inline-block; vertical-align: middle; }.left-sidebar .left { max-width: 100px; }.left-sidebar .right { max-width: 300px; }.left-sidebar .img1 { width: 100%; max-width: 33px; height: auto; }.left-sidebar .img2 { width: 100%; max-width: 60px; height: auto; }.left-sidebar .contents { font-size: 14px; text-align: left; }.left-sidebar a { color: #85ab70; }.inner.contents.sections { padding: 3px 0px; ; }.column.footerimg { width: 105px; }.column.footertext { max-width: 390px !important; }.space-top { margin-top: 8px; margin-bottom: 2px; }.space-bottom { margin-top: 2px; margin-bottom: 8px; }.texttd.sponseredtd { background: #efefef none repeat scroll 0 0; }.column.text-col1 img {display: inline-block !important;} 
+    /*Media Queries*/
+   /* @media screen and (max-width: 400px) {
+    .two-column .column, .three-column .column { max-width: 100% !important; }
+    .two-column img { max-width: 100% !important; }
+    /*logo centering*/
+    
+  /*  .column.col1 { max-width: auto !important; }
+    .column.col2 { width: auto; }
+    .inner > h3 { text-align: left !important; }
+    .inner { padding: 4px 0; }
+    .copyright { text-align: left !important; }
+    .logo_resp {
+        max-width: 190% !important;
+      }
+    }
+    </style>
+    </head>';
+    return $news_html_head;
+}*/
+/*
+function cio_perspective_head(){
+  $html_head = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="format-detection" content="telephone=no" /><title>CIO Perspective</title>
+        <style type="text/css">body, #bodyTable, #bodyCell, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;font-family:Helvetica,Arial,sans-serif;}
+            table{border-collapse:collapse;}
+            table[id=bodyTable] {width:100%!important;margin:auto;max-width:500px!important;color:#7A7A7A;font-weight:normal;}
+            img, a img{border:0; outline:none; text-decoration:none;height:auto; line-height:100%;}
+        h3{color:#5F5F5F; font-weight:normal; font-family:Helvetica,Arial,sans-serif; font-size:20px;text-align:Left; letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;padding-top:0;padding-bottom:0;padding-left:0;padding-right:0;}
+            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+            #outlook a{padding:0;}img{-ms-interpolation-mode: bicubic;display:inline;outline:none; text-decoration:none;}body, table, td, p, a, li, blockquote{-ms-text-size-adjust:100%; -webkit-text-size-adjust:100%;}
+            .flexibleImage{height:auto;}
+            body, #bodyTable{background-color:#ffffff;}
+            #emailBody{background-color:#FFFFFF;border:8px solid #b7b7b8;}
+            #emailFooter{background-color:#E1E1E1;}
+            .textContent, .textContentLast{color:#8B8B8B; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:125%; text-align:Left;}
+            .textContent a, .textContentLast a{color:#205478; text-decoration:underline;}
+            .imageContentText {margin-top: 10px;line-height:0;}
+            .imageContentText a {line-height:0;}
+            span[class=ios-color-hack3] a {color:#8B8B8B!important;text-decoration:none!important;}
+            .a[href^="tel"], a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:none!important;cursor:default!important;}
+            .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:auto!important;cursor:default!important;}
+.logo-text-month{display:block;}
+.logo-text-date > span {display: none;}
+
+.voice-logo {
+    height: auto;
+    padding: 0;
+    width: 590px;
+}
+.voiceimg {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+@media only screen and (max-width: 480px){
+      body{width:100% !important; min-width:95% !important;}  h1{display:block;font-size:10px !important;}
+            h3{line-height:25px !important;}
+        .resp-view {  font-size: 11px !important;}
+
+<!-- Logo image css -->
+#emailBody {border: 5px solid #b7b7b8;width: 300px !important;}
+.logo-resp{width:70%;}
+.logo-resp > img { width: 100% !important; display:block;}
+.logo-text-date {font-size: 18px !important;}
+.logo-text-day { font-size: 11px !important;padding-right:3px;line-height:10px !important;}
+#month-span{display: inline-block !important;}
+.logo-text-month{display:none;}
+.logo-text {  width: 26%;}
+.h3heading1 {
+    font-size: 20px !important;
+    line-height: 23px !important;
+    margin-top: -5px !important;
+}.h3heading2{font-size:16px !important;line-height: 17px !important;}.h3heading3{font-size:15px !important;line-height: 17px !important;}
+<!-- Logo image css Ends Here -->
+
+.logo-resp {height: auto;width: 71% !important;}
+.storyimg-resp {display: block !important;margin-left: 4% !important;width:98% !important;}
+.storyimg-resp > img { display: block;width:92%;
+}
+.textContent.story-text {
+    padding-left: 5% !important;
+}
+/*Media query forn
+#flexiblecontainercell > table {
+    width: 62% !important;
+}
+  /*Media query forn
+
+.socio-icon {  padding: 4px;; width: auto}
+.footer-font{
+    font-size: 8px !important;
+  text-align:center;
+}
+
+.footer-logo {
+    width: 75px !important;
+}
+.story-data {
+    font-size: 16px !important;
+}
+
+.flexibleImageSmall {
+    vertical-align: sub;
+}    table[id="emailHeader"], table[id="emailBody"], table[id="emailFooter"], table[class="flexibleContainer"] {width:100% !important;}
+                td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {display: inline;text-align: left;}
+
+                td[class="imageContent"] img {height:auto !important; width:100% !important; max-width:100% !important;}
+                img[class="flexibleImage"]{height:auto !important; width:100% !important;max-width:100% !important;}
+                img[class="flexibleImageSmall"]{height:auto !important; width:auto !important;}
+
+                table[class="flexibleContainerBoxNext"]{padding-top: 10px !important;}
+
+            }
+
+
+      @media only screen and (-webkit-device-pixel-ratio:.75){}
+            @media only screen and (-webkit-device-pixel-ratio:1){ }
+            @media only screen and (-webkit-device-pixel-ratio:1.5){
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width:568px) {
+            }
+</style>  <!--
+            Outlook Conditional CSS
+          -->
+        <!--[if mso 12]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+            </style>
+        <![endif]-->
+        <!--[if mso 14]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+              </style>
+        <![endif]--></head>';
+  return $html_head;
+}
+*/
+
+function cio_perspective_body($News_node, $site_arr, $src_url){
+  $html_body = '<!-- CENTER THE EMAIL // -->
+    <center>
+      <table id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+        <tbody>
+          <tr>
+            <td id="bodyCell" align="center" valign="top"><table id="emailBody" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #FFFFFF;border: 8px solid #b7b7b8;">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top">
+                    <table style="color:#FFFFFF;" bgcolor="#ffffff" border="0" cellpadding="8" cellspacing="0" width="100%">
+                      <tbody>
+                        <tr>
+                          <td align="center" valign="center">
+                            <div class="resp-view" style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">If you can\'t see this message <a style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;" target="_blank" href="http://crm.idgindia.net/newsletter/cioperspective/'.date('Y/F/d').'/index.html"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
+                            </div>
+                            <!-- // FLEXIBLE CONTAINER -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // CENTERING TABLE -->
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" align="center">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#FF170D" style="">
+                      <tbody>
+                        <tr>
+                          <td valign="top" align="center">
+                            <table width="599" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                              <tbody>
+                                <tr>
+                                  <td width="500" valign="center" align="center" class="flexibleContainerCell">
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                      <tbody>
+                                        <tr>
+                                          <td width="59%" valign="left" align="left" class="logo-resp">
+                                            <img width="488" align="middle" alt="CIO-logo" src="'.$src_url.'/themes/idgnews/images/perspective-logo.jpg">
+                                          </td>
+                                          <td width="39%" valign="center" align="center" class="logo-text">
+                                          <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-align: center; line-height: 12px; color: rgb(255, 255, 255); font-size: 13px;">Issue 69
+                                          </div>
+                                          <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; line-height: 16px; color: rgb(255, 255, 255); font-size: 15px;">'.date('F').'
+                                          </div>
+                                          <div style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-align: center; color: rgb(255, 255, 255); font-size: 15px;" class="logo-text-day">'.date('d/Y').'</div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  <!-- // CONTENT TABLE -->
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <!-- // FLEXIBLE CONTAINER -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- // CENTERING TABLE -->
+                </td>
+              </tr>';
+              //Get Newsletter content from Paragraphs
+              $Paragraphs = $News_node->get('field_news_content');
+              $content_index = 0;
+              foreach ($Paragraphs as $Paragraph) {
+                $content_index ++;
+                $news_content = Paragraph::load($Paragraph->target_id);
+
+                //Get image
+                $image_node = Node::load($news_content->get('field_newsletter_title')->target_id);
+                if(!empty($image_node->get('field_home_page_image')->target_id)){
+                  $image_url = file_create_url($image_node->field_home_page_image->entity->getFileUri());
+                }
+                else{
+                  unset($image_url);
+                }
+                $strap_line = $image_node->get('field_news_strap_line')->value;
+                $title = $news_content->get('field_actnewsletter_title')->value;
+                $teaser = $news_content->get('field_teaser')->value;
+                $content_url = $news_content->get('field_site_url')->value;
+                $content_guid = $news_content->get('field_content_guid')->value;
+                $url_title = end(explode('/', $content_url));
+
+
+                $html_body .= '<tr>
+                  <td valign="top" align="center" style="" class="textcontent">
+                  <!-- CENTERING TABLE // -->
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                      <tbody>
+                        <tr>
+                          <td valign="top" align="center" style="">
+                          <!-- FLEXIBLE CONTAINER // -->
+                            <table width="580" cellspacing="0" cellpadding="12" border="0" class="flexibleContainer" style="border-bottom: 1px dashed rgb(128, 128, 128);">
+                              <tbody>
+                                <tr>
+                                  <td width="575" valign="left" class="flexibleContainerCell">
+
+                                  <!-- CONTENT TABLE // -->
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                      <tbody>
+                                        <tr>
+                                          <td width="225" valign="top" align="left" class="storyimg-resp"><img src="'.$image_url.'" alt="story1" width="216" height="161" class="flexibleImage " style="max-width: 100%; vertical-align: bottom;" title="Text"></td>
+                                          <td valign="top" align="right" class="flexibleContainerBox">
+                                            <table width="330" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                              <tbody>
+                                                <tr>
+                                                  <td align="left" class="textContent story-text"> <h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-transform: uppercase; color: rgb(236, 43, 36); margin: 0px; text-align: left; font-size: 12px; display: block; line-height: 1 ! important;"> <img width="10" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/red-dot.jpg">&nbsp;'.$strap_line. ' <span style="color: black; text-transform: capitalize;">&nbsp;</span>
+                                                    </h3>
+                                                    <h3 class="h3heading1" style="line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-weight: normal;margin: 0 0 4px; text-align: left; color: black; font-size: 28px;"> <a href="'.$content_url.'?utm_source=cioperspective&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y',strtotime(' +1 day')).'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" style="text-decoration: none; color: #666666; font-weight: bold ! important;">'.$title.'</a> </h3>
+                                                      <div class="story-data" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin-bottom:0;color:#666666;line-height:105%;">'.$teaser.'</div>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                      <!-- // CONTENT TABLE -->
+
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <!-- // FLEXIBLE CONTAINER -->
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <!-- // CENTERING TABLE -->
+                    </td>
+                  </tr>';
+                }
+              $html_body .= '<table width="615" cellspacing="0" cellpadding="0" border="0" bgcolor="black" id="emailFooter" style="">
+                <tbody>
+                  <tr>
+                    <td valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="10" bgcolor="black" class="footer-font;">&nbsp;</td><td width="585" bgcolor="black" class="footer-font;"><span style="color:white;font-family:Arial, Helvetica, sans-serif; font-size:12px;">You are receiving this newsletter because you have subscribed to it on </span><a href="http://www.cio.in/" style="color: white; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-decoration:none;">www.cio.in. </a><a href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#" style="color: #FFFFFF; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-decoration:none;">UNSUBSCRIBE</a></td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="black" colspan="2">
+                      <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                          <tr>
+                            <td width="10" bgcolor="black">&nbsp;</td>
+                            <td width="106" align="left" style="background-color: black; text-align: left"><a href="http://www.cio.in/"><img width="100" height="30" border="0" src="'.$src_url.'/themes/idgnews/images/cio-in-footer.jpg" alt="CIO India"></a></td>
+                            <td width="379" style="background-color: black; text-align: center"><span style="text-align: center; font-family: Arial; font-size: 9px; color: white;" class="footer-font;">Copyright 2005 - 2018 <a style="text-decoration: none; color: white;" href="http://www.idg.in">IDG Media Private Ltd</a>. All rights reserved. <a style="text-decoration: none; color: white;" href="http://www.cio.in/about-us/privacy-policy">Privacy Policy</a></span></td>
+                            <td width="44" class="socio-icon"><a href="https://www.facebook.com/CIOIndiaIDG" style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/facebook.jpg"> </a></td>
+                            <td width="45" class="socio-icon"><a href="https://twitter.com/CIOIn"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/newsletter/twitter.jpg"><br>
+                            </a></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td height="0px" bgcolor="black" colspan="2"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </tbody>
+  </table>;               
+  </td>
+  </tr>
+  </tbody>
+  </table>
+        </center>
+      </body>
+  </html>';
+return $html_body;
+}
+
+
+//CIO Peer2Peer newsletter body and header functions
+/*function cio_peer2peer_head(){
+  $html_head = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="format-detection" content="telephone=no" /><title>CIO Peer2Peer</title>
+        <style type="text/css">body, #bodyTable, #bodyCell, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;font-family:Helvetica,Arial,sans-serif;}
+            table{border-collapse:collapse;}
+            table[id=bodyTable] {width:100%!important;margin:auto;max-width:500px!important;color:#7A7A7A;font-weight:normal;}
+            img, a img{border:0; outline:none; text-decoration:none;height:auto; line-height:100%;}
+        h3{color:#5F5F5F; font-weight:normal; font-family:Helvetica,Arial,sans-serif; font-size:20px;text-align:Left; letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;padding-top:0;padding-bottom:0;padding-left:0;padding-right:0;}
+            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+            #outlook a{padding:0;}img{-ms-interpolation-mode: bicubic;display:inline;outline:none; text-decoration:none;}body, table, td, p, a, li, blockquote{-ms-text-size-adjust:100%; -webkit-text-size-adjust:100%;}
+            .flexibleImage{height:auto;}
+            body, #bodyTable{background-color:#ffffff;}
+            #emailBody{background-color:#FFFFFF;border:8px solid #b7b7b8;}
+            #emailFooter{background-color:#E1E1E1;}
+            .textContent, .textContentLast{color:#8B8B8B; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:125%; text-align:Left;}
+            .textContent a, .textContentLast a{color:#205478; text-decoration:underline;}
+            .imageContentText {margin-top: 10px;line-height:0;}
+            .imageContentText a {line-height:0;}
+            span[class=ios-color-hack3] a {color:#8B8B8B!important;text-decoration:none!important;}
+            .a[href^="tel"], a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:none!important;cursor:default!important;}
+            .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:auto!important;cursor:default!important;}
+.logo-text-month{display:block;}
+.logo-text-date > span {display: none;}
+
+.voice-logo {
+    height: auto;
+    padding: 0;
+    width: 590px;
+}
+.voiceimg {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+@media only screen and (max-width: 480px){
+      body{width:100% !important; min-width:95% !important;}  h1{display:block;font-size:10px !important;}
+            h3{line-height:25px !important;}
+        .resp-view {  font-size: 11px !important;}
+
+<!-- Logo image css -->
+#emailBody {border: 5px solid #b7b7b8;width: 300px !important;}
+.logo-resp{width:70%;}
+.logo-resp > img { width: 100% !important; display:block;}
+.logo-text-date {font-size: 18px !important;}
+.logo-text-day { font-size: 11px !important;padding-right:3px;line-height:10px !important;}
+#month-span{display: inline-block !important;}
+.logo-text-month{display:none;}
+.logo-text {  width: 26%;}
+.h3heading1 {
+    font-size: 20px !important;
+    line-height: 23px !important;
+    margin-top: -5px !important;
+}.h3heading2{font-size:16px !important;line-height: 17px !important;}.h3heading3{font-size:15px !important;line-height: 17px !important;}
+<!-- Logo image css Ends Here -->
+
+.logo-resp {height: auto;width: 71% !important;}
+.storyimg-resp {display: block !important;margin-left: 4% !important;width:98% !important;}
+.storyimg-resp > img { display: block;width:92%;
+}
+.textContent.story-text {
+    padding-left: 5% !important;
+}
+/*Media query forn
+#flexiblecontainercell > table {
+    width: 62% !important;
+}
+  /*Media query forn
+
+.socio-icon {  padding: 4px;; width: auto}
+.footer-font{
+    font-size: 8px !important;
+  text-align:center;
+}
+
+.footer-logo {
+    width: 75px !important;
+}
+.story-data {
+    font-size: 16px !important;
+}
+
+.flexibleImageSmall {
+    vertical-align: sub;
+}    table[id="emailHeader"], table[id="emailBody"], table[id="emailFooter"], table[class="flexibleContainer"] {width:100% !important;}
+                td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {display: inline;text-align: left;}
+
+                td[class="imageContent"] img {height:auto !important; width:100% !important; max-width:100% !important;}
+                img[class="flexibleImage"]{height:auto !important; width:100% !important;max-width:100% !important;}
+                img[class="flexibleImageSmall"]{height:auto !important; width:auto !important;}
+
+                table[class="flexibleContainerBoxNext"]{padding-top: 10px !important;}
+
+            }
+
+
+      @media only screen and (-webkit-device-pixel-ratio:.75){}
+            @media only screen and (-webkit-device-pixel-ratio:1){ }
+            @media only screen and (-webkit-device-pixel-ratio:1.5){
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width:568px) {
+            }
+</style>  <!--
+            Outlook Conditional CSS
+          -->
+        <!--[if mso 12]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+            </style>
+        <![endif]-->
+        <!--[if mso 14]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+              </style>
+        <![endif]--></head>';
+  return $html_head;
+}*/
+
+function cio_peer2peer_body($News_node, $site_arr, $src_url){
+    $html_body = '<!-- CENTER THE EMAIL // -->
+    <center>
+      <table id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+        <tbody>
+          <tr>
+            <td id="bodyCell" align="center" valign="top"><table id="emailBody" style="background-color: #FFFFFF;border: 8px solid #b7b7b8;" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="600">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top">
+                    <table style="color:#FFFFFF;" bgcolor="#ffffff" border="0" cellpadding="8" cellspacing="0" width="100%">
+                      <tbody>
+                        <tr>
+                          <td align="center" valign="center">
+                            <div class="resp-view" style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">If you can\'t see this message <a style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;" target="_blank" href="http://crm.idgindia.net/newsletter/ciopeer2peer/'.date('Y/F/d').'/index.html"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
+                            </div>
+                            <!-- // FLEXIBLE CONTAINER -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // CENTERING TABLE -->
+                  </td>
+                </tr>
+              <tr>
+                <td valign="top" align="center">
+                  <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#FF170D" style="">
+                  <tbody>
+                    <tr>
+                      <td valign="top" align="center">
+                        <table width="599" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                          <tbody>
+                            <tr>
+                              <td width="500" valign="center" align="center" class="flexibleContainerCell">
+                                <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                  <tbody>
+                                    <tr>
+                                      <td width="59%" valign="left" align="left" class="logo-resp">
+                                        <img width="488" align="middle" alt="CIO-logo" src="'.$src_url.'/themes/idgnews/images/peer2peer-logo.jpg">
+                                      </td>
+                                      <td width="39%" valign="center" align="center" class="logo-text">
+                                        <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-align: center; line-height: 12px; color: rgb(255, 255, 255); font-size: 13px;">Issue 69
+                                        </div>
+                                        <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; line-height: 16px; color: rgb(255, 255, 255); font-size: 15px;">'.date('F').'
+                                        </div>
+                                        <div style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-align: center; color: rgb(255, 255, 255); font-size: 15px;" class="logo-text-day">'.date('d/Y').'</div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <!-- // CONTENT TABLE -->
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- // FLEXIBLE CONTAINER -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- // CENTERING TABLE -->
+              </td>
+            </tr>';
+
+            //Get Newsletter content from Paragraphs
+            $Paragraphs = $News_node->get('field_news_content');
+            $content_index = 0;
+            foreach ($Paragraphs as $Paragraph) {
+              $content_index ++;
+              $news_content = Paragraph::load($Paragraph->target_id);
+
+              //Get image
+              $image_node = Node::load($news_content->get('field_newsletter_title')->target_id);
+              if(!empty($image_node->get('field_home_page_image')->target_id)){
+                $image_url = file_create_url($image_node->field_home_page_image->entity->getFileUri());
+              }
+              else{
+                unset($image_url);
+              }
+              $strap_line = $image_node->get('field_news_strap_line')->value;
+              $title = $news_content->get('field_actnewsletter_title')->value;
+              $teaser = $news_content->get('field_teaser')->value;
+              $content_url = $news_content->get('field_site_url')->value;
+              $content_guid = $news_content->get('field_content_guid')->value;
+              $url_title = end(explode('/', $content_url));
+
+
+              $html_body .= '<tr>
+                <td valign="top" align="center" style="" class="textcontent">
+                <!-- CENTERING TABLE // -->
+                  <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                      <tr>
+                        <td valign="top" align="center" style="">
+                        <!-- FLEXIBLE CONTAINER // -->
+                          <table width="580" cellspacing="0" cellpadding="12" border="0" class="flexibleContainer" style="border-bottom: 1px dashed rgb(128, 128, 128);">
+                            <tbody>
+                              <tr>
+                                <td width="575" valign="left" class="flexibleContainerCell">
+                                <!-- CONTENT TABLE // -->
+                                  <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                    <tbody>
+                                      <tr>
+                                        <td width="225" valign="top" align="left" class="storyimg-resp"><img src="'.$image_url.'" alt="story1" width="216" height="161" class="flexibleImage " style="max-width: 100%; vertical-align: bottom;" title="Text">
+                                        </td>
+                                        <td valign="top" align="right" class="flexibleContainerBox">
+                                          <table width="330" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                            <tbody>
+                                              <tr>
+                                                <td align="left" class="textContent story-text">
+                                                  <h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-transform: uppercase; color: rgb(236, 43, 36); margin: 0;padding:0;align: left; font-size: 12px; display: block; line-height: 1 ! important;"> <img width="10" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/red-dot.jpg">&nbsp;'.$strap_line. ' <span style="color: black; text-transform: capitalize;">&nbsp;</span></h3>
+                                                    <h3 class="h3heading1" style="line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-weight: normal;margin:0 0 4px; text-align: left; color: black; font-size: 28px;"> <a href="'.$content_url.'?utm_source=ciopeer2peer&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y',strtotime('+1 day')).'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" style="text-decoration: none; color: #666666; font-weight: bold ! important;">'.$title.'</a> </h3>
+                                                      <div class="story-data" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin-bottom:0;color:#666666;line-height:105%;">'.$teaser.'</div>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>                                      
+                                      <!-- // CONTENT TABLE -->
+
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <!-- // FLEXIBLE CONTAINER -->
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <!-- // CENTERING TABLE -->
+                    </td>
+                  </tr>';
+                }
+                $html_body .= '<table width="615" cellspacing="0" cellpadding="0" border="0" bgcolor="black" id="emailFooter" style="">
+                  <tbody>
+                    <tr>
+                      <td valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="10" bgcolor="black" class="footer-font;">&nbsp;</td><td width="585" bgcolor="black" class="footer-font;"><span style="color:white;font-family:Arial, Helvetica, sans-serif; font-size:12px;">You are receiving this newsletter because you have subscribed to it on </span><a href="http://www.cio.in/" style="color: white; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-decoration:none;">www.cio.in. </a><a href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#" style="color: #FFFFFF; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-decoration:none;">UNSUBSCRIBE</a></td>
+                    </tr>
+                    <tr>
+                      <td bgcolor="black" colspan="2">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                          <tr>
+                            <td width="10" bgcolor="black">&nbsp;</td>
+                            <td width="106" align="left" style="background-color: black; text-align: left"><a href="http://www.cio.in/"><img width="100" height="30" border="0" src="'.$src_url.'/themes/idgnews/images/cio-in-footer.jpg" alt="CIO India"></a></td>
+
+                            <td width="379" style="background-color: black; text-align: center"><span style="text-align: center; font-family: Arial; font-size: 9px; color: white;" class="footer-font;">Copyright 2005 - 2018 <a style="text-decoration: none; color: white;" href="http://www.idg.in">IDG Media Private Ltd</a>. All rights reserved. <a style="text-decoration: none; color: white;" href="http://www.cio.in/about-us/privacy-policy">Privacy Policy</a></span></td>
+
+                            <td width="44" class="socio-icon"><a href="https://www.facebook.com/CIOIndiaIDG" style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/facebook.jpg"> </a></td>
+
+                            <td width="45" class="socio-icon"><a href="https://twitter.com/CIOIn"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/twitter.jpg"><br>
+                                </a></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td height="0px" bgcolor="black" colspan="2"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </tbody>
+  </table>;
+  </td>
+  </tr>
+  </tbody>
+  </table>
+    </center>
+  </body>
+</html>';
+return $html_body;
+}
+
+
+
+//Channel world special
+/*function channelworld_specials_head(){
+  $html_head = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="format-detection" content="telephone=no" /><title>ChannelWorld Special</title>
+        <style type="text/css">body, #bodyTable, #bodyCell, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;font-family:Helvetica,Arial,sans-serif;}
+            table{border-collapse:collapse;}
+            table[id=bodyTable] {width:100%!important;margin:auto;max-width:500px!important;color:#7A7A7A;font-weight:normal;}
+            img, a img{border:0; outline:none; text-decoration:none;height:auto; line-height:100%;}
+        h3{color:#5F5F5F; font-weight:normal; font-family:Helvetica,Arial,sans-serif; font-size:20px;text-align:Left; letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;padding-top:0;padding-bottom:0;padding-left:0;padding-right:0;}
+            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+            #outlook a{padding:0;}img{-ms-interpolation-mode: bicubic;display:inline;outline:none; text-decoration:none;}body, table, td, p, a, li, blockquote{-ms-text-size-adjust:100%; -webkit-text-size-adjust:100%;}
+            .flexibleImage{height:auto;}
+            body, #bodyTable{background-color:#ffffff;}
+            #emailBody{background-color:#FFFFFF;border:8px solid #F00001;}
+            #emailFooter{background-color:#E1E1E1;}
+            .textContent, .textContentLast{color:#8B8B8B; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:125%; text-align:Left;}
+            .textContent a, .textContentLast a{color:#205478; text-decoration:underline;}
+            .imageContentText {margin-top: 10px;line-height:0;}
+            .imageContentText a {line-height:0;}
+            span[class=ios-color-hack3] a {color:#8B8B8B!important;text-decoration:none!important;}
+            .a[href^="tel"], a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:none!important;cursor:default!important;}
+            .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:auto!important;cursor:default!important;}
+.logo-text-month{display:block;}
+.logo-text-date > span {display: none;}
+
+.voice-logo {
+    height: auto;
+    padding: 0;
+    width: 590px;
+}
+.voiceimg {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+@media only screen and (max-width: 480px){
+      body{width:100% !important; min-width:95% !important;}  h1{display:block;font-size:10px !important;}
+            h3{line-height:25px !important;}
+        .resp-view {  font-size: 11px !important;}
+
+<!-- Logo image css -->
+#emailBody {border: 5px solid #F00001;width: 300px !important;}
+.logo-resp{width:70%;}
+.logo-resp > img { width: 100% !important; display:block;}
+.logo-text-date {font-size: 18px !important;}
+.logo-text-day { font-size: 11px !important;padding-right:3px;line-height:10px !important;}
+#month-span{display: inline-block !important;}
+.logo-text-month{display:none;}
+.logo-text {  width: 26%;}
+.h3heading1 {
+    font-size: 20px !important;
+    line-height: 23px !important;
+    margin-top: -5px !important;
+}.h3heading2{font-size:16px !important;line-height: 17px !important;}.h3heading3{font-size:15px !important;line-height: 17px !important;}
+<!-- Logo image css Ends Here -->
+
+.logo-resp {height: auto;width: 71% !important;}
+.storyimg-resp {display: block !important;margin-left: 4% !important;width:98% !important;}
+.storyimg-resp > img { display: block;width:92%;
+}
+.textContent.story-text {
+    padding-left: 5% !important;
+}
+/*Media query forn
+#flexiblecontainercell > table {
+    width: 62% !important;
+}
+  /*Media query forn
+
+.socio-icon {  padding: 4px;; width: auto}
+.footer-font{
+    font-size: 8px !important;
+  text-align:center;
+}
+
+.footer-logo {
+    width: 75px !important;
+}
+.story-data {
+    font-size: 16px !important;
+}
+
+.flexibleImageSmall {
+    vertical-align: sub;
+}    table[id="emailHeader"], table[id="emailBody"], table[id="emailFooter"], table[class="flexibleContainer"] {width:100% !important;}
+                td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {display: inline;text-align: left;}
+
+                td[class="imageContent"] img {height:auto !important; width:100% !important; max-width:100% !important;}
+                img[class="flexibleImage"]{height:auto !important; width:100% !important;max-width:100% !important;}
+                img[class="flexibleImageSmall"]{height:auto !important; width:auto !important;}
+
+                table[class="flexibleContainerBoxNext"]{padding-top: 10px !important;}
+
+            }
+
+
+      @media only screen and (-webkit-device-pixel-ratio:.75){}
+            @media only screen and (-webkit-device-pixel-ratio:1){ }
+            @media only screen and (-webkit-device-pixel-ratio:1.5){
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width:568px) {
+            }
+</style>  <!--
+            Outlook Conditional CSS
+          -->
+        <!--[if mso 12]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+            </style>
+        <![endif]-->
+        <!--[if mso 14]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+              </style>
+        <![endif]--></head>';
+  return $html_head;
+}*/
+
+function channelworld_specials_body($News_node, $site_arr, $src_url){
+  $html_body = '<!-- CENTER THE EMAIL // -->
+    <center>
+      <table id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+        <tbody>
+          <tr>
+            <td id="bodyCell" align="center" valign="top"><table id="emailBody" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #FFFFFF; border: 8px solid #F00001;">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top">
+                    <table style="color:#FFFFFF;" bgcolor="#ffffff" border="0" cellpadding="8" cellspacing="0" width="100%">
+                      <tbody>
+                        <tr>
+                          <td align="center" valign="center">
+                            <div class="resp-view" style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">If you can\'t see this message <a style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;" target="_blank" href="http://crm.idgindia.net/newsletter/channelworldspecial/'.date('Y/F/d').'/index.html"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
+                              </div>
+                              <!-- // FLEXIBLE CONTAINER -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // CENTERING TABLE -->
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top" align="center">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#FF170D" style="">
+                      <tbody>
+                        <tr>
+                          <td valign="top" align="center">
+                            <table width="599" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                              <tbody>
+                                <tr>
+                                  <td valign="top" align="center">
+                                  <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f00001" style="">
+                                    <tbody>
+                                      <tr>
+                                        <td valign="top" align="left">
+                                          <table width="590" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                                            <tbody>
+                                              <tr>
+                                                <td width="590" valign="center" align="center" class="flexibleContainerCell">
+                                                  <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                                    <tbody>
+                                                      <tr>
+                                                        <td width="59%" valign="bottom" align="left" class="logo-resp">
+                                                          <img width="437" align="middle" alt="Channel-logo" src="'.$src_url.'/themes/idgnews/images/Executive-Shuffle.png">
+                                                        </td>
+                                                        <td width="40%" valign="bottom" align="center" class="logo-text">
+                                                          <div class="logo-resp"><img width="129" align="middle" alt="channel-logo" src="'.$src_url.'/themes/idgnews/images/special.jpg">
+                                                            </div>
+                                                            <div style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; font-size: 16px; color: rgb(255, 255, 255); vertical-align: bottom ! important;" class="logo-text-day">'.date('F Y').'
+                                                            </div>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                    <!-- // CONTENT TABLE -->
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                            <!-- // FLEXIBLE CONTAINER -->
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!-- // CENTERING TABLE -->
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          <!-- // FLEXIBLE CONTAINER -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- // CENTERING TABLE -->
+                </td>
+              </tr>';
+              //Get Newsletter content from Paragraphs
+              $Paragraphs = $News_node->get('field_news_content');
+              $content_index = 0;
+              foreach ($Paragraphs as $Paragraph) {
+                $content_index ++;
+                $news_content = Paragraph::load($Paragraph->target_id);
+                //Get image
+                $image_node = Node::load($news_content->get('field_newsletter_title')->target_id);
+                if(!empty($image_node->get('field_home_page_image')->target_id)){
+                  $image_url = file_create_url($image_node->field_home_page_image->entity->getFileUri());
+                }
+                else{
+                  unset($image_url);
+                }
+                $strap_line = $image_node->get('field_news_strap_line')->value;
+                $title = $news_content->get('field_actnewsletter_title')->value;
+                $teaser = $news_content->get('field_teaser')->value;
+                $content_url = $news_content->get('field_site_url')->value;
+                $content_guid = $news_content->get('field_content_guid')->value;
+                $url_title = end(explode('/', $content_url));
+
+                $html_body .= '<tr>
+                  <td valign="top" align="center" style="" class="textcontent">
+                  <!-- CENTERING TABLE // -->
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                      <tbody>
+                        <tr>
+                          <td valign="top" align="center" style="">
+                          <!-- FLEXIBLE CONTAINER // -->
+                            <table width="580" cellspacing="0" cellpadding="12" border="0" class="flexibleContainer" style="border-bottom: 1px dashed rgb(128, 128, 128);">
+                              <tbody>
+                                <tr>
+                                  <td width="575" valign="left" class="flexibleContainerCell">
+                                  <!-- CONTENT TABLE // -->
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                      <tbody>
+                                        <tr>
+                                          <td width="225" valign="top" align="left" class="storyimg-resp"><img src="'.$image_url.'" alt="story1" width="216" height="161" class="flexibleImage " style="max-width: 100%; border:1px solid #000; vertical-align: bottom;" title="Text">
+                                          </td>
+                                          <td valign="top" align="right" class="flexibleContainerBox">
+                                            <table width="330" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                              <tbody>
+                                                <tr>
+                                                  <td align="left" class="textContent story-text"> <h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-transform: uppercase; color: rgb(236, 43, 36); margin: 0px; text-align: left; font-size: 12px; display: block; line-height: 1 ! important;"> <img width="10" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/arrow_1.jpg">&nbsp;'.$strap_line. ' <span style="color: black; text-transform: capitalize;">&nbsp;</span>
+                                                    </h3>
+                                                    <h3 class="h3heading1" style="line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-weight: normal;margin: 0 0 4px; text-align: left; color: black; font-size: 28px;"> <a href="'.$content_url.'?utm_source=ciopeer2peer&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y').'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" style="text-decoration: none; color: #666666; font-weight: bold ! important;">'.$title.'</a>
+                                                    </h3>
+                                                    <div class="story-data" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin-bottom:0;color:#666666;line-height:105%;">'.$teaser.'</div>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!-- // CONTENT TABLE -->
+                                  </td>
+                                </tr>
+                              </tbody></table>
+                              <!-- // FLEXIBLE CONTAINER -->
+                            </td>
+                          </tr>
+                        </tbody></table>
+                        <!-- // CENTERING TABLE -->
+                      </td>
+                    </tr>';
+                  }
+                  $html_body .= '<table width="615" cellspacing="0" cellpadding="0" border="0" bgcolor="black" id="emailFooter" style="">
+                    <tbody>
+                      <tr>
+                        <td valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="10" bgcolor="black" class="footer-font;">&nbsp;</td><td width="585" bgcolor="black" class="footer-font;"><span style="color:white;font-family:Arial, Helvetica, sans-serif; font-size:11px;">You are receiving this newsletter because you have subscribed to it on </span><a href="http://www.channelworld.in/" style="color: white; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-decoration:none;">www.channelworld.in. </a><a href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#" style="color: #FFFFFF; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-decoration:none;">UNSUBSCRIBE</a></td>
+                      </tr>
+                      <tr>
+                      <td bgcolor="black" colspan="2">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                          <tbody>
+                            <tr>
+                              <td width="10" bgcolor="black">&nbsp;</td>
+                              <td width="106" align="left" style="background-color: black; text-align: left"><a href="http://www.ChannelWorld.in/"><img width="145" height="30" border="0" src="'.$src_url.'/themes/idgnews/images/channelworld_footer_logo.png" alt="ChannelWorld India"></a></td>
+
+                              <td width="379" style="background-color: black; text-align: center"><span style="text-align: center; font-family: Arial; font-size: 9px; color: white;" class="footer-font;">Copyright 2005 - 2018 <a style="text-decoration: none; color: white;" href="http://www.idg.in">IDG Media Private Ltd</a>. All rights reserved. <a style="text-decoration: none; color: white;" href="http://www.cio.in/about-us/privacy-policy">Privacy Policy</a></span></td>
+
+                              <td width="44" class="socio-icon"><a href="https://www.facebook.com/ChannelWorldIndia" style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/facebook.jpg"> </a></td>
+
+                              <td width="45" class="socio-icon"><a href="https://twitter.com/ChannelWorldin"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/twitter.jpg"><br>
+                                  </a></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td height="0px" bgcolor="black" colspan="2"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </tbody>
+    </table>;
+                
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    </center>
+ </body>
+</html>';
+return $html_body;
+}
+
+
+//Insights body and head
+/*
+function channelworld_insights_head(){
+  $html_head = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="format-detection" content="telephone=no" /><title>ChannelWorld Insights</title>
+        <style type="text/css">body, #bodyTable, #bodyCell, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;font-family:Helvetica,Arial,sans-serif;}
+            table{border-collapse:collapse;}
+            table[id=bodyTable] {width:100%!important;margin:auto;max-width:500px!important;color:#7A7A7A;font-weight:normal;}
+            img, a img{border:0; outline:none; text-decoration:none;height:auto; line-height:100%;}
+        h3{color:#5F5F5F; font-weight:normal; font-family:Helvetica,Arial,sans-serif; font-size:20px;text-align:Left; letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;padding-top:0;padding-bottom:0;padding-left:0;padding-right:0;}
+            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+            #outlook a{padding:0;}img{-ms-interpolation-mode: bicubic;display:inline;outline:none; text-decoration:none;}body, table, td, p, a, li, blockquote{-ms-text-size-adjust:100%; -webkit-text-size-adjust:100%;}
+            .flexibleImage{height:auto;}
+            body, #bodyTable{background-color:#ffffff;}
+            #emailBody{background-color:#FFFFFF;border:8px solid #F00001;}
+            #emailFooter{background-color:#E1E1E1;}
+            .textContent, .textContentLast{color:#8B8B8B; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:125%; text-align:Left;}
+            .textContent a, .textContentLast a{color:#205478; text-decoration:underline;}
+            .imageContentText {margin-top: 10px;line-height:0;}
+            .imageContentText a {line-height:0;}
+            span[class=ios-color-hack3] a {color:#8B8B8B!important;text-decoration:none!important;}
+            .a[href^="tel"], a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:none!important;cursor:default!important;}
+            .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:auto!important;cursor:default!important;}
+.logo-text-month{display:block;}
+.logo-text-date > span {display: none;}
+
+.voice-logo {
+    height: auto;
+    padding: 0;
+    width: 590px;
+}
+.voiceimg {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+@media only screen and (max-width: 480px){
+      body{width:100% !important; min-width:95% !important;}  h1{display:block;font-size:10px !important;}
+            h3{line-height:25px !important;}
+        .resp-view {  font-size: 11px !important;}
+
+<!-- Logo image css -->
+#emailBody {border: 5px solid #F00001;width: 300px !important;}
+.logo-resp{width:70%;}
+.logo-resp > img { width: 100% !important; display:block;}
+.logo-text-date {font-size: 18px !important;}
+.logo-text-day { font-size: 11px !important;padding-right:3px;line-height:10px !important;}
+#month-span{display: inline-block !important;}
+.logo-text-month{display:none;}
+.logo-text {  width: 26%;}
+.h3heading1 {
+    font-size: 20px !important;
+    line-height: 23px !important;
+    margin-top: -5px !important;
+}.h3heading2{font-size:16px !important;line-height: 17px !important;}.h3heading3{font-size:15px !important;line-height: 17px !important;}
+<!-- Logo image css Ends Here -->
+
+.logo-resp {height: auto;width: 71% !important;}
+.storyimg-resp {display: block !important;margin-left: 4% !important;width:98% !important;}
+.storyimg-resp > img { display: block;width:92%;
+}
+.textContent.story-text {
+    padding-left: 5% !important;
+}
+/*Media query forn
+#flexiblecontainercell > table {
+    width: 62% !important;
+}
+  /*Media query forn
+
+.socio-icon {  padding: 4px;; width: auto}
+.footer-font{
+    font-size: 8px !important;
+  text-align:center;
+}
+
+.footer-logo {
+    width: 75px !important;
+}
+.story-data {
+    font-size: 16px !important;
+}
+
+.flexibleImageSmall {
+    vertical-align: sub;
+}    table[id="emailHeader"], table[id="emailBody"], table[id="emailFooter"], table[class="flexibleContainer"] {width:100% !important;}
+                td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {display: inline;text-align: left;}
+
+                td[class="imageContent"] img {height:auto !important; width:100% !important; max-width:100% !important;}
+                img[class="flexibleImage"]{height:auto !important; width:100% !important;max-width:100% !important;}
+                img[class="flexibleImageSmall"]{height:auto !important; width:auto !important;}
+
+                table[class="flexibleContainerBoxNext"]{padding-top: 10px !important;}
+
+            }
+
+
+      @media only screen and (-webkit-device-pixel-ratio:.75){}
+            @media only screen and (-webkit-device-pixel-ratio:1){ }
+            @media only screen and (-webkit-device-pixel-ratio:1.5){
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width:568px) {
+            }
+</style>  <!--
+            Outlook Conditional CSS
+          -->
+        <!--[if mso 12]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+            </style>
+        <![endif]-->
+        <!--[if mso 14]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+              </style>
+        <![endif]--></head>';
+  return $html_head;
+}*/
+
+function channelworld_insights_body($News_node, $site_arr, $src_url){
+  $html_body = '<!-- CENTER THE EMAIL // -->
+    <center>
+      <table id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+        <tbody>
+          <tr>
+            <td id="bodyCell" align="center" valign="top"><table id="emailBody" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #FFFFFF; border: 8px solid #F00001">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top">
+                    <table style="color:#FFFFFF;" bgcolor="#ffffff" border="0" cellpadding="8" cellspacing="0" width="100%">
+                      <tbody>
+                        <tr>
+                          <td align="center" valign="center">
+                            <div class="resp-view" style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">If you can\'t see this message <a style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;" target="_blank" href="http://crm.idgindia.net/newsletter/channelworldinsights/'.date('Y/F/d').'/index.html"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
+                            </div>
+                            <!-- // FLEXIBLE CONTAINER -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // CENTERING TABLE -->
+                  </td>
+                  </tr>
+                  <tr>
+                    <td valign="top" align="center">
+                      <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f00001" style="">
+                        <tbody>
+                          <tr>
+                            <td valign="top" align="left">
+                              <table width="591" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                                <tbody>
+                                  <tr>
+                                    <td width="591" valign="center" align="center" class="flexibleContainerCell">
+                                      <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                          <tr>
+                                            <td width="59%" valign="bottom" align="left" class="logo-resp">
+                                              <img width="485" align="middle" src="'.$src_url.'/themes/idgnews/images/chanel_logo_bar.jpg" alt="computerworld-logo">
+                                            </td>
+                                            <td width="39%" valign="center" align="center" class="logo-text">
+                                              <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-align: center; font-size: 14px; line-height: 12px; color: rgb(255, 255, 255);">Issue 135</div>
+                                              <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; font-size: 16px; line-height: 16px; color: rgb(255, 255, 255);">'.date('F').'</div>
+                                              <div style="font-family: Helvetica,Arial,sans-serif; font-size: 16px; font-weight: bold; text-align: center; color: rgb(255, 255, 255);" class="logo-text-day">'.date('Y/d').'</div>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                      <!-- // CONTENT TABLE -->
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <!-- // FLEXIBLE CONTAINER -->
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <!-- // CENTERING TABLE -->
+                    </td>
+                  </tr>';
+
+                  //Get Newsletter content from Paragraphs
+                  $Paragraphs = $News_node->get('field_news_content');
+                  $content_index = 0;
+                  foreach ($Paragraphs as $Paragraph) {
+                    $content_index ++;
+                    $news_content = Paragraph::load($Paragraph->target_id);
+
+                    //Get image
+                    $image_node = Node::load($news_content->get('field_newsletter_title')->target_id);
+                    if(!empty($image_node->get('field_home_page_image')->target_id)){
+                        $image_url = file_create_url($image_node->field_home_page_image->entity->getFileUri());
+                      }
+                    else{
+                      unset($image_url);
+                      }                    
+                        $strap_line = $image_node->get('field_news_strap_line')->value;
+                        $title = $news_content->get('field_actnewsletter_title')->value;
+                        $teaser = $news_content->get('field_teaser')->value;
+                        $content_url = $news_content->get('field_site_url')->value;
+                        $content_guid = $news_content->get('field_content_guid')->value;
+                        $url_title = end(explode('/', $content_url));
+
+
+                        $html_body .= '<tr>
+                          <td valign="top" align="center" style="" class="textcontent">
+                            <!-- CENTERING TABLE // -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                              <tbody>
+                                <tr>
+                                  <td valign="top" align="center" style="">
+                                  <!-- FLEXIBLE CONTAINER // -->
+                                    <table width="580" cellspacing="0" cellpadding="12" border="0" class="flexibleContainer" style="border-bottom: 1px dashed rgb(128, 128, 128);">
+                                      <tbody>
+                                        <tr>
+                                          <td width="575" valign="left" class="flexibleContainerCell">
+
+                                            <!-- CONTENT TABLE // -->
+                                              <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                                <tbody>
+                                                  <tr>
+                                                    <td width="225" valign="top" align="left" class="storyimg-resp"><img src="'.$image_url.'" alt="story1" width="216" height="161" class="flexibleImage " style="max-width: 100%; border:1px solid #000; vertical-align: bottom;" title="Text"></td>
+                                                    <td valign="top" align="right" class="flexibleContainerBox">
+                                                      <table width="330" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                                        <tbody>
+                                                          <tr>
+                                                            <td align="left" class="textContent story-text"> <h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-transform: uppercase; color: rgb(236, 43, 36); margin: 0px; text-align: left; font-size: 12px; display: block; line-height: 1 ! important;"> <img width="10" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/arrow_1.jpg">&nbsp;'.$strap_line. ' <span style="color: black; text-transform: capitalize;">&nbsp;</span></h3>
+                                                              <h3 class="h3heading1" style="line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-weight: normal;margin: 0 0 4px; text-align: left; color: black; font-size: 28px;"> <a href="'.$content_url.'?utm_source=ciopeer2peer&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y').'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" style="text-decoration: none; color: #666666; font-weight: bold ! important;">'.$title.'</a> </h3>
+                                                              <div class="story-data" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin-bottom:0;color:#666666;line-height:105%;">'.$teaser.'</div>
+                                                            </td>
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                              <!-- // CONTENT TABLE -->
+
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                      <!-- // FLEXIBLE CONTAINER -->
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <!-- // CENTERING TABLE -->
+                            </td>
+                          </tr>';
+                        }
+                        $html_body .= '<table width="615" cellspacing="0" cellpadding="0" border="0" bgcolor="black" id="emailFooter" style="">
+                          <tbody>
+                            <tr>
+                              <td valign="top" align="center"><table width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="10" bgcolor="black" class="footer-font;">&nbsp;</td><td width="585" bgcolor="black" class="footer-font;"><span style="color:white;font-family:Arial, Helvetica, sans-serif; font-size:11px;">You are receiving this newsletter because you have subscribed to it on </span><a href="http://www.channelworld.in/" style="color: white; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-decoration:none;">www.channelworld.in. </a><a href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#" style="color: #FFFFFF; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; text-decoration:none;">UNSUBSCRIBE</a></td>
+                            </tr>
+                            <tr>
+                              <td bgcolor="black" colspan="2">
+                                <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                  <tbody>
+                                    <tr>
+                                      <td width="10" bgcolor="black">&nbsp;</td>
+                                      <td width="106" align="left" style="background-color: black; text-align: left"><a href="http://www.ChannelWorld.in/"><img width="145" height="30" border="0" src="'.$src_url.'/themes/idgnews/images/channelworld_footer_logo.png" alt="ChannelWorld India"></a></td>
+
+                                      <td width="379" style="background-color: black; text-align: center"><span style="text-align: center; font-family: Arial; font-size: 9px; color: white;" class="footer-font;">Copyright 2005 - 2018 <a style="text-decoration: none; color: white;" href="http://www.idg.in">IDG Media Private Ltd</a>. All rights reserved. <a style="text-decoration: none; color: white;" href="http://www.cio.in/about-us/privacy-policy">Privacy Policy</a></span></td>
+
+                                      <td width="44" class="socio-icon"><a href="https://www.facebook.com/ChannelWorldIndia" style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/facebook.jpg"> </a></td>
+
+                                      <td width="45" class="socio-icon"><a href="https://twitter.com/ChannelWorldin"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/twitter.jpg"><br>
+                                          </a></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          <tr>
+                            <td height="0px" bgcolor="black" colspan="2"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </tbody>
+          </table>;
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </center>
+ </body>
+</html>';
+return $html_body;
+}
+
+//Computer world compass
+/*
+function computerworld_compass_head(){
+  $html_head = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="format-detection" content="telephone=no" /><title>Computerworld Compass</title>
+        <style type="text/css">body, #bodyTable, #bodyCell, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;font-family:Helvetica,Arial,sans-serif;}
+            table{border-collapse:collapse;}
+            table[id=bodyTable] {width:100%!important;margin:auto;max-width:500px!important;color:#7A7A7A;font-weight:normal;}
+            img, a img{border:0; outline:none; text-decoration:none;height:auto; line-height:100%;}
+        h3{color:#5F5F5F; font-weight:normal; font-family:Helvetica,Arial,sans-serif; font-size:20px;text-align:Left; letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;padding-top:0;padding-bottom:0;padding-left:0;padding-right:0;}
+            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+            #outlook a{padding:0;}img{-ms-interpolation-mode: bicubic;display:inline;outline:none; text-decoration:none;}body, table, td, p, a, li, blockquote{-ms-text-size-adjust:100%; -webkit-text-size-adjust:100%;}
+            .flexibleImage{height:auto;}
+            body, #bodyTable{background-color:#ffffff;}
+            #emailBody{background-color:#FFFFFF;border:8px solid #FFC143;}
+            #emailFooter{background-color:#E1E1E1;}
+            .textContent, .textContentLast{color:#8B8B8B; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:125%; text-align:Left;}
+            .textContent a, .textContentLast a{color:#205478; text-decoration:underline;}
+            .imageContentText {margin-top: 10px;line-height:0;}
+            .imageContentText a {line-height:0;}
+            span[class=ios-color-hack3] a {color:#8B8B8B!important;text-decoration:none!important;}
+            .a[href^="tel"], a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:none!important;cursor:default!important;}
+            .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:auto!important;cursor:default!important;}
+.logo-text-month{display:block;}
+.logo-text-date > span {display: none;}
+
+.voice-logo {
+    height: auto;
+    padding: 0;
+    width: 590px;
+}
+.voiceimg {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+@media only screen and (max-width: 480px){
+      body{width:100% !important; min-width:95% !important;}  h1{display:block;font-size:10px !important;}
+            h3{line-height:25px !important;}
+        .resp-view {  font-size: 11px !important;}
+
+<!-- Logo image css -->
+#emailBody {border: 5px solid #F00001;width: 300px !important;}
+.logo-resp{width:70%;}
+.logo-resp > img { width: 100% !important; display:block;}
+.logo-text-date {font-size: 18px !important;}
+.logo-text-day { font-size: 11px !important;padding-right:3px;line-height:10px !important;}
+#month-span{display: inline-block !important;}
+.logo-text-month{display:none;}
+.logo-text {  width: 26%;}
+.h3heading1 {
+    font-size: 20px !important;
+    line-height: 23px !important;
+    margin-top: -5px !important;
+}.h3heading2{font-size:16px !important;line-height: 17px !important;}.h3heading3{font-size:15px !important;line-height: 17px !important;}
+<!-- Logo image css Ends Here -->
+
+.logo-resp {height: auto;width: 71% !important;}
+.storyimg-resp {display: block !important;margin-left: 4% !important;width:98% !important;}
+.storyimg-resp > img { display: block;width:92%;
+}
+.textContent.story-text {
+    padding-left: 5% !important;
+}
+/*Media query forn
+#flexiblecontainercell > table {
+    width: 62% !important;
+}
+  /*Media query forn
+
+.socio-icon {  padding: 4px;; width: auto}
+.footer-font{
+    font-size: 8px !important;
+  text-align:center;
+}
+
+.footer-logo {
+    width: 75px !important;
+}
+.story-data {
+    font-size: 16px !important;
+}
+
+.flexibleImageSmall {
+    vertical-align: sub;
+}    table[id="emailHeader"], table[id="emailBody"], table[id="emailFooter"], table[class="flexibleContainer"] {width:100% !important;}
+                td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {display: inline;text-align: left;}
+
+                td[class="imageContent"] img {height:auto !important; width:100% !important; max-width:100% !important;}
+                img[class="flexibleImage"]{height:auto !important; width:100% !important;max-width:100% !important;}
+                img[class="flexibleImageSmall"]{height:auto !important; width:auto !important;}
+
+                table[class="flexibleContainerBoxNext"]{padding-top: 10px !important;}
+
+            }
+
+
+      @media only screen and (-webkit-device-pixel-ratio:.75){}
+            @media only screen and (-webkit-device-pixel-ratio:1){ }
+            @media only screen and (-webkit-device-pixel-ratio:1.5){
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width:568px) {
+            }
+</style>  <!--
+            Outlook Conditional CSS
+          -->
+        <!--[if mso 12]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+            </style>
+        <![endif]-->
+        <!--[if mso 14]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+              </style>
+        <![endif]--></head>';
+  return $html_head;
+}*/
+
+function computerworld_compass_body($News_node, $site_arr, $src_url){
+  $html_body = '<!-- CENTER THE EMAIL // -->
+  <center>
+    <table id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+      <tbody>
+        <tr>
+          <td id="bodyCell" align="center" valign="top"><table id="emailBody" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #FFFFFF;border: 8px solid #FFC143;" >
+            <tbody>
+              <tr>
+                <td align="center" valign="top">
+                  <table style="color:#FFFFFF;" bgcolor="#ffffff" border="0" cellpadding="8" cellspacing="0" width="100%">
+                    <tbody>
+                      <tr>
+                        <td align="center" valign="center">
+                          <div class="resp-view" style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">If you can\'t see this message <a style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;" target="_blank" href="http://crm.idgindia.net/newsletter/computerworldcompass/'.date('Y/F/d').'/index.html"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
+                          </div>
+                          <!-- // FLEXIBLE CONTAINER -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- // CENTERING TABLE -->
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" align="center">
+                  <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#2F2F2F" style="">
+                    <tbody>
+                      <tr>
+                        <td valign="top" align="center">
+                          <table width="590" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                            <tbody>
+                              <tr>
+                                <td width="590" valign="center" align="center" class="flexibleContainerCell">
+                                  <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                  <tbody>
+                                    <tr>
+                                      <td width="59%" valign="bottom" align="left" class="logo-resp">
+                                        <img width="485" align="middle" alt="computerworld-logo" src="'.$src_url.'/themes/idgnews/images/logo_bar.jpg">
+                                      </td>
+                                      <td width="39%" valign="bottom" align="center" class="logo-text">
+                                        <div style="font-family: Helvetica,Arial,sans-serif; color: rgb(255, 193, 68); font-weight: bold; text-align: center; font-size: 14px; line-height: 12px;" class="logo-text-day">Issue 73</div>
+                                        <div style="font-family: Helvetica,Arial,sans-serif; color: rgb(255, 193, 68); font-weight: bold; font-size: 16px; line-height: 16px;" class="logo-text-day">'.date('F').'</div>
+                                        <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; color: rgb(255, 193, 68); font-size: 16px; font-weight: bold; text-align: center;">'.date('d/Y').'</div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <!-- // CONTENT TABLE -->
+
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!-- // FLEXIBLE CONTAINER -->
+                      </td>
+                    </tr>
+                  <tr>
+                    <td width="600" valign="bottom" align="center" class="voice-logo"><img width="599" class="voiceimg" style="" src="'.$src_url.'/themes/idgnews/images/main-logo-footer600.jpg" alt="cw-logo">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- // CENTERING TABLE -->
+            </td>
+          </tr>';
+
+          //Get Newsletter content from Paragraphs
+          $Paragraphs = $News_node->get('field_news_content');
+          $content_index = 0;
+          foreach ($Paragraphs as $Paragraph) {
+            $content_index ++;
+            $news_content = Paragraph::load($Paragraph->target_id);
+
+            //Get image
+            $image_node = Node::load($news_content->get('field_newsletter_title')->target_id);
+            if(!empty($image_node->get('field_home_page_image')->target_id)){
+              $image_url = file_create_url($image_node->field_home_page_image->entity->getFileUri());
+            }
+            else{
+              unset($image_url);
+            }
+            $strap_line = $image_node->get('field_news_strap_line')->value;
+            $title = $news_content->get('field_actnewsletter_title')->value;
+            $teaser = $news_content->get('field_teaser')->value;
+            $content_url = $news_content->get('field_site_url')->value;
+            $content_guid = $news_content->get('field_content_guid')->value;
+            $url_title = end(explode('/', $content_url));
+
+
+            $html_body .= '<tr>
+              <td valign="top" align="center" style="" class="textcontent">
+              <!-- CENTERING TABLE // -->
+                <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                  <tbody>
+                    <tr>
+                      <td valign="top" align="center" style="">
+                        <!-- FLEXIBLE CONTAINER // -->
+                        <table width="580" cellspacing="0" cellpadding="12" border="0" class="flexibleContainer" style="border-bottom: 1px dashed rgb(128, 128, 128);">
+                          <tbody>
+                            <tr>
+                              <td width="575" valign="left" class="flexibleContainerCell">
+                              <!-- CONTENT TABLE // -->
+                                <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                  <tbody>
+                                    <tr>
+                                      <td width="225" valign="top" align="left" class="storyimg-resp"><img src="'.$image_url.'" alt="story1" width="216" height="161" class="flexibleImage " style="max-width: 100%; border:1px solid #000; vertical-align: bottom;" title="Text"></td>
+                                      <td valign="top" align="right" class="flexibleContainerBox">
+                                        <table width="330" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                          <tbody>
+                                            <tr>
+                                              <td align="left" class="textContent story-text">
+                                                <h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-transform: uppercase; color: rgb(236, 43, 36); margin: 0px; text-align: left; font-size: 12px; display: block; line-height: 1 ! important;"> <img width="10" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/arrow_1.jpg">&nbsp;'.$strap_line. ' <span style="color: black; text-transform: capitalize;">&nbsp;</span></h3>
+                                                  <h3 class="h3heading1" style="line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-weight: normal;margin: 0 0 4px; text-align: left; color: black; font-size: 28px;"> <a href="'.$content_url.'?utm_source=computerworldcompass&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y',strtotime('+1 day')).'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" style="text-decoration: none; color: #666666; font-weight: bold ! important;">'.$title.'</a> </h3>
+                                                    <div class="story-data" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin-bottom:0;color:#666666;line-height:105%;">'.$teaser.'</div>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!-- // CONTENT TABLE -->
+
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- // FLEXIBLE CONTAINER -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // CENTERING TABLE -->
+                  </td>
+                </tr>';
+              }
+              $html_body .= '<tr>
+              <td valign="top" align="center">
+                <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                  <tbody>
+                    <tr>
+                      <td width="10" bgcolor="black" class="footer-font">&nbsp;</td><td width="585" bgcolor="black" class="footer-font"><span style="color:white;font-family:Arial, Helvetica, sans-serif; font-size:11px;">You are receiving this newsletter because you have subscribed to it on </span><a href="http://www.computerwolrd.in/" style="color: white; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-decoration:none;">www.computerworld.in. </a><a href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#" style="color: #FFFFFF; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-decoration:none;">UNSUBSCRIBE</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td bgcolor="black" colspan="2">
+                      <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                    <tr>
+                      <td width="10" bgcolor="black">&nbsp;</td>
+                      <td width="106" align="left" style="background-color: black; text-align: left"><a href="http://www.computerworld.in/"><img class="footer-logo" width="145" height="30" border="0" src="'.$src_url.'/themes/idgnews/images/cw-footer3.jpg" alt="CIO India"></a></td>
+
+                      <td width="379" style="background-color: black; text-align: center"><span style="text-align: center; font-family: Arial; font-size: 9px; color: white;" class="footer-font;">Copyright 2005 - 2018 <a style="text-decoration: none; color: white;" href="http://www.idg.in">IDG Media Private Ltd</a>. All rights reserved. <a style="text-decoration: none; color: white;" href="http://www.computerworld.in/about-us/privacy-policy">Privacy Policy</a></span></td>
+
+                      <td width="44" class="socio-icon"><a href="https://www.facebook.com/computerworld.india" style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/facebook.jpg"> </a></td>
+
+                      <td width="45" class="socio-icon"><a href="https://twitter.com/CompworldIndia"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/twitter.jpg"><br>
+                      </a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td height="0px" bgcolor="black" colspan="2"></td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </center>
+  </body>
+</html>';
+return $html_body;
+}
+
+
+
+//Pathways HTML
+//Computer world pathways
+
+/*function computerworld_pathways_head(){
+  $html_head = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="format-detection" content="telephone=no" /><title>Computerworld Pathways</title>
+        <style type="text/css">body, #bodyTable, #bodyCell, #bodyCell{height:100% !important; margin:0; padding:0; width:100% !important;font-family:Helvetica,Arial,sans-serif;}
+            table{border-collapse:collapse;}
+            table[id=bodyTable] {width:100%!important;margin:auto;max-width:500px!important;color:#7A7A7A;font-weight:normal;}
+            img, a img{border:0; outline:none; text-decoration:none;height:auto; line-height:100%;}
+        h3{color:#5F5F5F; font-weight:normal; font-family:Helvetica,Arial,sans-serif; font-size:20px;text-align:Left; letter-spacing:normal;margin-top:0;margin-right:0;margin-bottom:10px;margin-left:0;padding-top:0;padding-bottom:0;padding-left:0;padding-right:0;}
+            table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+            #outlook a{padding:0;}img{-ms-interpolation-mode: bicubic;display:inline;outline:none; text-decoration:none;}body, table, td, p, a, li, blockquote{-ms-text-size-adjust:100%; -webkit-text-size-adjust:100%;}
+            .flexibleImage{height:auto;}
+            body, #bodyTable{background-color:#ffffff;}
+            #emailBody{background-color:#FFFFFF;border:8px solid #FFC143;}
+            #emailFooter{background-color:#E1E1E1;}
+            .textContent, .textContentLast{color:#8B8B8B; font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:125%; text-align:Left;}
+            .textContent a, .textContentLast a{color:#205478; text-decoration:underline;}
+            .imageContentText {margin-top: 10px;line-height:0;}
+            .imageContentText a {line-height:0;}
+            span[class=ios-color-hack3] a {color:#8B8B8B!important;text-decoration:none!important;}
+            .a[href^="tel"], a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:none!important;cursor:default!important;}
+            .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {text-decoration:none!important;color:#606060!important;pointer-events:auto!important;cursor:default!important;}
+.logo-text-month{display:block;}
+.logo-text-date > span {display: none;}
+
+.voice-logo {
+    height: auto;
+    padding: 0;
+    width: 590px;
+}
+.voiceimg {
+    display: block;
+    height: 100% !important;
+    width: 100% !important;
+}
+
+@media only screen and (max-width: 480px){
+      body{width:100% !important; min-width:95% !important;}  h1{display:block;font-size:10px !important;}
+            h3{line-height:25px !important;}
+        .resp-view {  font-size: 11px !important;}
+
+<!-- Logo image css -->
+#emailBody {border: 5px solid #F00001;width: 300px !important;}
+.logo-resp{width:70%;}
+.logo-resp > img { width: 100% !important; display:block;}
+.logo-text-date {font-size: 18px !important;}
+.logo-text-day { font-size: 11px !important;padding-right:3px;line-height:10px !important;}
+#month-span{display: inline-block !important;}
+.logo-text-month{display:none;}
+.logo-text {  width: 26%;}
+.h3heading1 {
+    font-size: 20px !important;
+    line-height: 23px !important;
+    margin-top: -5px !important;
+}.h3heading2{font-size:16px !important;line-height: 17px !important;}.h3heading3{font-size:15px !important;line-height: 17px !important;}
+<!-- Logo image css Ends Here -->
+
+.logo-resp {height: auto;width: 71% !important;}
+.storyimg-resp {display: block !important;margin-left: 4% !important;width:98% !important;}
+.storyimg-resp > img { display: block;width:92%;
+}
+.textContent.story-text {
+    padding-left: 5% !important;
+}
+/*Media query forn
+#flexiblecontainercell > table {
+    width: 62% !important;
+}
+  /*Media query forn
+
+.socio-icon {  padding: 4px;; width: auto}
+.footer-font{
+    font-size: 8px !important;
+  text-align:center;
+}
+
+.footer-logo {
+    width: 75px !important;
+}
+.story-data {
+    font-size: 16px !important;
+}
+
+.flexibleImageSmall {
+    vertical-align: sub;
+}    table[id="emailHeader"], table[id="emailBody"], table[id="emailFooter"], table[class="flexibleContainer"] {width:100% !important;}
+                td[class="flexibleContainerBox"], td[class="flexibleContainerBox"] table {display: inline;text-align: left;}
+
+                td[class="imageContent"] img {height:auto !important; width:100% !important; max-width:100% !important;}
+                img[class="flexibleImage"]{height:auto !important; width:100% !important;max-width:100% !important;}
+                img[class="flexibleImageSmall"]{height:auto !important; width:auto !important;}
+
+                table[class="flexibleContainerBoxNext"]{padding-top: 10px !important;}
+
+            }
+
+
+      @media only screen and (-webkit-device-pixel-ratio:.75){}
+            @media only screen and (-webkit-device-pixel-ratio:1){ }
+            @media only screen and (-webkit-device-pixel-ratio:1.5){
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width:568px) {
+            }
+</style>  <!--
+            Outlook Conditional CSS
+          -->
+        <!--[if mso 12]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+            </style>
+        <![endif]-->
+        <!--[if mso 14]>
+            <style type="text/css">
+                .flexibleContainer{display:block !important; width:100% !important;}
+              </style>
+        <![endif]--></head>';
+  return $html_head;
+}*/
+
+function computerworld_pathways_body($News_node, $site_arr, $src_url){
+  $html_body = '<!-- CENTER THE EMAIL // -->
+<center>
+  <table id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+    <tbody>
+      <tr>
+        <td id="bodyCell" align="center" valign="top"><table id="emailBody" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #FFFFFF; border: 8px solid #FFC143;">
+          <tbody>
+            <tr>
+              <td align="center" valign="top">
+                <table style="color:#FFFFFF;" bgcolor="#ffffff" border="0" cellpadding="8" cellspacing="0" width="100%">
+                  <tbody>
+                    <tr>
+                      <td align="center" valign="center">
+                        <div class="resp-view" style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">If you can\'t see this message <a style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;" target="_blank" href="http://crm.idgindia.net/newsletter/computerworldpathways/'.date('Y/F/d').'/index.html"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
+                        </div>
+                        <!-- // FLEXIBLE CONTAINER -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- // CENTERING TABLE -->
+              </td>
+            </tr>
+            <tr>
+            <td valign="top" align="center">
+              <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#2F2F2F" style="">
+                <tbody>
+                  <tr>
+                    <td valign="top" align="center">
+                      <table width="590" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                        <tbody>
+                          <tr>
+                            <td width="590" valign="center" align="center" class="flexibleContainerCell">
+                              <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                <tbody>
+                                  <tr>
+                                    <td width="59%" valign="bottom" align="left" class="logo-resp">
+                                      <img width="485" align="middle" alt="computerworld-logo" src="'.$src_url.'/themes/idgnews/images/Pathways_logo_bar.jpg">
+                                    </td>
+                                    <td width="39%" valign="bottom" align="center" class="logo-text">
+                                      <div style="font-family: Helvetica,Arial,sans-serif; color: rgb(255, 193, 68); font-weight: bold; text-align: center; font-size: 14px; line-height: 12px;" class="logo-text-day">Issue 73</div>
+                                      <div style="font-family: Helvetica,Arial,sans-serif; color: rgb(255, 193, 68); font-weight: bold; font-size: 16px; line-height: 16px;" class="logo-text-day">'.date('F').'</div>
+                                      <div class="logo-text-day" style="font-family: Helvetica,Arial,sans-serif; color: rgb(255, 193, 68); font-size: 16px; font-weight: bold; text-align: center;">'.date('d/Y').'</div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <!-- // CONTENT TABLE -->
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <!-- // FLEXIBLE CONTAINER -->
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="600" valign="bottom" align="center" class="voice-logo">\
+                      <img width="599" class="voiceimg" style="" src="'.$src_url.'/themes/idgnews/images/main-logo-footer600.jpg" alt="cw-logo">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- // CENTERING TABLE -->
+            </td>
+          </tr>';
+
+          //Get Newsletter content from Paragraphs
+          $Paragraphs = $News_node->get('field_news_content');
+          $content_index = 0;
+          foreach ($Paragraphs as $Paragraph) {
+          $content_index ++;
+          $news_content = Paragraph::load($Paragraph->target_id);
+
+          //Get image
+          $image_node = Node::load($news_content->get('field_newsletter_title')->target_id);
+          if(!empty($image_node->get('field_home_page_image')->target_id)){
+            // print_r($image_node->get('field_home_page_image'->target_id);die();
+            $image_url = file_create_url($image_node->field_home_page_image->entity->getFileUri());
+          }
+          else{
+            unset($image_url);
+          }
+          $strap_line = $image_node->get('field_news_strap_line')->value;
+          $title = $news_content->get('field_actnewsletter_title')->value;
+          $teaser = $news_content->get('field_teaser')->value;
+          $content_url = $news_content->get('field_site_url')->value;
+          $content_guid = $news_content->get('field_content_guid')->value;
+          $url_title = end(explode('/', $content_url));
+
+
+          $html_body .= '<tr>
+          <td valign="top" align="center" style="" class="textcontent">
+          <!-- CENTERING TABLE // -->
+            <table width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tbody>
+                <tr>
+                  <td valign="top" align="center" style="">
+                  <!-- FLEXIBLE CONTAINER // -->
+                    <table width="580" cellspacing="0" cellpadding="12" border="0" class="flexibleContainer" style="border-bottom: 1px dashed rgb(128, 128, 128);">
+                      <tbody>
+                        <tr>
+                          <td width="575" valign="left" class="flexibleContainerCell">
+
+                          <!-- CONTENT TABLE // -->
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                              <tbody>
+
+                                <tr>
+                                  <td width="225" valign="top" align="left" class="storyimg-resp"><img src="'.$image_url.'" alt="story1" width="216" height="161" class="flexibleImage " style="max-width: 100%; border:1px solid #000; vertical-align: bottom;" title="Text"></td>
+                                  <td valign="top" align="right" class="flexibleContainerBox">
+                                    <table width="330" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                      <tbody>
+                                        <tr>
+                                          <td align="left" class="textContent story-text">
+                                            <h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-transform: uppercase; color: #2e80a9; margin: 0; text-align: left; font-size: 12px; display: block; line-height: 1 ! important;"> <img width="10" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/arrow_1.jpg">&nbsp;'.$strap_line. ' <span style="color: black; text-transform: capitalize;">&nbsp;</span></h3>
+                                            <h3 class="h3heading1" style="line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-weight: normal;margin: 0 0 4px; text-align: left; color: black; font-size: 28px;"> <a href="'.$content_url.'?utm_source=computerworldpathway&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y',strtotime('+1 day')).'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" style="text-decoration: none; color: #666666; font-weight: bold ! important;">'.$title.'</a> </h3>
+                                            <div class="story-data" style="text-align:left;font-family:Helvetica,Arial,sans-serif;font-size:16px;margin-bottom:0;color:#666666;line-height:105%;">'.$teaser.'</div>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- // CONTENT TABLE -->
+
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // FLEXIBLE CONTAINER -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- // CENTERING TABLE -->
+          </td>
+        </tr>';
+      }
+      $html_body .= '<tr>
+      <td valign="top" align="center">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+          <tbody>
+            <tr>
+              <td width="10" bgcolor="black" class="footer-font">&nbsp;</td>
+              <td width="585" bgcolor="black" class="footer-font">
+                <span style="color:white;font-family:Arial, Helvetica, sans-serif; font-size:11px;">You are receiving this newsletter because you have subscribed to it on </span><a href="http://www.computerwolrd.in/" style="color: white; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-decoration:none;">www.computerworld.in.</a><a href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#" style="color: #FFFFFF; padding-left: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-decoration:none;">UNSUBSCRIBE</a>
+              </td>
+            </tr>
+            <tr>
+              <td bgcolor="black" colspan="2">
+                <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                  <tbody>
+                    <tr>
+                      <td width="10" bgcolor="black">&nbsp;</td>
+                      <td width="106" align="left" style="background-color: black; text-align: left"><a href="http://www.computerworld.in/"><img class="footer-logo" width="145" height="30" border="0" src="'.$src_url.'/themes/idgnews/images/cw-footer3.jpg" alt="CIO India"></a></td>
+
+                      <td width="379" style="background-color: black; text-align: center"><span style="text-align: center; font-family: Arial; font-size: 9px; color: white;" class="footer-font;">Copyright 2005 - 2018 <a style="text-decoration: none; color: white;" href="http://www.idg.in">IDG Media Private Ltd</a>. All rights reserved. <a style="text-decoration: none; color: white;" href="http://www.computerworld.in/about-us/privacy-policy">Privacy Policy</a></span></td>
+
+                      <td width="44" class="socio-icon"><a href="https://www.facebook.com/computerworld.india" style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/facebook.jpg"> </a></td>
+
+                      <td width="45" class="socio-icon"><a href="https://twitter.com/CompworldIndia"><img width="31" height="31" border="0" src="'.$src_url.'/themes/idgnews/images/twitter.jpg"><br>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          <tr>
+          <td height="0px" bgcolor="black" colspan="2"></td>
+          </tr></tbody></table></td></tr>
+        </center>
+      </body>
+  </html>';
+return $html_body;
+}
+function cso_alert_body($News_node, $site_arr, $src_url){
+  $html_body = '<!-- CENTER THE EMAIL // -->
+  <center marginwidth="0" marginheight="0" bgcolor="#1e2226" yahoo="fix" offset="0" topmargin="0" leftmargin="0">
+    <table id="bodyTable" style="table-layout: fixed;max-width:100% !important;width: 100% !important;min-width: 100% !important;" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+      <tbody>
+        <tr>
+          <td id="bodyCell" align="center" valign="top">
+            <table id="emailBody" style="background-color: #FFFFFF; border: 8px solid #1e2226;" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0" width="600">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top">
+                    <table style="color:#FFFFFF;" bgcolor="#ffffff" border="0" cellpadding="8" cellspacing="0" width="100%">
+                      <tbody>
+                        <tr>
+                          <td align="center" valign="center">
+                            <div class="resp-view" style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:#828282;text-align:center;line-height:120%;">If you can\'t see this message <a style="text-decoration:none;border-bottom:1px solid #828282;color:#828282;" target="_blank" href="http://crm.idgindia.net/newsletter/CSOalert/'.date('Y/F/d').'/index.html"><span style="color:#828282;">View&nbsp;it&nbsp;in&nbsp;your&nbsp;browser</span></a>.
+                            </div>
+                            <!-- // FLEXIBLE CONTAINER -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // CENTERING TABLE -->
+                  </td>
+                </tr>
+              <tr>
+                <td valign="top" align="center">
+                  <table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#1c1f23" style="">
+                    <tbody>
+                      <tr>
+                        <td valign="top" align="center">
+                          <table width="590" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer">
+                            <tbody>
+                              <tr>
+                                <td width="590" valign="center" align="center" class="flexibleContainerCell">
+                                  <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                    <tbody>
+                                      <tr>
+                                        <td width="45%" align="left" class="logo-resp">
+                                          <a href="http://www.csoonline.in/videos/cso-alert-fireball-malware-over-250-million-computers-affected-worldwide?utm_source=csoalert&utm_medium=email&utm_term=#zip#&utm_campaign='.date('Y/F/d').'~promo~1497226000004236710&utm_content=1~Banner">
+                                            <img width="485" height="77" align="middle" alt="CSO Alert - For everything SECURITY" src="'.$src_url.'/themes/idgnews/images/cso-alert-banner.gif">
+                                          </a>
+                                        </td>
+                                        <td width="55%" bgcolor="#1c1f23" valign="middle" class="logo-text">
+                                          <div style="text-align:left; font-family:Helvetica,Arial,sans-serif; margin-bottom:0px; color:#e29001; font-size:14px; padding-left:10px;" class="logo-text-day">Issue 43
+                                          </div>
+                                          <div style="text-align:left; font-family: Helvetica,Arial,sans-serif; margin-bottom:0px; color:#e29001; font-size:14px; padding-left:10px;" class="logo-text-day">'.date('D,F d,Y', strtotime(' +1 day')).'</div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  <!-- // CONTENT TABLE -->
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <!-- // FLEXIBLE CONTAINER -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- // CENTERING TABLE -->
+                </td>
+              </tr>';
+              //Get Newsletter content from Paragraphs
+              $Paragraphs = $News_node->get('field_news_content');
+              $content_index = 0;
+              foreach ($Paragraphs as $Paragraph) {
+                $content_index ++;
+                  $news_content = Paragraph::load($Paragraph->target_id);
+                        //Get image
+                  $image_node = Node::load($news_content->get('field_newsletter_title')->target_id);
+                  if(!empty($image_node->get('field_home_page_image')->target_id)){
+                    // print_r($image_node->get('field_home_page_image'->target_id);die();
+                    $image_url = file_create_url($image_node->field_home_page_image->entity->getFileUri());
+                  }
+                  else{
+                    unset($image_url);
+                  }
+                  $strap_line = $image_node->get('field_news_strap_line')->value;
+                  $title = $news_content->get('field_actnewsletter_title')->value;
+                  $teaser = $news_content->get('field_teaser')->value;
+                  $content_url = $news_content->get('field_site_url')->value;
+                  $content_guid = $news_content->get('field_content_guid')->value;
+                  $url_title = end(explode('/', $content_url));
+                  $html_body .= '<tr>
+                    <td valign="top" align="center" style="" class="textcontent">
+                    <!-- CENTERING TABLE // -->
+                      <table width="100%" cellspacing="0" cellpadding="12" border="0">
+                        <tbody>
+                          <tr>
+                            <td valign="top" align="center" style="">
+                            <!-- FLEXIBLE CONTAINER // -->
+                              <table width="575" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer" style="border-bottom: #e8e8e8 1px dotted">
+                                <tbody>
+                                  <tr>
+                                    <td width="570" valign="left" class="flexibleContainerCell">
+                                    <!-- CONTENT TABLE // -->
+                                      <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                        <tbody>
+                                          <tr>
+                                            <td width="225" valign="top" align="left" class="storyimg-resp"><img src="'.$image_url.'" alt="story1" width="215" height="161" class="flexibleImage " style="max-width: 100%; border:1px solid #000; vertical-align: bottom;" title="Text"></td>
+                                            <td valign="top" align="right" class="flexibleContainerBox">
+                                              <table width="330" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                                <tbody>
+                                                  <tr>
+                                                    <td align="left" class="textContent story-text">
+                                                      <h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; text-transform: uppercase;
+                                                        margin-bottom: 0px; color: #00aeef; text-transform: uppercase; text-align: left; font-size: 12px; display: block; line-height: 1 ! important;"> <img width="10" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/arrow.gif">'.$strap_line.'</h3>
+                                                      <h3 class="h3heading1" style="line-height:100%; font-family: Helvetica,Arial,sans-serif; font-weight:normal; margin:0 0 4px; text-align:left; color:black; font-size: 28px;"> <a href="'.$content_url.'?utm_source=csoalert&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y',strtotime('+1 day')).'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" target="_blank" style="text-decoration:none; color:#1e2226; font-weight:bold ! important;">'.$title.'</a> </h3>
+                                                      <div class="story-data" style="text-align:left; font-family:Helvetica,Arial,sans-serif; font-size:16px; margin-bottom:0; color:#666666; line-height:115%;"><a href="'.$content_url.'?utm_source=csoalert&amp;utm_medium=email&amp;utm_term=#zip#&amp;utm_campaign='.date('d/m/Y').'~Edit&amp;utm_content='.$content_index.'~'.$content_guid.'~'.$url_title.'" target="_blank" style="text-decoration:none; color:#666666; font-weight:bold ! important;">'.$teaser.'</a>
+                                                    </div> 
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <!-- // CONTENT TABLE -->
+
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- // FLEXIBLE CONTAINER -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- // CENTERING TABLE -->
+                  </td>
+                </tr>';
+              }
+            $html_body .= '<tr>
+              <td valign="top" align="center" class="textcontent"><table width="100%" cellspacing="0" cellpadding="5" border="0" bgcolor="#000000">
+                <tbody>
+                  <tr>
+                    <td valign="top" align="center">
+                      <table width="545" cellspacing="0" cellpadding="0" border="0" class="flexibleContainer" style="">
+                        <tbody>
+                          <tr>
+                            <td width="545" valign="left" class="flexibleContainerCell">
+                              <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left">
+                                <tbody>
+                                  <tr>
+                                    <td width="54%" valign="top" align="left" class="flexibleContainerBox"><h3 style="font-family: Helvetica,Arial,sans-serif; font-weight: bold; font-size: 12px; text-transform: uppercase; margin-bottom: 0px; display: inline; text-align: right; color: rgb(0, 174, 239) ! important;"> CSO INDIA ALLIANCE Partners &nbsp;</h3>
+                                    </td>
+                                    <td valign="top" align="left" style="text-align: right;" class="flexibleContainerBox"><table width="244" cellspacing="0" cellpadding="0" border="0" class="flexibleContainerBoxNext" style="max-width:100%;">
+                                      <tbody>
+                                        <tr>
+                                        <td><h3 style="font-weight: bold; font-size: 12px; text-transform: uppercase; margin-bottom: 0px; text-align: right; display: inline; font-family: Helvetica,Arial,sans-serif; color: rgb(226, 144, 1);"><a href="mailto:naveen_cs@idgindia.com" style="font-weight: bold; font-size: 12px; text-transform: uppercase; margin-bottom: 0px; text-align: right; display: inline; font-family: Helvetica,Arial,sans-serif; color: rgb(226, 144, 1); text-decoration: none;">Alliance Partners<img width="12" title="Text" style="max-width: 100%;" class="" alt="Text" src="'.$src_url.'/themes/idgnews/images/alliance-arrow.png"></a></h3>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table></td>
+                  </tr>
+                </tbody>
+              </table></td>
+              <!-- // CENTERING TABLE --> 
+            </tr>
+            <tr>
+            <td valign="top" align="center">
+              <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                  <tr>
+                    <td width="99%" align="center" class="logo-resp"><img src="'.$src_url.'/themes/idgnews/images/cso-alliance-partners.png" alt="CSO-logo"></td>
+                  </tr>
+                  <tr>
+                    <td align="center" width="585" bgcolor="#000000" class="footer-font" style="color:#CCC; font-family:Arial, Helvetica, sans-serif; font-size:11px; padding:5px;">You are receiving this newsletter because you have subscribed to it on <a href="http://www.csoonline.in/" target="_blank" style="color:#FFF; padding-left:5px; font-family: Arial, Helvetica, sans-serif; font-size:11px; text-decoration:none;">www.csoonline.in. </a><a href="http://crm.idgindia.net/subscribe/unsubscribe.php?cid=#zip#" style="color:#FFFFFF; padding-left:5px; font-family: Arial, Helvetica, sans-serif; font-size:11px; text-decoration:none;">UNSUBSCRIBE</a></td>
+                  </tr>
+                  <tr>
+                    <td bgcolor="black" colspan="2">
+                      <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                          <tr>
+                            <td width="80" align="left" style="background-color:#000000; padding-left:10px;"><a href="http://www.csoonline.in/"><img class="footer-logo" width="82" height="41" border="0" src="'.$src_url.'/themes/idgnews/images/cso-footer.png" alt="CSO"></a></td>
+
+                            <td width="379" style="background-color: black; text-align: center"><span style="text-align:center; font-family: Arial; font-size:10px; color:#CCCCCC;" class="footer-font">Copyright 2005 - 2018 <a target="_blank" style="text-decoration:none; color:#CCCCCC;" href="http://www.idg.in">IDG Media Private Ltd</a>. All rights reserved. <a style="text-decoration: none; color: #CCCCCC;" href="http://www.computerworld.in/about-us/privacy-policy">Privacy Policy</a></span></td>
+
+                              <td width="44" class="socio-icon"><a href="https://www.facebook.com/computerworld.india" style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="26" height="26" border="0" src="'.$src_url.'/themes/idgnews/images/facebook-cso.png"> </a></td>
+
+                              <td width="30" class="socio-icon"><a href="https://www.facebook.com/CSOOnlineIndia/?fref=ts " style="color: #E2201E; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 12px; text-decoration:none;"><img width="26" height="26" border="0" src="'.$src_url.'/themes/idgnews/images/twitter.png"><br>
+                                </a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  <tr>
+                    <td height="0px" bgcolor="black" colspan="2"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </center>
+      </body>
+  </html>';
+return $html_body;
+}

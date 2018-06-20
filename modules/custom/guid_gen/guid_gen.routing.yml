@@ -1,0 +1,7 @@
+idg_xml:
+  path: '/guid_gen'
+  defaults:
+    _title: 'Hello'
+  requirements:
+    _permission: 'access content'
+

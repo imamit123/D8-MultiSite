@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_show_profile
+    - node.type.author_profile
+id: node.author_profile.field_show_profile
+field_name: field_show_profile
+entity_type: node
+bundle: author_profile
+label: 'Show Author Profile'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Show Author Profile'
+  off_label: 'Show Author Profile'
+field_type: boolean

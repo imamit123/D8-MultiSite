@@ -1,0 +1,6 @@
+idg_import.post:
+  path: 'idg-push-node-alias/post.json'
+  defaults: { _controller: '\Drupal\idg_import\Controller\UrlImport::create' }
+  methods:  [POST]
+  requirements:
+    _access: 'TRUE'

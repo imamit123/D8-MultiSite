@@ -1,0 +1,10 @@
+name: Views Google News
+type: module
+description: Views Google News feed.
+# core: 8.x
+
+# Information added by Drupal.org packaging script on 2017-08-23
+version: '8.x-1.0-alpha1'
+core: '8.x'
+project: 'views_googlenews'
+datestamp: 1503515349

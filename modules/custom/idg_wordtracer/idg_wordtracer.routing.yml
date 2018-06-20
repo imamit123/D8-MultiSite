@@ -1,0 +1,9 @@
+idg_wordtracer:
+  path: '/admin/config/user-interface/wordtracer'
+  defaults:
+    _form: 'Drupal\idg_wordtracer\Form\WordTracerConfigureForm'
+    _title: 'Wordtracer configuration'
+  requirements:
+    _permission: 'access content'
+
+

@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.idg_filter
+  module:
+    - block_class
+    - views
+  theme:
+    - idgnews
+third_party_settings:
+  block_class:
+    classes: ''
+id: views_block__idg_filter_block_1
+theme: idgnews
+region: content
+weight: -6
+provider: null
+plugin: 'views_block:idg_filter-block_1'
+settings:
+  id: 'views_block:idg_filter-block_1'
+  label: ''
+  provider: views
+  label_display: visible
+  views_label: ''
+  items_per_page: none
+visibility: {  }

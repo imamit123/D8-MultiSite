@@ -1,0 +1,59 @@
+<script>
+function getCookie(name) {
+      var value = "; " + document.cookie;
+      var parts = value.split("; " + name + "=");
+      if (parts.length == 2) return parts.pop().split(";").shift();
+    }
+
+var homeCookies = getCookie('setAds');
+console.log(homeCookies);
+      if(homeCookies == 'home') {
+        document.getElementById('block-googleadsfront').remove();
+      }
+</script>
+
+<div id="overlay-background" style="position: fixed; width: 100%; height: 100%; left: 0; background-color: black; z-index: 9996; -moz-opacity: 0.7; opacity: .70; filter: alpha(opacity=70); top:0px;"></div>
+<div class="new-ad" style="width: 640px; height: 480px; z-index: 9997; position: fixed; margin-left: 14%; margin-top: 7%;  text-align: center; top:30px;">
+<script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+
+
+<script type='text/javascript'>
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+    var gads = document.createElement('script');
+    gads.async = true;gads.type = 'text/javascript';
+    var useSSL = 'https:' == document.location.protocol;gads.src = (useSSL ? 'https:' : 'http:') +'//www.googletagservices.com/tag/js/gpt.js';var node = document.getElementsByTagName('script')[0];node.parentNode.insertBefore(gads, node);})();</script>
+<script type='text/javascript'>
+googletag.cmd.push(function() {
+	googletag.defineSlot('/8456/IDG.IN_B2B_{{ path }}/{{ variable }}', [600, 600], 'div-gpt-ad-{{ variable }}-600x600-0').addService(googletag.pubads()).setTargeting('pos','ATF1').setTargeting('Taxonomy',{{ var1|raw}});
+    googletag.pubads().setTargeting('URL',encodeURIComponent(window.location));googletag.defineSlot('/8456/IDG.IN_B2B_{{ path }}/{{ variable }}', [[600, 450],[640, 480]], 'div-gpt-ad-{{ variable }}-640x480-0').addService(googletag.pubads()).setTargeting('pos','ATF1').setTargeting('Taxonomy',{{ var1|raw}});googletag.pubads().setTargeting('URL',encodeURIComponent(window.location));
+});
+var myVar = setInterval(function(){myTimer()},1000);
+			var n = 20;
+			function myTimer() {
+			n = n-1;
+			if (n == 0) {
+			document.getElementById('block-googleadsfront').style.display = 'none';
+			clearTimeout(myVar);
+      document.cookie = "setAds=home";
+			}
+			   document.getElementById('adclose').innerHTML = n;
+			}
+</script>
+<!-- IDG CIO MPU2 -->
+<div id="close" style="position:absolute; top:-31px; right:0; z-index:9998;background-color: #4b4b4b; width: 100%; text-align: right; ">
+<span style="color:white;padding-right:20%;font-size:14px">This ad will automatically close in <span id="adclose" style="color:white;">0</span> seconds</span>
+<span id="adclose_nocount" style="color:white;display:none;padding-right:20%;"> </span>
+<a href="#" id="btn-close">
+<img src="/modules/custom/idg_custom/images/close-btn.png" alt="Close" title="Close" width="20" height="18"></a></div>
+<div id='div-gpt-ad-{{ variable }}-640x480-0' style='width:300px; margin-top:-29px' class='each-section welcomeadSection'>
+<script type='text/javascript'>
+googletag.cmd.push(function() { googletag.display('div-gpt-ad-{{ variable }}-640x480-0'); });
+</script>
+</div>
+</div>

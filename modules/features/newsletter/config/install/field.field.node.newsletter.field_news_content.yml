@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_news_content
+    - node.type.newsletter
+    - paragraphs.paragraphs_type.news_letter_content
+  module:
+    - entity_reference_revisions
+id: node.newsletter.field_news_content
+field_name: field_news_content
+entity_type: node
+bundle: newsletter
+label: 'News Content'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      news_letter_content: news_letter_content
+    target_bundles_drag_drop:
+      news_letter_content:
+        enabled: true
+        weight: 3
+      slideshow:
+        weight: 4
+        enabled: false
+field_type: entity_reference_revisions

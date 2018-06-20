@@ -1,0 +1,15 @@
+name: 'cio topic page'
+type: module
+core: 8.x
+dependencies:
+  - cio_listing_pages
+  - common_content
+  - editors_pick
+  - image
+  - node
+  - taxonomy
+  - text
+  - user
+  - views
+  - views_infinite_scroll
+version: 8.x-1.0

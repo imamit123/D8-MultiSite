@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'IDG Sites'
+vid: idg_sites
+description: 'URLs for IDG sites'
+hierarchy: 0
+weight: 0

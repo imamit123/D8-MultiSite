@@ -1,0 +1,17 @@
+idg_publish.form:
+  path: '/idg_publish_form'
+  defaults:
+    _form: 'Drupal\idg_publish\Form\IdgPublishForm'
+    _title: 'Publish On Microsite'
+  requirements:
+    _permission:  'access content'
+
+idg_publish:
+  path: '/idg_publish_path'
+  defaults:
+    _controller: '\Drupal\idg_publish\Controller\IdgPublicationController::idg_publish_path'
+    _title: 'Hello'
+  requirements:
+    _permission: 'access content'
+
+

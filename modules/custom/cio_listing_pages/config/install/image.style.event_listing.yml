@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: event_listing
+label: 'event listing'
+effects:
+  a5c2df4a-b0b7-4e2d-933d-b4cd20d176b2:
+    uuid: a5c2df4a-b0b7-4e2d-933d-b4cd20d176b2
+    id: image_scale
+    weight: 1
+    data:
+      width: 352
+      height: 264
+      upscale: false

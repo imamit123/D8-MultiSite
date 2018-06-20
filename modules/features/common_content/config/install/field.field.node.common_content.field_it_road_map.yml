@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_it_road_map
+    - node.type.common_content
+    - taxonomy.vocabulary.it_road_map
+id: node.common_content.field_it_road_map
+field_name: field_it_road_map
+entity_type: node
+bundle: common_content
+label: 'IT road map'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      it_road_map: it_road_map
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

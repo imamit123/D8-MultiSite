@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_common_content_display
+    - node.type.home_page
+    - paragraphs.paragraphs_type.home_page_fields
+  module:
+    - entity_reference_revisions
+id: node.home_page.field_common_content_display
+field_name: field_common_content_display
+entity_type: node
+bundle: home_page
+label: 'Common content display'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      home_page_fields: home_page_fields
+    target_bundles_drag_drop:
+      home_page_fields:
+        enabled: true
+        weight: 2
+field_type: entity_reference_revisions

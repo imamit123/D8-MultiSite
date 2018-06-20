@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: feature_image_
+label: 'feature image '
+effects:
+  86a26f48-ed9d-45ed-9d80-f551f6466575:
+    uuid: 86a26f48-ed9d-45ed-9d80-f551f6466575
+    id: image_scale
+    weight: 1
+    data:
+      width: 176
+      height: 132
+      upscale: false

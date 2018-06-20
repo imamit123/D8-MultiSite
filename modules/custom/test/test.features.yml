@@ -1,0 +1,26 @@
+excluded:
+  - block.block.views_block__test_block_1
+  - node.type.test
+  - core.entity_view_display.node.test.default
+  - core.entity_view_display.node.test.teaser
+  - core.entity_view_display.paragraph.author_test.default
+  - core.entity_view_display.paragraph.link_test.default
+  - core.entity_view_display.paragraph.test_image.default
+  - field.field.node.test.body
+  - field.field.paragraph.author_test.field_test_for
+  - field.field.paragraph.author_test.field_test_refer
+  - field.field.paragraph.link_test.field_link_one
+  - field.field.paragraph.link_test.field_test_link_text
+  - field.field.paragraph.test_image.field_image_new
+  - field.field.paragraph.text.field_test_with
+  - field.storage.paragraph.field_image_new
+  - field.storage.paragraph.field_link_one
+  - field.storage.paragraph.field_test_for
+  - field.storage.paragraph.field_test_link_text
+  - field.storage.paragraph.field_test_refer
+  - field.storage.paragraph.field_test_with
+  - paragraphs.paragraphs_type.author_test
+  - paragraphs.paragraphs_type.link_test
+  - paragraphs.paragraphs_type.test_image
+  - views.view.test
+required: true

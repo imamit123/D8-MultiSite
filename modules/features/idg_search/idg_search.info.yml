@@ -1,0 +1,15 @@
+name: idg_search
+type: module
+core: 8.x
+dependencies:
+  - author_profile
+  - better_exposed_filters
+  - block
+  - block_class
+  - common_content
+  - entity_reference_exposed_filters
+  - node
+  - taxonomy
+  - user
+  - views
+version: 8.x-1.0

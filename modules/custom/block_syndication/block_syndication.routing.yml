@@ -1,0 +1,7 @@
+block_syndication:
+  path: '/idg_block_syndication'
+  defaults:
+    _controller: '\Drupal\block_syndication\Controller\BlockContentSyndication::block_syndication'
+    _title: 'Block Syndication'
+  requirements:
+    _permission: 'access content'

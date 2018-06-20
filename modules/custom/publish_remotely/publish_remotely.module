@@ -1,0 +1,115 @@
+<?php
+use \Drupal\node\Entity\Node;
+use \Drupal\file\Entity\File;
+/*function publish_remotely_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_common_content_edit_form') { 
+   // echo '<pre>';print_r($form);die();
+  }
+}*/
+/* function to copy content from main site to child sies on updating the node */
+function publish_remotely_node_update(\Drupal\Core\Entity\EntityInterface $node) {
+  /* To fetch json data from the idgnews site (main)*/
+  ini_set('display_errors', 1);
+  ini_set('display_startup_errors', 1);
+  error_reporting(E_ALL);
+  $host = \Drupal::request()->getHost();
+  $node = \Drupal::routeMatch()->getParameter('node');
+  $guid = $node->get('field_guid')->getValue();
+  $guid = $guid[0]['value'];
+  $uri = 'http://'. $host . '/api/v-1/copy_content/'. $guid; ;
+  $response = \Drupal::httpClient()->get($uri, array('headers' => array('Accept' => 'text/plain')));
+  $data = (string) $response->getBody();
+  $output = json_decode($data);
+  $idg_new_taxonomy_name = getTaxonomyName($output[0]->idg_new_taxonomy[0]->target_id);
+  $content_category_name = getTaxonomyName($output[0]->content_category[0]->target_id);
+  $select_agency_name = getTaxonomyName($output[0]->field_select_agency[0]->target_id);
+  $select_company_name = getTaxonomyName($output[0]->field_select_company[0]->target_id);
+  $idg_taxonomy_tid = getTaxonomyTid("http://dev-cio.gailabs.com/api/v-1/idg-taxonomy",$idg_new_taxonomy_name);
+  $common_category_child_tid = getTaxonomyTid("http://dev-cio.gailabs.com/api/v-1/content-category",$content_category_name);
+  $select_agency_tid = getTaxonomyTid("http://dev-cio.gailabs.com/api/v-1/select_agency",$select_agency_name);
+  $select_company_tid = getTaxonomyTid("http://dev-cio.gailabs.com/api/v-1/select_company",$select_company_name);
+
+  /* To fill the editor profile */ 
+  $field_editor = $output[0]->field_edited_by[0]->target_id;
+  $field_editor_url= "http://".$host."/author_profile/".$field_editor;
+  $editor_response = \Drupal::httpClient()->get($field_editor_url, array('headers' => array('Accept' => 'text/plain')));
+  $data_editor = (string) $editor_response->getBody();
+  $output_editor = json_decode($data_editor);
+  $editor_name = $output_editor[0]->title;
+  $editor_name = strtolower($editor_name);
+  //print_r($editor_name);
+  $author_profile_url = 'http://dev-cio.gailabs.com/api/v-1/author_profile';
+  $response_author = \Drupal::httpClient()->get($author_profile_url, array('headers' => array('Accept' => 'text/plain')));
+  $author_data = (string) $response_author->getBody();
+  $author_output = json_decode($author_data);
+  //echo "<pre>";print_r($author_output);
+  for($i=0; $i<count($author_output); $i++){
+    $author_name = $author_output[$i]->title ;
+    $author_name = strtolower($author_name);
+    if($author_name == $editor_name){
+      $author_nid = $author_output[$i]->nid;
+      //print_r($author_nid);die();
+    }
+  }
+  $myvalues1 = $node->get('field_send_content')->getValue();
+  $myvalues  = array();
+  foreach($myvalues1 as $val){
+    $child_host = $val['value'];
+    //echo '<pre>'; print_r($child_host);die();
+    if($child_host == 'CIO.in'){
+      $child_hosting = 'http://dev-cio.gailabs.com';
+    } 
+    $serialized_entity = json_encode([
+      'title' => [['value' => $output[0]->title[0]->value]],
+      'type' => [['target_id' => 'common_content']],
+      'status' => [['value' => 0]],
+      'idg_new_taxonomy' => [['target_id' => $idg_taxonomy_tid]],
+      'field_guid' => [['value' => $output[0]->field_guid[0]->value]],
+      'body' => [['value' => $output[0]->body[0]->value]],
+      'content_category' => [['target_id' => $common_category_child_tid]],
+      'field_select_agency' => [['target_id' => $select_agency_tid]],
+      'field_select_company' => [['target_id' => $select_company_tid]],
+      'field_edited_by' => [['target_id' => $author_nid]],
+      '_links' => ['type' => [
+        'href' => 'http://dev-cio.gailabs.com/rest/type/node/common_content'
+      ]],
+    ]);
+    $response1 = \Drupal::httpClient()
+      ->post('http://dev-cio.gailabs.com/entity/node?_format=hal_json', [
+        'auth' => ['admin', 'admin123'],
+        'body' => $serialized_entity,
+        'headers' => [
+        'Content-Type' => 'application/hal+json'
+      ],
+    ]);
+  }
+  return array('#prefix' => 'content copied');
+}
+
+/* function to get Taxonomy term name */
+function getTaxonomyName($term_name){
+  $taxonomy_tid = $term_name;
+  $taxonomy_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($taxonomy_tid);
+  $taxonomy_name = $taxonomy_term->getName();
+  $taxonomy_name = strtolower($taxonomy_name);
+  return $taxonomy_name;
+}
+
+/* function to match taxonomy term name of parent side with child site 
+*  
+*  get term id of same taxonomy term name
+*/
+function getTaxonomyTid($url, $term_name){
+  $uri1 = $url; 
+  $response_taxonomy = \Drupal::httpClient()->get($url, array('headers' => array('Accept' => 'text/plain')));
+  $idg_taxonomy_data = (string) $response_taxonomy->getBody();
+  $idg_taxonomy_output = json_decode($idg_taxonomy_data);
+  for($i=0; $i<count($idg_taxonomy_output); $i++){
+    $idg_taxonomy_term_child = $idg_taxonomy_output[$i]->name[0]->value ;
+    $idg_taxonomy_term_child = strtolower($idg_taxonomy_term_child);
+    if($idg_taxonomy_term_child == $term_name){
+      $idg_taxonomy_term_child_tid = $idg_taxonomy_output[$i]->tid[0]->value;
+      return $idg_taxonomy_term_child_tid;
+    }
+  }
+}

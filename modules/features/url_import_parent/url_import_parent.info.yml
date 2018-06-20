@@ -1,0 +1,10 @@
+name: 'Url Import Parent'
+description: 'url import for parent site'
+type: module
+core: 8.x
+dependencies:
+  - node
+  - rest
+  - serialization
+  - user
+  - views

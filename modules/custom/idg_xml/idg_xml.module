@@ -1,0 +1,44 @@
+<?php
+
+
+/**
+*Implement Hook_form_alter().
+*/
+function idg_xml_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'user_login_form') {
+    $form['name']['#attributes']['placeholder'] = t('User ID');
+    $form['pass']['#attributes']['placeholder'] = t('Password');
+    $form['actions']['submit']['#value'] = t('SIGN IN');
+  }
+
+  if ($form_id == 'views_exposed_form') {
+    $form['created']['min']['#title'] = t('From');
+    $form['created']['max']['#title'] = t('To');
+    $form['actions']['submit']['#value'] = t('Go');
+  }
+}
+
+
+//converts xml objects into array
+function objectsIntoArray1($arrObjData, $arrSkipIndices = array())
+{
+    $arrData = array();
+
+    // if input is object, convert into array
+    if (is_object($arrObjData)) {
+        $arrObjData = get_object_vars($arrObjData);
+    }
+
+    if (is_array($arrObjData)) {
+        foreach ($arrObjData as $index => $value) {
+            if (is_object($value) || is_array($value)) {
+                $value = objectsIntoArray1($value, $arrSkipIndices); // recursive call
+            }
+            if (in_array($index, $arrSkipIndices)) {
+                continue;
+            }
+            $arrData[$index] = $value;
+        }
+    }
+    return $arrData;
+}

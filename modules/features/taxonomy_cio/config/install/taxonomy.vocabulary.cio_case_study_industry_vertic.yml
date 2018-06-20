@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'CIO Case Study Industry Vertic'
+vid: cio_case_study_industry_vertic
+description: ''
+hierarchy: 0
+weight: 0

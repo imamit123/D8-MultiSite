@@ -1,0 +1,16 @@
+<?php
+
+
+  use Drupal\node\Entity\Node;
+  use Drupal\Core\Database\Database;
+  use Drupal\block\Entity\Block;
+
+/**
+ * Implements hook_page_attachments().
+ *
+ * Adds the page_scroll_indicator library to the page for any user.
+ */
+function idg_publish_page_attachments(array &$page) {
+      $page['#attached']['library'][] = 'idg_publish/idg_publish';
+
+}

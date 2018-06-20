@@ -1,0 +1,40 @@
+diff --git a/src/Form/PollViewForm.php b/src/Form/PollViewForm.php
+index 2041c1b..d968657 100644
+--- a/src/Form/PollViewForm.php
++++ b/src/Form/PollViewForm.php
+@@ -69,9 +69,9 @@ class PollViewForm extends FormBase {
+ 
+       // For all view modes except full and block (as block displays it as the
+       // block title), display the question.
+-      if ($view_mode != 'full' && $view_mode != 'block') {
++
+         $form['results']['#show_question'] = TRUE;
+-      }
++
+     }
+     else {
+       $options = $this->poll->getOptions();
+@@ -92,10 +92,7 @@ class PollViewForm extends FormBase {
+ 
+       // For all view modes except full and block (as block displays it as the
+       // block title), display the question.
+-      if ($view_mode != 'full' && $view_mode != 'block') {
+-        $form['#show_question'] = TRUE;
+-      }
+-
++      $form['#show_question'] = TRUE;
+     }
+ 
+     $form['actions'] = $this->actions($form, $form_state, $this->poll);
+diff --git a/src/Plugin/Block/PollRecentBlock.php b/src/Plugin/Block/PollRecentBlock.php
+index 80d2f6c..672f43c 100644
+--- a/src/Plugin/Block/PollRecentBlock.php
++++ b/src/Plugin/Block/PollRecentBlock.php
+@@ -45,7 +45,6 @@ class PollRecentBlock extends BlockBase {
+ //      }
+       // @todo: new view mode using ajax
+       $output = entity_view($poll, 'block');
+-      $output['#title'] = $poll->label();
+       return $output;
+     }
+   }

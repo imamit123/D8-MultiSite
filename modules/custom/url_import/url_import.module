@@ -1,0 +1,168 @@
+<?php
+use \Drupal\node\Entity\Node;
+use \Drupal\file\Entity\File;
+use Drupal\Core\Database\Database;
+use Drupal\taxonomy\Entity\Term;
+
+
+/**
+ * Implements hook_node_update().
+ */
+function url_import_node_update (\Drupal\Core\Entity\EntityInterface $node) {
+	global $base_url;
+    $config = \Drupal::config('idg_custom.settings');
+    $idg_username = $config->get('idg_custom.idg_username');
+    $idg_password = $config->get('idg_custom.idg_password');
+    $idg_url = $config->get('idg_custom.idg_url');
+    $cio_url = $config->get('idg_custom.cio');
+    $channelworld_url = $config->get('idg_custom.channelworld');
+    $computerworld_url = $config->get('idg_custom.computerworld');
+    $cso_url = $config->get('idg_custom.cso');
+    $greenenterprise_url = $config->get('idg_custom.greenenterprise');
+    $readybusiness_url = $config->get('idg_custom.readybusiness');
+    $fintech_url = $config->get('idg_custom.fintech');
+    ///////////////////////////////////////////////////////
+    $vid = 'idg_sites'; //name of your vocabulary
+    $terms =\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    ///////////////////////////////////////////////////////
+     
+    if ($node->bundle() == 'common_content' && $node->isPublished()) {
+    	$nid = $node->id();
+    	// $request = \Drupal::request();
+    	// $session = $request->getSession();
+     //    $new_alias = $node->url();
+     //    $old_alias = $request->getSession()->get('node_alias_'. $node->Id());
+        // If old and new paths are not same.
+        // if ((!empty($old_alias) && !empty($new_alias)) && strcasecmp($new_alias, $old_alias)) {
+          $aliasArray = \Drupal::service('path.alias_storage')->load(['source' => '/node/'.$nid]);
+	    	$node_alias = (isset($aliasArray['alias'])) ? $aliasArray['alias'] : $aliasArray['source'];
+	    	$node_alias = $base_url . $node_alias;
+	        if (!empty($idg_username) && !empty($idg_password) && !empty($idg_url)) {
+	          $idg_url = rtrim($idg_url, '/');
+	      	  $cio_url = rtrim($cio_url, '/');
+	          $channelworld_url = rtrim($channelworld_url, '/');
+	          $computerworld_url = rtrim($computerworld_url, '/');
+	          $cso_url = rtrim($cso_url, '/');
+	          $greenenterprise_url = rtrim($greenenterprise_url, '/');
+	          $readybusiness_url = rtrim($readybusiness_url, '/');
+	          $fintech_url = rtrim($fintech_url, '/');
+			  $out = (array) $node;
+		    ///////**Fetched GUID From hw_Children(connection, objectID)**///////
+		      if (!$node->get('field_new_guid')->isEmpty()) {
+	            $terms = $node->get('field_new_guid')->getValue();
+		        $guid =  $terms[0]['value'];
+			      if ($guid) { 
+			        $urip =  $idg_url.'/urip/'.$guid;
+				    $uric =  $base_url.'/uric/'.$guid; 
+			       //////**Parent Response**//////
+				    $responsep = \Drupal::httpClient()->get($urip, array('headers' => array('Accept' => 'text/plain')));
+	      			$datap = (string) $responsep->getBody();
+	      			$outputp = json_decode($datap);
+	      			$aliasp = $outputp[0]->path;
+	      			$nidp = $outputp[0]->nid;
+			        $guidp = $outputp[0]->field_new_guid;
+		     
+			       ///////**Field Validation**//////////
+				    $all_microsites = array(
+				      'cio' => $cio_url,
+				      'channelworld' => $channelworld_url,
+				      'computerworld' => $computerworld_url,
+				      'cso' => $cso_url,
+				      'readybusiness' => $readybusiness_url,
+				      'fintech' => $fintech_url,
+	                );
+	                  
+	                $microsite = array_search($base_url, $all_microsites);
+		            $field = 'field_'.$microsite.'_url';
+			        if($guidp == $guid){
+	                 //Url import url response.
+	                 $client = \Drupal::httpClient();
+	                 $request = $client->post($idg_url.'/idg-push-node-alias/post.json', [
+	                  'json' => [
+	                  'nid'=> $nidp,
+	                  'guid' => $guid,
+	                  'url_alias' => $node_alias,
+	                  'field_name' => $field,
+	                  ]
+	                 ]);
+	                 $response = json_decode($request->getBody());
+	                 if ($response->response) {
+			            // Response is Ok from the service.
+			            // Do any processing if required.
+	                   }
+				       return array('#prefix' => 'Url imported');
+				      }
+				    }
+		        }
+	          }
+            // }
+        // $session->remove('node_alias_'. $node->Id());
+    }
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+
+function url_import_node_presave(\Drupal\Core\Entity\EntityInterface  $node) {
+  global $base_url;
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+  if ($node->bundle() == 'common_content' || $node->bundle() == 'computerworld_homepage_content' || $node->bundle() == 'editors_pick' || $node->bundle() == 'partner_content' || $node->bundle() == 'partner_tab' || $node->bundle() == 'cio100' || $node->bundle() == 'home_page' || $node->bundle() == 'poll' || $node->bundle() == 'story' || $node->bundle() == 'webform') {
+  	  // For common content type only.
+  	// if ($node->bundle() == 'common_content') {
+  	//    $request = \Drupal::request();
+   //     $session = $request->getSession();
+   //     $session->set('node_alias_' . $node->Id(), $node->url());
+  	//  }
+	  if ($node->isNew() && ($path_args[1] == 'node')  && ($path_args[2] == 'add')) {
+	    if ($node->hasField('field_new_guid')) {
+	      $config = \Drupal::config('idg_custom.settings');
+	      $guid_format = $config->get('idg_custom.guid_format');
+	      // Create new GUID
+
+	      // If Max GUID is set in variable use that value.
+	      $max_guid = (\Drupal::state()->get('max_guid')) ? \Drupal::state()->get('max_guid') : 0;
+	      if ($max_guid) {
+	        $max_guid += 1;
+	        $new_guid_field_val = $max_guid . $guid_format;
+	        $node->set('field_new_guid', $new_guid_field_val);
+	        \Drupal::state()->set('max_guid', $max_guid);
+	      }
+	      // Else Get Max GUID value from Database.
+	      else {
+	        $con = \Drupal\Core\Database\Database::getConnection();
+	        $query = db_select('node__field_new_guid', 'n')
+	               ->condition('bundle', 'common_content');
+	        $query->fields('n', array('field_new_guid_value'));
+	        $result = $query->execute()->fetchAll();
+	        if (count($result)) {
+	          $guids_arr = json_decode(json_encode($result), true);
+	          $guids = array_unique(array_column($guids_arr, 'field_new_guid_value'));
+	          $guids = array_filter($guids, 'is_numeric');
+	          rsort($guids);
+	          if (isset($guids[0])) {
+	            $max_guid = $guids[0];
+	            if (!empty($max_guid) && is_numeric($max_guid)) {
+	              $inc_guid = $max_guid + 1;
+	              \Drupal::state()->set('max_guid', $inc_guid);
+	              $inc_guid = $inc_guid . $guid_format;
+	              $node->set('field_new_guid', $inc_guid);
+	            }
+	          }
+	        }  
+	      }
+	    }
+	  }
+	  // Update new GUID Version.
+	  if (!$node->isNew() && ($path_args[1] == 'node') && (is_numeric($path_args[2])) && ($path_args[3] == 'edit') && ($node->hasField('field_new_guid_version'))) {
+	    $new_guid_version = 1;
+	    if ($node->get('field_new_guid_version')->getValue()) {
+	      $new_guid_version = $node->get('field_new_guid_version')->getValue()[0]['value'];
+	      $new_guid_version += 1;
+	    }
+	    $node->set('field_new_guid_version', $new_guid_version);
+	  }
+ }
+}
+

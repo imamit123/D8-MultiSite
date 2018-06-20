@@ -1,0 +1,5 @@
+name: IDG xml
+description: A simple xml feed parser.
+core: 8.x
+package: Custom
+type: module

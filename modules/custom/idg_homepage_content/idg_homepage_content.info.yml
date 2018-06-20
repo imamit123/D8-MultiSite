@@ -1,0 +1,25 @@
+name: idg_homepage_content
+description: 'published and unpublished content view'
+type: module
+core: 8.x
+dependencies:
+  - author_profile
+  - better_exposed_filters
+  - block
+  - block_class
+  - common_content
+  - entity_reference_exposed_filters
+  - image
+  - newsletter
+  - node
+  - options
+  - rest
+  - serialization
+  - system
+  - taxonomy
+  - text
+  - user
+  - views
+  - views_infinite_scroll
+  - webform_node_in_cio
+version: 8.x-1.0

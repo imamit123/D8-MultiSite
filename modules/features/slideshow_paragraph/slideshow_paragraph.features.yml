@@ -1,0 +1,3 @@
+excluded:
+  - migrate.migration.d6_node__page_custom
+required: true

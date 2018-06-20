@@ -1,0 +1,4 @@
+idg_import url_permission:
+    title: 'Custom url Permission'
+    description: 'The description'
+    restrict access: false

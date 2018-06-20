@@ -1,0 +1,5 @@
+name: IDG News Get Microsite Content 
+description: Gets content for the microsite based on Node id of parent site
+core: 8.x
+package: Custom
+type: module

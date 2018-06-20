@@ -1,0 +1,8 @@
+published_date.uid:
+  path: '/batch-process/update-uid'
+  defaults:
+    #_form: '\Drupal\uid_updation\Form\UpdateUid'
+    _title: 'Updation...'
+  requirements:
+    _permission: 'access content'
+

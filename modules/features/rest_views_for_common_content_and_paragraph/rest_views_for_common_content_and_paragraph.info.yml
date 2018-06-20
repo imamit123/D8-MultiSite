@@ -1,0 +1,21 @@
+name: 'Rest Views for Common content and paragraph'
+description: 'Creates a rest page which are accessed by micro sites for importing content'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - common_content
+  - entity_reference_revisions
+  - file
+  - image
+  - metatag
+  - node
+  - options
+  - paragraphs
+  - rest
+  - serialization
+  - slideshow_paragraph
+  - text
+  - user
+  - views
+version: 8.x-1.3

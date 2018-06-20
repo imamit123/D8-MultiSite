@@ -1,0 +1,5 @@
+idg_media_release.config:
+  title: Mediarelease Settings
+  description: 'Mediarelease settings'
+  route_name: idg_media_release.config
+  parent: system.admin_config_ui

@@ -1,0 +1,5 @@
+idg_custom.config:
+  title: General Settings
+  description: 'General site settings'
+  route_name: idg_custom.config
+  parent: system.admin_config_ui

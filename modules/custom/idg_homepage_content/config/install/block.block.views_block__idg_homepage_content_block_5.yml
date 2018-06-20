@@ -1,0 +1,42 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.idg_homepage_content
+  module:
+    - block_class
+    - node
+    - system
+    - views
+  theme:
+    - idgnews
+third_party_settings:
+  block_class:
+    classes: ''
+id: views_block__idg_homepage_content_block_5
+theme: idgnews
+region: content
+weight: -1
+provider: null
+plugin: 'views_block:idg_homepage_content-block_5'
+settings:
+  id: 'views_block:idg_homepage_content-block_5'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility:
+  node_type:
+    id: node_type
+    bundles:
+      author_profile: author_profile
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+  request_path:
+    id: request_path
+    pages: '/node/*/edit'
+    negate: true
+    context_mapping: {  }

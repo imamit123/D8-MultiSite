@@ -1,0 +1,10 @@
+idg_xml:
+  path: '/idg_xml_news_create'
+  defaults:
+    _controller: '\Drupal\idg_xml\Controller\CreateNewsController::create_news'
+    _title: 'Import IDGNS XML'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: 'TRUE'
+

@@ -1,0 +1,23 @@
+{#
+/**
+* @file
+** Related content for special pages.
+*/
+#}
+{% if variable is not empty %}
+	<div class="listing-page-style partner-content view-latest-news">
+		<h1 class="page-title">Related Content </h1>
+		<div class="view-content">
+			{% for item in variable %}
+				<div class="views-row">
+				  <div class="img">
+				  	<a href="{{ item.alias['#markup'] }}"><img src={{item.image['#markup']}}></a>
+				  </div>
+				  <div class="txt">
+				  	<a href="{{ item.alias['#markup'] }}">{{ item.title['#markup'] }}</a>
+				  </div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endif %}

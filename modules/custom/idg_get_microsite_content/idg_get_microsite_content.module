@@ -1,0 +1,198 @@
+<?php
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\Entity\Node;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Database\Database;
+// use \Drupal\node\NodeInterface;
+/**
+ * Implements hook_node_presave().
+ */
+
+function idg_get_microsite_content_node_presave(Drupal\node\NodeInterface $node) {
+  $node_type = $node->gettype();
+  switch ($node_type) {
+    case 'partner_content':
+      $referenced_fields = array('field_knowledge_vault_navigation','field_knowledgevault_side','field_homepage_slideshow', 'field_home_page_left_column', 'field_home_page_right_column','field_knowledge_vault_no_tabs');
+      //Get referenced Node Ids
+      foreach ($referenced_fields as $field_name) {
+        $node_ids = $node->$field_name;
+        foreach ($node_ids as $key => $value) {
+          $referenced_nids[] =  $value->target_id;
+        }
+      }
+
+      //Create new term for the new node
+      if (empty($node->field_partner_reference->target_id)){
+        $term = Term::create([
+          'name' => $node->label(),//$node->id(),
+          'vid' => 'partner_reference',
+        ]);
+        $inserted_or_updated = $term->save();
+        $tid = $term->id();
+        $node->field_partner_reference = $tid;
+      } else {
+        $tid = $node->field_partner_reference->target_id;
+        //Get list of nodes which have this reference
+        $connection = Database::getConnection();
+        $query = $connection->select('node__field_partner_reference', 'nfpr');
+        $query->condition('nfpr.field_partner_reference_target_id', $tid);
+        $query->condition('nfpr.bundle', 'partner_content', '!=');
+        $query->fields('nfpr', array('entity_id'));
+        $result = $query->execute()->fetchAll(\PDO::FETCH_OBJ);
+        //Remove all previous references for this Partner content reference
+        foreach ($result as $key => $value) {
+           $ref_nids[] = $value->entity_id;
+           $ref_node = Node::load($value->entity_id);
+           $ref_node->field_partner_reference = null;
+           $ref_node->save();
+           unset($ref_node);
+         }
+      }
+      $_SESSION['ref_tid']= $tid;
+      updatePartnersref($referenced_nids, $tid);
+      break;
+    case 'partner_tab':
+      $referenced_fields = array('field_top_story_node_ref','field_winners','field_winners_right');
+      update_referenced_nodes($referenced_fields,$node);
+      //$referenced_fields = array('field_knowledge_vault_navigation','field_knowledgevault_side','field_homepage_slideshow', 'field_home_page_left_column', 'field_home_page_right_column');
+      //Get referenced Node Ids
+      foreach ($referenced_fields as $field_name) {
+        $node_ids = $node->$field_name;
+        foreach ($node_ids as $key => $value) {
+          $referenced_nids[] =  $value->target_id;
+        }
+      }
+
+      //Create new term for the new node
+      if (empty($node->field_partner_tab_reference->target_id)){
+        $term = Term::create([
+          'name' => $node->label(),//$node->id(),
+          'vid' => 'partner_tab_reference',
+        ]);
+        $inserted_or_updated = $term->save();
+        $tid = $term->id();
+        $node->field_partner_tab_reference = $tid;
+      } else {
+        $tid = $node->field_partner_tab_reference->target_id;
+        //Get list of nodes which have this reference
+        $connection = Database::getConnection();
+        $query = $connection->select('node__field_partner_tab_reference', 'nfpr');
+        $query->condition('nfpr.field_partner_tab_reference_target_id', $tid);
+        $query->condition('nfpr.bundle', 'partner_content', '!=');
+        $query->fields('nfpr', array('entity_id'));
+        $result = $query->execute()->fetchAll(\PDO::FETCH_OBJ);
+        //Remove all previous references for this Partner content reference
+        foreach ($result as $key => $value) {
+           $ref_nids[] = $value->entity_id;
+           $ref_node = Node::load($value->entity_id);
+           $ref_node->field_partner_tab_reference = null;
+           $ref_node->save();
+           unset($ref_node);
+         }
+      }
+      $_SESSION['ref_tid']= $tid;
+      updatePartnersTabref($referenced_nids, $tid);
+      break;
+    case 'editors_pick':
+      $referenced_fields = array('field_top_story_node_ref', 'field_top_story');
+      update_referenced_nodes($referenced_fields, $node);
+      break;
+    default:
+      # code...
+      break;
+  }
+  unset($_SESSION['ref_tid']);
+}
+
+function update_referenced_nodes($ref_fields, $refNode){
+      //Get referenced Node Ids
+    if($ref_fields){
+      foreach ($ref_fields as $field_name) {
+        $node_ids = $refNode->$field_name;
+        if ($node_ids) {
+          foreach ($node_ids as $key => $value) {
+            $referenced_nids[] =  $value->target_id;
+          }
+        }
+      }
+    }
+      //get referenced term if available
+      if (!empty($refNode->field_partner_reference->target_id)||$_SESSION['ref_tid']){
+        if(!empty($_SESSION['ref_tid'])){
+          $ref_tid = $_SESSION['ref_tid'];
+        }
+        else{
+          $ref_tid = $refNode->field_partner_reference->target_id;
+        }
+        // print_r($ref_tid);die();
+        updatePartnersref($referenced_nids, $ref_tid);
+      } else{
+        updatePartnersref($referenced_nids, NULL);
+      }
+}
+
+function updatePartnersref($nids, $tid){
+  //Update all nodes with tid
+  if (!empty($nids)){
+    foreach ($nids as $node_id) {
+      if(!empty(trim($node_id))){
+        $refNode = Node::load($node_id);
+        if($refNode){
+          $refNode->field_partner_reference = $tid;
+          $refNode->save();
+        }
+        unset($refNode);
+      }
+    }
+  }
+}
+
+/**
+ * update Partners Tab reference ().
+ */
+function updatePartnersTabref($nids, $tid){
+  //Update all nodes with tid
+  if (!empty($nids)){
+    foreach ($nids as $node_id) {
+      if(!empty(trim($node_id))){
+        $refNode = Node::load($node_id);
+        if($refNode){
+          $refNode->field_partner_tab_reference = $tid;
+          $refNode->save();
+        }
+        unset($refNode);
+      }
+    }
+  }
+}
+/**
+ * Implements hook_page_attachments().
+ */
+function idg_get_microsite_content_page_attachments(array &$attachments) {
+  $theme = \Drupal::theme()->getActiveTheme()->getName();
+  if ($theme == 'seven') {
+    $attachments['#attached']['library'][] = 'cio/seven_custom';
+  }
+}
+
+
+
+
+// function idg_get_microsite_content_views_pre_view(\Drupal\views\ViewExecutable $view){
+//   echo '<pre>'; print_r($view);die();
+// }
+
+function idg_get_microsite_content_theme($existing, $type, $theme, $path) {
+  return array(
+    'pt_related_content' => array(
+        'variables' => array('variable' => NULL),
+        'template' => 'pt-related-content',
+    ),
+  );
+}

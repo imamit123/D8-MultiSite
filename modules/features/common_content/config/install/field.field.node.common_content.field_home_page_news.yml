@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_home_page_news
+    - node.type.common_content
+  module:
+    - entity_reference_revisions
+id: node.common_content.field_home_page_news
+field_name: field_home_page_news
+entity_type: node
+bundle: common_content
+label: 'home page news'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings: {  }
+field_type: entity_reference_revisions

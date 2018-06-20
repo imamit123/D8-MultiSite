@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vancast_url
+    - node.type.common_content
+id: node.common_content.field_vancast_url
+field_name: field_vancast_url
+entity_type: node
+bundle: common_content
+label: 'Vancast URL'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

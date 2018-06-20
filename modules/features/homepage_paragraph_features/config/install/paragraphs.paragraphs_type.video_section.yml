@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: video_section
+label: 'Video section'
+behavior_plugins: {  }

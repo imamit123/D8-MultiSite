@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - node.type.newsletter
+  module:
+    - user
+id: node.newsletter.search_result
+targetEntityType: node
+bundle: newsletter
+mode: search_result
+content:
+  links:
+    weight: 100
+    region: content
+hidden: {  }

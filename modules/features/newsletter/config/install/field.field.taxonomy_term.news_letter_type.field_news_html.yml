@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_news_html
+    - taxonomy.vocabulary.news_letter_type
+id: taxonomy_term.news_letter_type.field_news_html
+field_name: field_news_html
+entity_type: taxonomy_term
+bundle: news_letter_type
+label: 'Newsletter HTML'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

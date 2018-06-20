@@ -1,0 +1,21 @@
+name: Newsletter
+description: 'Provides Newsletter content type and related configuration. '
+type: module
+core: 8.x
+dependencies:
+  - block
+  - block_class
+  - comment
+  - common_content
+  - entity_reference_revisions
+  - field
+  - idg_homepage_content
+  - node
+  - options
+  - paragraphs
+  - path
+  - system
+  - taxonomy
+  - text
+  - user
+  - views

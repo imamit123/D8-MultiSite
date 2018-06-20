@@ -1,0 +1,16 @@
+name: 'Partner pages tabs'
+description: 'Module for partner pages tabs'
+type: module
+core: 8.x
+dependencies:
+  - field
+  - file
+  - image
+  - node
+  - owlcarousel
+  - paragraphs
+  - partner_tab
+  - text
+  - user
+  - views
+version: 8.x-1.1

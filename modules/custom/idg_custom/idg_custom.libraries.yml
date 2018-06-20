@@ -1,0 +1,10 @@
+idg-custom-ads:
+  version: 1.x
+  header: TRUE
+  js:
+    https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js: { type: external, minified: true }
+    js/google_ads.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    

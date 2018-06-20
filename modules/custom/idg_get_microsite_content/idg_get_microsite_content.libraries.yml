@@ -1,0 +1,6 @@
+form-script:
+  js:
+    js/idg_gen_newsletter.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

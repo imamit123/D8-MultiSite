@@ -1,0 +1,15 @@
+idg_gen_newsletter.create:
+  path: '/get-microsite-content'
+  defaults:
+    _controller: '\Drupal\idg_get_microsite_content\Controller\CreateMicrositeContentController::get_microsite_content'
+    _title: 'Get content from parent site to microsite'
+  requirements:
+    _permission: 'access content'
+idg_gen_newsletter.update:
+  path: '/get-microsite-content-update'
+  defaults:
+    _controller: '\Drupal\idg_get_microsite_content\Controller\CreateMicrositeContentController::get_microsite_content_update'
+    _title: 'Update content from parent site to microsite'
+  requirements:
+    _permission: 'access content'
+

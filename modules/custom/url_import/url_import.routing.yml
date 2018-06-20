@@ -1,0 +1,8 @@
+idg_xml:
+  path: '/url_import'
+  defaults:
+    # _controller: '\Drupal\url_import\Controller\UrlImport::buildForm'
+    _title: 'Hello'
+  requirements:
+    _permission: 'access content'
+

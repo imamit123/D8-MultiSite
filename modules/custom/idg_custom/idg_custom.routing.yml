@@ -1,0 +1,23 @@
+idg_custom.configure:
+  path: '/admin/config/user-interface/environment-configration'
+  defaults:
+    _form: 'Drupal\idg_custom\Form\IdgEnvironmentConfigureForm'
+    _title: 'Environment Configuration'
+  requirements:
+    _permission: 'administer idg_environment_configration'
+
+idg_custom.config:
+  path: '/admin/config/user-interface/general'
+  defaults:
+    _form: '\Drupal\idg_custom\Form\IdgGeneralConfigForm'
+    _title: 'General Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
+idg_custom.webform:
+  path: '/download/submission/confirm'
+  defaults:
+    _controller: '\Drupal\idg_custom\Controller\WebformSubmission::WebformFileDownload'
+  requirements:
+    _permission: 'access content'
+

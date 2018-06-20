@@ -1,0 +1,6 @@
+excluded:
+  - core.base_field_override.node.newsletter.promote
+  - core.base_field_override.node.newsletter.status
+  - core.base_field_override.node.newsletter.sticky
+  - block.block.exposedformidg_homepage_contentpage_1
+required: true

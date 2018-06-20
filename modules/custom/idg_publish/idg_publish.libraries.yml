@@ -1,0 +1,7 @@
+idg_publish:
+  js:
+    js/script.js: { weight: -1 }
+  dependencies:
+    - core/jquery
+    - core/drupal
+

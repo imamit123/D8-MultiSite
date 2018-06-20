@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: popular_
+label: 'Popular section'
+behavior_plugins: {  }

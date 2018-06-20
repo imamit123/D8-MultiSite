@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: partner_content
+label: 'Partner content'
+behavior_plugins: {  }

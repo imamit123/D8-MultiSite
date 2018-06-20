@@ -1,0 +1,5 @@
+name: 'Block Content Syndication'
+description:  'Block Content Syndication'
+type: module
+core: 8.x
+version: 8.x

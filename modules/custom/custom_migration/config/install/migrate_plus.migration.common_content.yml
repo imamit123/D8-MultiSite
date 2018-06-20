@@ -1,0 +1,85 @@
+id: common_content
+label: common_content
+migration_tags:
+  - Drupal 6
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+migration_group: test5group
+source:
+  plugin: d6_node
+  node_type: common_content
+process:
+#  nid and vid commented out will allow them to autoincrement. Safe as long
+#    as nothing else is referencing them.
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: common_content
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid:
+    plugin: default_value
+    default_value: 1
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: basic_html
+  'body/value': body
+  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_author_name: field_author_name
+  #field_author_profile_name:
+    #plugin: author_id
+    #source: field_author_profile_name
+    #ignore_case: true
+  field_author_profile_name: field_author_profile_name
+  field_edited_by: field_edited_by
+  field_home_page_image: field_home_page_image
+  field_teaser: field_teaser
+  field_sponsored: field_sponsored
+  field_about_person: field_about_person
+  field_person_name: field_person_name
+  field_design: field_design
+  field_company: field_company
+  field_quote : field_quote
+  field_nwsl_title: field_nwsl_title
+  field_nwsl_teaser: field_nwsl_teaser
+  field_slideshow_image: field_slideshow_image
+  field_slide_caption: field_slide_caption
+  field_slide_desc: field_slide_desc
+  field_image_credit: field_image_credit
+  field_video_script: field_video_script
+  field_detail_video_script: field_detail_video_script
+  field_local_guid: field_local_guid
+  field_guid: field_guid
+  field_guid_version: field_guid_version
+  field_org_ref: field_org_ref
+  field_org_type: field_org_type
+  field_org_url: field_org_url
+  field_send_content: field_send_content
+  field_idgns_image_url: field_idgns_image_url
+  field_cio_url:  field_cio_url
+  field_channelworld_url: field_channelworld_url
+  field_computerworld_url: field_computerworld_url
+  field_cso_url: field_cso_url
+  field_textnfile: field_textnfile
+  field_hidden_company_name: field_hidden_company_name
+  field_hidden_agency_name: field_hidden_agency_name
+  field_new_guid: field_new_guid
+
+  #field_external_link:
+    #plugin: d6_cck_link
+    #source: field_externallinktarget
+  #field_location: field_location
+destination:
+  plugin: entity:node
+migration_dependencies: {}

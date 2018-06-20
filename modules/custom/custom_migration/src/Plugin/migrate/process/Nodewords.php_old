@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\migrate_d6_metatag_custom\Plugin\migrate\process\Nodewords.
+ */
+
+namespace Drupal\custom_migration\Plugin\migrate\process;
+
+use Drupal\migrate\ProcessPluginBase;
+use Drupal\migrate\MigrateExecutableInterface;
+use Drupal\migrate\Row;
+use Drupal\Component\Utility\Unicode;
+namespace Drupal\action\Plugin\migrate\source;
+
+use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
+use Drupal\migrate\Row;
+
+/**
+ * This plugin converts D6 Nodewords to D8 Metatags.
+ *
+ *   id = "my_migration_blog",
+ *   source_provider = "node"
+ * )
+ */
+class Nodewords extends Node {
+
+  /**
+   * {@inheritdoc}
+   */
+ public function prepareRow(Row $row) {
+
+
+}
+
+
+}

@@ -1,0 +1,5 @@
+name: Published Date
+description: Custom code for published date
+core: 8.x
+package: Custom
+type: module

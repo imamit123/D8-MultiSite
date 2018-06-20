@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Case Study Technology Taxonomy'
+vid: case_study_technology_taxonomy
+description: 'Case Study  Technology Taxonomy'
+hierarchy: 0
+weight: 8

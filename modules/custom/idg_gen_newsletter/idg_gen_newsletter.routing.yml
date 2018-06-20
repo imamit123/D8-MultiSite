@@ -1,0 +1,9 @@
+idg_gen_newsletter.a:
+  path: '/idg-get-news-content'
+  defaults:
+    #_form: 'Drupal\idg_gen_newsletter\Form\GenerateNewsletterForm'
+    _controller: '\Drupal\idg_gen_newsletter\Controller\CreateNewsletterController::get_newsl_content'
+    _title: 'Get content for News letter based on node id'
+  requirements:
+    _permission: 'access content'
+

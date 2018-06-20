@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'News letter Type'
+vid: news_letter_type
+description: 'Type of news letter to be generated'
+hierarchy: 0
+weight: 0

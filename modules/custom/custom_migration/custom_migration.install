@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function custom_migration_uninstall() {
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.external_article')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.author_name')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.common_content')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.test5group')->delete();
+}

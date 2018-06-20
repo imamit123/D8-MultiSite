@@ -1,0 +1,5 @@
+name: 'IDG Media Release'
+description:  'IDG Media Release'
+type: module
+core: 8.x
+version: 8.x

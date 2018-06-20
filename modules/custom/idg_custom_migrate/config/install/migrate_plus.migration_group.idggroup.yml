@@ -1,0 +1,7 @@
+id: idggroup
+label: My Group
+description: Legacy content to be migrated to Drupal 8.
+source_type: Drupal 6.
+shared_configuration:
+  source:
+    key: legacy

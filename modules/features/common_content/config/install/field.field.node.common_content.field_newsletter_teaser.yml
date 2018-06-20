@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_newsletter_teaser
+    - node.type.common_content
+id: node.common_content.field_newsletter_teaser
+field_name: field_newsletter_teaser
+entity_type: node
+bundle: common_content
+label: 'Newsletter Teaser'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

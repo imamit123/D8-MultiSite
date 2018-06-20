@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.idg_homepage_content
+  module:
+    - block_class
+    - system
+    - views
+  theme:
+    - idgnews
+third_party_settings:
+  block_class:
+    classes: block-view-media
+id: views_block__idg_homepage_content_block_3
+theme: idgnews
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'views_block:idg_homepage_content-block_3'
+settings:
+  id: 'views_block:idg_homepage_content-block_3'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    pages: "/home\r\n/filter"
+    negate: false
+    context_mapping: {  }

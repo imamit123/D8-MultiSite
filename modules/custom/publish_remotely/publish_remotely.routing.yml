@@ -1,0 +1,7 @@
+publish_remotely:
+  path: '/idg_publish_remotely'
+  defaults:
+    _controller: '\Drupal\publish_remotely\Controller\PublishRemotelyController::publish_remotely'
+    _title: 'publish remotely content'
+  requirements:
+    _permission: 'access content'

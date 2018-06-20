@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.rss
+    - node.type.newsletter
+  module:
+    - user
+id: node.newsletter.rss
+targetEntityType: node
+bundle: newsletter
+mode: rss
+content:
+  links:
+    weight: 100
+    region: content
+hidden: {  }

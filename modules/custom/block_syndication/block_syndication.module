@@ -1,0 +1,51 @@
+<?php
+
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeTypeInterface;
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node_form.
+ *
+ * Adds a new submit hook to the node form.
+ *
+ * @see block_syndication_redirect_form_nnode_editors_pick_submit()
+ */
+function block_syndication_form_node_editors_pick_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+      $form['actions'][$action]['#submit'][] = 'block_syndication_redirect_form_node_editors_pick_submit';
+    }
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node_form.
+ *
+ * Adds a new submit hook to the node form.
+ *
+ * @see block_syndication_redirect_form_nnode_editors_pick_submit()
+ */
+function block_syndication_form_node_editors_pick_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+      $form['actions'][$action]['#submit'][] = 'block_syndication_redirect_form_node_editors_pick_submit';
+    }
+  }
+}
+
+/**
+ * Implements block syndication submit handler().
+ */
+
+function block_syndication_redirect_form_node_editors_pick_submit($form, FormStateInterface $form_state){
+  \Drupal::request()->query->remove('destination');
+  $location = 'idg_block_syndication';
+  $redirect = \Drupal::pathValidator()->getUrlIfValid($location);
+  $form_state->setRedirectUrl($redirect);
+}

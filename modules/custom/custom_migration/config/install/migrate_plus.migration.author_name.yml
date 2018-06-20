@@ -1,0 +1,48 @@
+id: author_name
+label: Author Name
+migration_tags:
+  - Drupal 6
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+migration_group: test5group
+source:
+  plugin: d6_node
+  node_type: common_content
+process:
+#  nid and vid commented out will allow them to autoincrement. Safe as long
+#    as nothing else is referencing them.
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: common_content
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid:
+    plugin: default_value
+    default_value: 1
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+#  'body/format':
+#    plugin: default_value
+#    default_value: basic_html
+#  'body/value': body
+#  'body/summary': teaser
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_author_profile_name:
+    plugin: d6_author_name
+    source: field_author_profile_name
+  #field_external_link:
+    #plugin: d6_cck_link
+    #source: field_externallinktarget
+  #field_location: field_location
+destination:
+  plugin: entity:node
+migration_dependencies: {}

@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Case Study  Industry Vertical Taxonomy'
+vid: case_study_industry_vertical_tax
+description: 'Case Study Industry Vertical Taxonomy'
+hierarchy: 0
+weight: 10

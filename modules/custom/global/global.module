@@ -1,0 +1,73 @@
+<?php
+
+use Drupal\node\Entity\Node;
+use Drupal\Core\Database\Database;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Entity\EntityInterface;
+
+/*
+ * Implements hook_page_attachments().
+ *
+ * Adds the page_scroll_indicator library to the page for any user.
+*/
+function global_page_attachments(array &$page) {
+    $page['#attached']['library'][] = 'global/global_js';
+}
+
+/**
+ * Implements hook_query_TAG_alter() for comment_filter tag.
+ *
+ * @see CommentStorage::loadThread().
+ */
+function global_query_comment_filter_alter(Drupal\Core\Database\Query\AlterableInterface $query) {
+	
+  // Change comment order to DESC for 'comment' field.
+  if ($query->getMetaData('field_name') == 'field_comments') {
+
+    $order_by = &$query->getOrderBy();
+    $expressions = &$query->getExpressions();
+    // Sorting for threaded comments.
+    if (isset($order_by['torder']) && $order_by['torder'] == 'ASC') {
+      // Get rid of the expressions that prepare the threads for ASC ordering.
+      unset($expressions['torder']);
+      unset($order_by['torder']);
+      // Simply order by the thread field.
+      $order_by['c.thread'] = 'DESC';
+    }
+
+  }
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function global_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+	$id =  $form_id;
+  if($id == 'comment_comment_form'){
+  	/*$form['subject']['widget'][0]['value']['#maxlength'] = 250;
+  	$form['subject']['widget'][0]['value']['#validated'] = 0;
+  	$form['subject']['widget'][0]['value']['#needs_validation'] =  0;*/
+	  foreach (array_keys($form['actions']) as $action) {
+	    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+	    	$form['actions'][$action]['#submit'][] = [];
+	      $form['actions'][$action]['#submit'][] = 'change_empty_subject_comment';
+	    }
+	  }
+	}
+}
+
+/*
+ * fucntion for submit handler for comment
+ */
+function change_empty_subject_comment(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+	//echo '<pre>'; print_r($form['subject']['widget'][0]['value']['#needs_validation']);die();
+  $body = $form_state->getValue('subject');
+	$comment = $body[0]['value'];
+	if ($entity = $form_state->getFormObject()->getEntity()) {
+		if ($comment == ''){ 
+			$entity->set('subject', ''); $entity->save(); 
+		
+		}
+	}
+}

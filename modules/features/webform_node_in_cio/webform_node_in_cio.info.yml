@@ -1,0 +1,14 @@
+name: 'webform node in cio'
+type: module
+core: 8.x
+dependencies:
+  - field
+  - file
+  - image
+  - node
+  - path
+  - taxonomy
+  - text
+  - user
+  - webform
+version: 8.x-1.1

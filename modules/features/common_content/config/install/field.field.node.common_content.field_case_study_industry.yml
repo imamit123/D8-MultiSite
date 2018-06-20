@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_case_study_industry
+    - node.type.common_content
+    - taxonomy.vocabulary.case_study_industry_vertical_tax
+id: node.common_content.field_case_study_industry
+field_name: field_case_study_industry
+entity_type: node
+bundle: common_content
+label: 'Case Study Industry Vertical Taxonomy'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      case_study_industry_vertical_tax: case_study_industry_vertical_tax
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

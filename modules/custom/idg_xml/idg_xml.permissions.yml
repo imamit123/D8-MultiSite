@@ -1,0 +1,3 @@
+administer idg_xml:
+  title: 'xml import url.'
+  description: 'Administer permissions for xml import url.'

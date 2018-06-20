@@ -1,0 +1,5 @@
+name: GUID Auto Generation
+description: Custom Guid Generation.
+core: 8.x
+package: Custom
+type: module

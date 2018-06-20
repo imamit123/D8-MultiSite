@@ -1,0 +1,1 @@
+1. question-title-is-displayed-as-block-title-2923946-8.x-1.x-dev-2.patch is used for display the title of most recent poll block for poll module.

@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_content_sites
+    - taxonomy.vocabulary.idg_sites
+    - taxonomy.vocabulary.news_letter_type
+id: taxonomy_term.news_letter_type.field_content_sites
+field_name: field_content_sites
+entity_type: taxonomy_term
+bundle: news_letter_type
+label: 'Content Sites'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      idg_sites: idg_sites
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

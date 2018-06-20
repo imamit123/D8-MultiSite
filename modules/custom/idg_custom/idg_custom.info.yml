@@ -1,0 +1,5 @@
+name: IDG Custom
+description: A simple Custom module.
+core: 8.x
+package: Custom
+type: module
