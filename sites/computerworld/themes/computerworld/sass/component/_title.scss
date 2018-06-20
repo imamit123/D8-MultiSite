@@ -1,0 +1,113 @@
+.custom-title  {
+  h2 {
+    font-family: $font-secondary-bold;
+    color: $color-lightblack;
+    border-bottom: 2px solid $color-black;
+    margin-bottom: 15px;
+    font-size: 16px;
+    padding-bottom: 5px;
+    margin-top: 0;
+    @at-root .ms#{&} {
+      margin-bottom: 20px;
+    }
+    @at-root .title-img.video-img#{&} {
+      color: $color-secondary;
+      text-transform: uppercase;
+      position: relative;
+      border-bottom: 0 none;
+      padding-left: 40px;
+      margin-bottom: 10px;
+      font-family: $font-myridprobold;
+      font-size: 26px;
+      letter-spacing: -1px;
+      line-height: 22px;
+      &:before {
+        background: $social-icons;
+        background-position: -188px -33px;
+        content: "";
+        width: 28px;
+        display: block;
+        position: absolute;
+        height: 29px;
+        left: 0px;
+        top: -6px;
+      }
+      span {
+        color: $color-body-text;
+        font-family: $font-myridproregular;
+        font-weight: normal;
+      }
+    }
+  }
+}
+.page-title, .block-title {
+  font-family: $font-secondary-bold;
+  color: $color-lightblack;
+  border-bottom: 2px solid $color-black;
+  margin-bottom: 15px;
+  font-size: 16px;
+  padding-bottom: 5px;
+  margin-top: 0;
+  text-transform: capitalize;
+  &:empty {
+    display: none;
+  }
+}
+
+.title-middle {
+  h2 {
+    border-bottom: none;
+    color: $color-black;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    margin-top: 5px;
+    &:after, &:before {
+      content: "";
+      border-top: 3px solid $color-secondary;
+      position: absolute;
+      top: 8px;
+      width: 50%;
+    }
+    &:before {
+      left: 0;
+    }
+    &:after {
+      right: 0;
+    }
+    span {
+      position: relative;
+      z-index: 16;
+      background: $color-white;
+      padding: 0 15px;
+      font-family: $font-myridprobold;
+      font-size: 26px;
+      letter-spacing: -1px;
+      line-height: 22px;
+      @at-root .paragraph--type--slider-section#{&} {
+        font-size: 22px;
+      }
+    }
+  }
+}
+#block-signup {
+  h2 {
+    text-transform: initial;
+  }
+}
+.path-frontpage {
+  .sidebar {
+    h2 {
+      color: $color-red;
+      text-transform: uppercase !important;
+    }
+  }
+}
+
+.home-main-data {
+  .left-content {
+    h2 {
+      margin-top: -1px;
+    }
+  }
+}

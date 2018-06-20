@@ -1,0 +1,104 @@
+::::::::::::::::::
+Rajanish:Nagwekar:NSETECH:AsVP:rnagwekar@nse.co.in:912226598100:IN:yes:yes:Not Sure:No:Application hardening libraries like ESAPI;Cloud WAF;:We do not use cloud platforms:Cloud WAF:WAF appliance with DDoS mitigation capability;:Not sure:on:Ad-hoc domain blocking during incident response;Regulator-provided blacklist;:No:SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Sanjay:Tiwari:SSFB:CISO:sanjaykumar.tiwari@suryodaybank.com:41856773:IN:No::Yes:No:WAF appliance;:We do not use cloud platforms:WAF appliance:WAF appliance with DDoS mitigation capability;:20-59 Gbps:on:Regulator-provided blacklist;:No:IPSec VPN;
+:::::::::::::::::::
+:::::::::::::::::::
+KAVEEN:P:UNBORN GROUPS :MD:pkaveen@unborn.co.in:9942014332:IN:yes:yes:Not Sure:Yes:Application hardening libraries like ESAPI;:Rely on the platform’s inbuilt DDoS system:API gateway:ISP-based DDoS mitigation service;:<9 Gbps:on:Regulator-provided blacklist;:No:Application Delivery Controllers (ADC) e.g. F5 Big-IP;Policy-based secure access e.g. Zscaler;
+:::::::::::::::::::
+Mayendra:Leaz:Telin:PM:endra@telin.co.id:+6281298124588:ID:No:yes:No:Not sure:Pre-production application vulnerability scanning;WAF appliance;:Deploy a cloud-based WAF in front of the cloud platform:Cloud-based API specific WAF:DDoS mitigation appliance;ISP-based DDoS mitigation service;:Not sure:on:None of the above;:No:SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Mitch:Polites :Akamai:AE:mpolites@akamai.com:0415947556:AU:No:yes:No:Yes:WAF appliance;:Deploy a cloud-based WAF in front of the cloud platform:Cloud WAF:ISP-based DDoS mitigation service;:<9 Gbps:on:Regulator-provided blacklist;:Yes, for obvious bots:IPSec VPN;
+:::::::::::::::::::
+William:Chua:Akamai:Security Sales Specialist:wchua@akamai.com:97617650:SG:No::Not Sure:No:Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;WAF appliance;:We do not use cloud platforms:WAF appliance:ISP-based DDoS mitigation service;WAF appliance with DDoS mitigation capability;:Not sure:on:Ad-hoc domain blocking during incident response;Purchased lists for content filtering such as adult content and gambling;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:Yes, for obvious bots:Application Delivery Controllers (ADC) e.g. F5 Big-IP;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+CHIDAMBARATHANU:L.:MOHAN BREWEREIS AND DISTILLERIES LTD.:GENERAL MANAGER  IT:lcthanu@mbdl.co.in:28290603:IN:yes:yes:No:No:None of the above;:We do not use cloud platforms:API gateway:None of the above;:Not sure:on:None of the above;:No:IPSec VPN;
+:::::::::::::::::::
+:::::::::::::::::::
+Arvindra:Singh:Petronet LNG Limited:Officer :arvindrasingh@petronetlng.com:7228888535:IN:No::No:No:None of the above;:We do not use cloud platforms:API gateway:DDoS mitigation appliance;:20-59 Gbps:on:Ad-hoc domain blocking during incident response;Create own blacklists based on threat intelligence and big data efforts;Purchased lists for content filtering such as adult content and gambling;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:No:SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+:::::::::::::::::::
+:::::::::::::::::::
+Neeraj:Malhotra:BC Management Services Pvt. Ltd.:Sr. Manager:neeraj.malhotra@britishcouncil.org:9818181085:IN:No::Yes:Yes:Application hardening libraries like ESAPI;Cloud WAF;ModSecurity rules;Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;:Rely on inbuilt scalability of the cloud platform:WAF appliance:Cloud-based DDoS protection (using BGP/DNS diversion);ISP-based DDoS mitigation service;WAF appliance with DDoS mitigation capability;:Not sure:on:Ad-hoc domain blocking during incident response;Create own blacklists based on threat intelligence and big data efforts;Regulator-provided blacklist;:Yes, for all bots:Application Delivery Controllers (ADC) e.g. F5 Big-IP;IPSec VPN;Policy-based secure access e.g. Zscaler;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Bharadwaj:Basavanahalli:CTS:SM:102968@cognizant.com:9999999999:IN:No::Not Sure:No:Application hardening libraries like ESAPI;Cloud WAF;Production vulnerability scanning;WAF appliance;:Rely on the platform’s inbuilt DDoS system:API gateway:WAF appliance with DDoS mitigation capability;:Not sure:Not sure:Ad-hoc domain blocking during incident response;Create own blacklists based on threat intelligence and big data efforts;Regulator-provided blacklist;:Yes, for obvious bots:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Sanjiv:Khushu:Evantage IT Consulting Services Pvt Ltd:CEO:sanjiv@evantageit.com:9811307195:IN:No::No:No:None of the above;:We do not use cloud platforms:We do not use APIs:None of the above;:Not sure:Not sure:None of the above;:No, my sites do not have any logins:None of the above;
+:::::::::::::::::::
+Daman:Sood:Continuity and Resilience:COO:d.sood@continuityandresilience.com:00919958091880:IN:No:yes:Not Sure:Not sure:None of the above;:We do not use cloud platforms:We do not use APIs:None of the above;:Not sure:Not sure:None of the above;:No, my sites do not have any logins:None of the above;
+:::::::::::::::::::
+Murugan:K:Vee Technologies:IRM:murugan@veetechnologies.com:914272341064:IN:No:yes:Yes:Yes:Application hardening libraries like ESAPI;ModSecurity rules;Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;WAF appliance;:Deploy a WAF instance within the cloud platform:API gateway:WAF appliance with DDoS mitigation capability;:<9 Gbps:No:Create own blacklists based on threat intelligence and big data efforts;Purchased lists for malware droppers and command and control;:Yes, for all bots:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+:::::::::::::::::::
+saravanan:t:hindustan petroleum corporation limited:deputy general :tsaravanan@hpcl.in:914067294515:IN:No:yes:Yes:Yes:Application hardening libraries like ESAPI;Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;:We do not use cloud platforms:We do not use APIs:ISP-based DDoS mitigation service;:<9 Gbps:Yes:Create own blacklists based on threat intelligence and big data efforts;Purchased lists for content filtering such as adult content and gambling;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:Yes, for obvious bots:Application Delivery Controllers (ADC) e.g. F5 Big-IP;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+:::::::::::::::::::
+Yogesh:Mehta:WGBL:Sr. V.P.:yogesh_mehta@welspun.com:+912266136412:IN:No::Yes:No:Cloud WAF;Pre-production application vulnerability scanning;Static and dynamic code analysis;:Rely on the platform’s inbuilt DDoS system:API gateway:Cloud-based DDoS protection (using BGP/DNS diversion);ISP-based DDoS mitigation service;WAF appliance with DDoS mitigation capability;:20-59 Gbps:No:Ad-hoc domain blocking during incident response;Create own blacklists based on threat intelligence and big data efforts;Purchased lists for content filtering such as adult content and gambling;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:Yes, for obvious bots:IPSec VPN;Policy-based secure access e.g. Zscaler;
+:::::::::::::::::::
+CK :PRASAD:INDIAN RAILWAYS:RGM:ckprasad@railtelindia.com:09701387171:IN:yes:yes:Yes:No:None of the above;:Deploy a WAF instance within the cloud platform:We do not use APIs:WAF appliance with DDoS mitigation capability;:10-19 Gbps:No:Purchased lists for content filtering such as adult content and gambling;:No:SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Vikash:Maurya:MakeMyTrip India Pvt Ltd:Sr. Manager:domainregister@makemytrip.com:+911244395303:IN:yes::Yes:No:Pre-production application vulnerability scanning;Production vulnerability scanning;WAF appliance;:Deploy a cloud-based WAF in front of the cloud platform:API gateway:DDoS mitigation appliance;ISP-based DDoS mitigation service;:>100 Gbps:No:None of the above;:Yes, for obvious bots:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+:::::::::::::::::::
+liza:Ching:Mag:risk:liza.ching@maybank.com.hk:12345678:HK:No::Not Sure:Not sure:Production vulnerability scanning;:We do not use cloud platforms:We do not use APIs:None of the above;:Not sure:Not sure:None of the above;:No:None of the above;
+:::::::::::::::::::
+Jinu:Sanny:Cafe Coffee Day:Sr.Manager:jinu@cafecoffeeday.com:+918040012345:IN:No:yes:No:Yes:Application hardening libraries like ESAPI;Pre-production application vulnerability scanning;Production vulnerability scanning;:Rely on inbuilt scalability of the cloud platform:We do not use APIs:None of the above;:Not sure:Yes:Purchased lists for content filtering such as adult content and gambling;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:No, my sites do not have any logins:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+:::::::::::::::::::
+:::::::::::::::::::
+:::::::::::::::::::
+atul:tiwari:Orange:Sr. Director:atul.tiwari@orange.com:9250006166:IN:No::Yes:No:ModSecurity rules;Static and dynamic code analysis;:Rely on the platform’s inbuilt DDoS system:WAF appliance:DDoS mitigation appliance;:10-19 Gbps:No:Ad-hoc domain blocking during incident response;:No:IPSec VPN;Policy-based secure access e.g. Zscaler;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+shashidhar:soppin:wipro:senior architect:shashidhar.soppin@wipro.com:32232323:IN:No:yes:No:Not sure:ModSecurity rules;Production vulnerability scanning;:Rely on inbuilt scalability of the cloud platform:Cloud-based API specific WAF:DDoS mitigation appliance;WAF appliance with DDoS mitigation capability;:20-59 Gbps:Not sure:Purchased lists for content filtering such as adult content and gambling;Regulator-provided blacklist;:Yes, for obvious bots:IPSec VPN;
+shashidhar:soppin:wipro:senior architect:shashidhar.soppin@wipro.com:32232323:IN:No:yes:No:Not sure:ModSecurity rules;Production vulnerability scanning;:Rely on inbuilt scalability of the cloud platform:Cloud-based API specific WAF:DDoS mitigation appliance;WAF appliance with DDoS mitigation capability;:20-59 Gbps:Not sure:Purchased lists for content filtering such as adult content and gambling;Regulator-provided blacklist;:Yes, for obvious bots:IPSec VPN;
+:::::::::::::::::::
+:::::::::::::::::::
+Sridhar:Narayana rao:Tnsdc:Senior technical director:n.sridhar@nic.in:9444744380:IN:No:yes:Yes:No:Application hardening libraries like ESAPI;Production vulnerability scanning;WAF appliance;:We do not use cloud platforms:WAF appliance:DDoS mitigation appliance;WAF appliance with DDoS mitigation capability;:>100 Gbps:No:Regulator-provided blacklist;:No:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+pritpal:singh:Beumer India:Sr. Manager:pr.sn@beumergroup.com:9560094247:IN:No::Not Sure:No:Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;:We do not use cloud platforms:API gateway:None of the above;:Not sure:Yes:Ad-hoc domain blocking during incident response;Create own blacklists based on threat intelligence and big data efforts;Regulator-provided blacklist;:Yes, for all bots:IPSec VPN;Policy-based secure access e.g. Zscaler;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Bhavik :Rathod:Amity Infosoft Pvt Ltd:Sr Channel Development and Sales:bhavnagar@amitygroup.co.in:8980012218:IN:No::Yes:No:Application hardening libraries like ESAPI;Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;:Rely on inbuilt scalability of the cloud platform:Cloud-based API specific WAF:ISP-based DDoS mitigation service;:I don't have DDoS mitigation capabilities:Yes:Create own blacklists based on threat intelligence and big data efforts;Purchased lists for content filtering such as adult content and gambling;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:Yes, for all bots:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Amit:Kajgikar:Planyourjourney.com:Head IT:ithead@planyourjourney.com:9819868933:IN:yes:yes:Not Sure:No:None of the above;:Rely on the platform’s inbuilt DDoS system:API gateway:None of the above;:Not sure:Not sure:None of the above;:No:None of the above;
+:::::::::::::::::::
+Amit:Kajgikar:Planyourjourney.com:Head IT:ithead@planyourjourney.com:+9122 4921 0400:IN:yes:yes:No:Not sure:None of the above;:We do not use cloud platforms:We do not use APIs:None of the above;:Not sure:No:None of the above;:No, my sites do not have any logins:None of the above;
+:::::::::::::::::::
+Shailesh Ashok:Gode:The Indian Hume Pipe Company Ltd:Sr. Systems Analyst:shailesh@indianhumepipe.com:02240748153:IN:No::Not Sure:No:Cloud WAF;ModSecurity rules;:Deploy a WAF instance within the cloud platform:Cloud WAF:None of the above;:Not sure:No:Regulator-provided blacklist;:No:None of the above;
+:::::::::::::::::::
+:::::::::::::::::::
+Pankaj:Khare:InterGlobe:Director IT:pankaj.khare@goindigo.in:9650244415:IN:yes:yes:No:No:Cloud WAF;Pre-production application vulnerability scanning;Production vulnerability scanning;WAF appliance;:We do not use cloud platforms:WAF appliance:DDoS mitigation appliance;:<9 Gbps:Yes:Ad-hoc domain blocking during incident response;Create own blacklists based on threat intelligence and big data efforts;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:No, my sites do not have any logins:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Ravikumar:LR:United Breweries Limited:United Breweries:ravikumarlr@ubmail.com:09980655669:IN:yes:yes:Yes:Yes:Application hardening libraries like ESAPI;ModSecurity rules;:We do not use cloud platforms:API gateway:ISP-based DDoS mitigation service;:<9 Gbps:Yes:Create own blacklists based on threat intelligence and big data efforts;Purchased lists for content filtering such as adult content and gambling;:Yes, for all bots:IPSec VPN;Policy-based secure access e.g. Zscaler;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+:::::::::::::::::::
+Keith:Boi:TrueWorth Consultants:Editoro:keith@trueworth.com.sg:65-76664534:SG:No::Yes:Not sure:Static and dynamic code analysis;WAF appliance;:We do not use cloud platforms:API gateway:None of the above;:60-99 Gbps:Yes:Regulator-provided blacklist;:Yes, for all bots:None of the above;
+:::::::::::::::::::
+jaga:desh:BIET:Asst Prof:jan@bietdvg.edu:09902911880:IN:yes:yes:No:Yes:Static and dynamic code analysis;:Deploy a WAF instance within the cloud platform:Cloud-based API specific WAF:DDoS mitigation appliance;ISP-based DDoS mitigation service;:<9 Gbps:Yes:Purchased lists for content filtering such as adult content and gambling;:Yes, for obvious bots:IPSec VPN;
+:::::::::::::::::::
+Sharon:Wu:Akamai:Marketing Manager:swu@akamai.com:+65 6593 8717:SG:No:yes:No:No:Production vulnerability scanning;Static and dynamic code analysis;:Rely on the platform’s inbuilt DDoS system:Cloud WAF:DDoS mitigation appliance;ISP-based DDoS mitigation service;:<9 Gbps:No:Create own blacklists based on threat intelligence and big data efforts;Purchased lists for content filtering such as adult content and gambling;:No:Application Delivery Controllers (ADC) e.g. F5 Big-IP;
+:::::::::::::::::::
+Test:Test:Akamai:AN:test@akamai.com:4152338335:AL:No::Yes:No:Cloud WAF;:We do not use cloud platforms:We do not use APIs:WAF appliance with DDoS mitigation capability;:10-19 Gbps:Yes:Ad-hoc domain blocking during incident response;:No:None of the above;
+:::::::::::::::::::
+Oscar:Chavez:Akamai:BDM:ochavez@akamai.com:0403360364:AU:No::No:No:Application hardening libraries like ESAPI;Cloud WAF;ModSecurity rules;Pre-production application vulnerability scanning;WAF appliance;:Rely on inbuilt scalability of the cloud platform:API gateway:None of the above;:<9 Gbps:Yes:Ad-hoc domain blocking during incident response;Create own blacklists based on threat intelligence and big data efforts;:No, my sites do not have any logins:Application Delivery Controllers (ADC) e.g. F5 Big-IP;
+:::::::::::::::::::
+Craig:Warren:Deakin Uni:Exec Director:ccw@deakin.edu.au:0352278840:AU:yes::::Pre-production application vulnerability scanning;:::ISP-based DDoS mitigation service;:::None of the above;::IPSec VPN;
+:::::::::::::::::::
+Ganesha:Kandasamy:Keysight:Cordinator:ganesh_kandasamy@keysight.com:+6046802826:MY:No:yes:Yes:Yes:Static and dynamic code analysis;:Deploy a cloud-based WAF in front of the cloud platform:WAF appliance:DDoS mitigation appliance;:>100 Gbps:No:Create own blacklists based on threat intelligence and big data efforts;:Yes, for all bots:SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+Shashi:Rao:The India Tour Company:Owner:shashj@theindiatourcompany.com:8194515383:IN:yes::Not Sure:No:None of the above;:Rely on the platform’s inbuilt DDoS system:We do not use APIs:DDoS mitigation appliance;:<9 Gbps:Yes:Regulator-provided blacklist;:No, my sites do not have any logins:None of the above;
+:::::::::::::::::::
+Damian:Cronin:ANZ:Senior Developer:cronind@anz.com:61386541728:AU:No::Not Sure:Not sure:Cloud WAF;Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;WAF appliance;:Deploy a cloud-based WAF in front of the cloud platform:WAF appliance:Cloud-based DDoS protection (using BGP/DNS diversion);WAF appliance with DDoS mitigation capability;:Not sure:Not sure:Create own blacklists based on threat intelligence and big data efforts;:Yes, for obvious bots:IPSec VPN;
+:::::::::::::::::::
+Deepak:Naik:Bank Ltd:Vice President:deepak.naik@axisbank.com:9821939374:IN:yes:yes:Yes:Yes:Cloud WAF;Pre-production application vulnerability scanning;Production vulnerability scanning;Static and dynamic code analysis;WAF appliance;:Deploy a cloud-based WAF in front of the cloud platform:API gateway:Cloud-based DDoS protection (using BGP/DNS diversion);DDoS mitigation appliance;WAF appliance with DDoS mitigation capability;:20-59 Gbps:Yes:Create own blacklists based on threat intelligence and big data efforts;Purchased lists for content filtering such as adult content and gambling;Regulator-provided blacklist;:Yes, for obvious bots:Policy-based secure access e.g. Zscaler;
+:::::::::::::::::::
+Louie:Bautista:PLDT:Network Analyst:lucbautista@pldt.com.ph:6325840454:PH:No::Yes:Yes:Application hardening libraries like ESAPI;ModSecurity rules;Pre-production application vulnerability scanning;:Deploy a cloud-based WAF in front of the cloud platform:Cloud WAF:DDoS mitigation appliance;WAF appliance with DDoS mitigation capability;:<9 Gbps:No:Purchased lists for content filtering such as adult content and gambling;Purchased lists for malware droppers and command and control;Regulator-provided blacklist;:No, my sites do not have any logins:IPSec VPN;SSL VPN e.g. Cisco AnyConnect;
+:::::::::::::::::::
+test:test:test inc.:tester:chee.hongern@stee.stengg.com:4164125999:CA:No::No:No:None of the above;:We do not use cloud platforms:We do not use APIs:WAF appliance with DDoS mitigation capability;:20-59 Gbps:No:None of the above;:No:IPSec VPN;
+:::::::::::::::::::
+Jennifer:Merredew:Akamai Technologies:Marketing:jmerrede@akamai.cm:6144443000:US:No::Not Sure:Not sure:None of the above;:Rely on inbuilt scalability of the cloud platform:WAF appliance:None of the above;:Not sure:Not sure:None of the above;:No, my sites do not have any logins:None of the above;
+:::::::::::::::::::
+test:test:test:test:test@test.com:5555555555:US:No::Yes:Yes:Application hardening libraries like ESAPI;:Deploy a cloud-based WAF in front of the cloud platform:API gateway:Cloud-based DDoS protection (using BGP/DNS diversion);:I don't have DDoS mitigation capabilities:Yes:Ad-hoc domain blocking during incident response;:Yes, for all bots:Application Delivery Controllers (ADC) e.g. F5 Big-IP;
+:::::::::::::::::::
+Test for LinkedIn:Please Exclude:Akamai:Test:test@akamai.com:555-555-5555:US:No:yes:Not Sure:Not sure:None of the above;:We do not use cloud platforms:We do not use APIs:None of the above;:Not sure:Not sure:None of the above;:No, my sites do not have any logins:None of the above;
+:::::::::::::::::::
+Bobby:Varghese:Qruize Technologies Pvt Ltd:Director  Managed Services:bobby.m@qruize.com:+919840076057:IN:No::Not Sure:Yes:Pre-production application vulnerability scanning;Production vulnerability scanning;:Rely on the platform’s inbuilt DDoS system:Cloud WAF:ISP-based DDoS mitigation service;:<9 Gbps:No:Purchased lists for content filtering such as adult content and gambling;:Yes, for obvious bots:SSL VPN e.g. Cisco AnyConnect;

@@ -1,0 +1,33 @@
+<?php
+/**
+ * @file
+ * Currently (31/07/2016) , Drupal needs this blank file.
+ */
+ function cse_theme($existing, $type, $theme, $path) {
+  return array(
+        'cse_theme' => array(
+            'variables' => array('value' => NULL), /////Array passed to controller///
+        ),
+    );
+}
+
+/* 
+ * change page title
+ */
+function cse_page_attachments_alter(array &$page) {
+	$urlArray = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	$segments = explode('/', $urlArray);
+	$numSegments = count($segments);
+	$currentSegment = $segments[$numSegments - 1];
+	$config = \Drupal::config('system.site');
+	$variables['site_name'] = $config->get('name');
+	if ($currentSegment == 'g_search' && $_REQUEST['q']){
+    $page['#attached']['html_head'][] = [
+        [
+          '#tag' => 'title',
+          '#value' => $_REQUEST['q'].' | Search Results | '.$variables['site_name'],
+        ],
+        'title'
+    ];
+  }
+}

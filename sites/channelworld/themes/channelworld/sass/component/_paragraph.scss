@@ -1,0 +1,67 @@
+.paragraph {
+  margin-bottom: 3px;
+}
+
+/*********** winners *************/
+.paragraph--type--winners-item {
+  margin-top: 20px;
+  .field--name-field-label {
+    border-bottom: 2px solid #545454;
+    margin-top: -1px;
+    padding-bottom: 5px;
+    color: #800000;
+    text-transform: uppercase;
+    font-size: 19px;
+    line-height: 20px;
+    padding: 0 10px 1px 0;
+    font-family: "RobotoSlabBold", serif;
+  }
+  .field--name-field-winners-item {
+    margin-top: 20px;
+    > .field__item {
+      width: 50%;
+      float: left;
+      @media (max-width: 767px) {
+        width: 100%;
+      }
+      a {
+        font-weight: normal;
+        line-height: 18px;
+        padding: 2px 0;
+        display: inline-block;
+        color: #800000;
+        margin-bottom: 3px;
+        font-size: 14px;
+        font-family: "RobotoSlabBold", serif;
+      }
+    }
+  }
+}
+/***********Premier100-company-details *************/
+
+#premier100-company-details {
+    font-size: 15px;
+    line-height: 20px;
+  strong {  color: maroon;  }
+}
+
+.info-details {
+    font-size: 16px;
+
+.awards {
+    border-bottom: 1px solid #808080;
+    color: #800000;
+    font-weight: bold;
+    PADDING: 10PX 0PX;
+
+   p {
+      color: maroon;
+      LINE-HEIGHT: 15PX;
+
+     b {
+        font-weight: normal;
+        color: #3c3c3c;
+      }
+    }
+  }
+}

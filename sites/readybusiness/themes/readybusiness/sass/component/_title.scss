@@ -1,0 +1,38 @@
+/*
+** style for title.
+*/
+.region-sidebar-second {
+	h2.block-title {
+		background: $color-grey;
+    border-bottom: 3px solid $color-red;
+    color: $color-white;
+    font-family: VodafoneRgBd;
+    font-size: 19px;
+    line-height: 37px;
+    margin-bottom: 0;
+    padding-left: 10px;
+    width: 100%;
+	}
+}
+.block-views {
+	h2, .page-title {
+		color: #e70000;
+    font-size: 34px;
+    font-family: "VodafoneRgBd";
+    margin: 18px 0 12px;
+	}
+}
+h1.page-title {
+  color: #e70000;
+  font-size: 34px;
+  font-family: "VodafoneRgBd";
+  margin: 18px 0 12px;
+}
+.page-node-type-common-content {
+  h1.page-title {
+    color: #000000;
+    font-family: VodafoneRgBd;
+    font-size: 40px;
+  }
+}
+

@@ -1,0 +1,43 @@
+/*
+** style for google search.
+*/
+.block-search {
+  text-align: right;
+  padding-right: 30px;
+  @media (max-width: 768px) {
+    padding-left: 7px;
+    margin-bottom: 8px;
+    padding-top: 8px;
+    text-align: left;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+  .form-search {
+    position: relative;
+  }
+	.google_search_text {
+		border: 1px solid $color-white;
+		height: 32px;
+		padding: 0 0 0 5px;
+		width: 318px;
+    @media (max-width: 768px) { 
+      width: 88%;
+    }  
+		input {
+			outline: none;
+		}
+	}
+	.search {
+    background: url("../images/search.png") no-repeat scroll 0px 4px $color-white;
+    border: 1px solid $color-white;
+    cursor: pointer;
+    height: 32px;
+    margin: 0 0 0 -5px;
+    text-indent: -9999px;
+    width: 30px;
+    &:hover, &:focus {
+      background: url("../images/search.png") no-repeat scroll 1px 5px $color-white;
+      border: none;
+    }
+  } 
+}	

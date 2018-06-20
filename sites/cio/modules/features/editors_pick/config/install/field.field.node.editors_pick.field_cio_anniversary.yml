@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cio_anniversary
+    - node.type.editors_pick
+id: node.editors_pick.field_cio_anniversary
+field_name: field_cio_anniversary
+entity_type: node
+bundle: editors_pick
+label: 'CIO Anniversary'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

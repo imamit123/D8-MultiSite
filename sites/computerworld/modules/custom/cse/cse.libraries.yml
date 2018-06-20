@@ -1,0 +1,6 @@
+cse-scr:
+  version: 1.x
+  footer: true
+  js:
+    js/csejs.js: {  preprocess: false }
+    

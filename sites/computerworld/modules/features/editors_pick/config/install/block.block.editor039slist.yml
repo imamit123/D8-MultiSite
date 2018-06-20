@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_node_as_block
+  content:
+    - 'node:editors_pick:8d47c27f-0f20-434c-a6c2-ea385a39d25c'
+  module:
+    - block_class
+    - entityblock
+  theme:
+    - cio
+third_party_settings:
+  block_class:
+    classes: ''
+id: editor039slist
+theme: cio
+region: sidebar_second
+weight: -18
+provider: null
+plugin: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|8d47c27f-0f20-434c-a6c2-ea385a39d25c|0'
+settings:
+  id: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|8d47c27f-0f20-434c-a6c2-ea385a39d25c|0'
+  label: 'Editor''s list'
+  provider: entityblock
+  label_display: visible
+  label_override: 1
+visibility: {  }

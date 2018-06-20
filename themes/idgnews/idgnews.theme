@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the CIO theme.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
+
+/**
+ * Implements hook_preprocess_page() for page.html.twig.
+ */
+
+function idgnews_preprocess_node(&$variables) {
+  $variables['baseurl'] = $GLOBALS['base_url'];
+}

@@ -1,0 +1,17 @@
+name: greenenterpriseit
+type: theme
+base theme: classy
+Description: "A modern & responsive Drupal 8 Theme"
+package: custom
+core: 8.x
+
+regions:
+  leader: Leader
+  header: Header
+  content: Content
+  sidebar_first: Sidebar first
+  sidebar_second: Sidebar second
+  footer: Footer
+
+libraries:
+  - greenenterpriseit/greenenterpriseit-styling

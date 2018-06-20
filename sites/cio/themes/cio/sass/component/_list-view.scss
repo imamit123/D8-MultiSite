@@ -1,0 +1,10 @@
+.list-item {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid $color-border;
+  .txt {
+    @include flexbox;
+    @include justify-content(center);
+    @include align-items(center);
+  }
+}

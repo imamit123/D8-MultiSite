@@ -1,0 +1,28 @@
+name: cio
+type: theme
+base theme: classy
+Description: "A modern & responsive Drupal 8 Theme"
+package: custom
+core: 8.x
+
+regions:
+  ad: Ads
+  special_page_menu: Special page menu
+  quick_links: Quick links
+  menu: menu
+  menu_collapse: Menu Collapse
+  special_menu: Special Menu
+  special_tabs: Special Tabs
+  breadcrumb: Breadcrumb
+  content: Content
+  sidebar_first: Sidebar first
+  sidebar_second: Sidebar second
+  sidebar_second_special: Sidebar second special
+  mobile: Mobile Regions
+  footer_top: Footer Top
+  footer_bottom_logo: Footer Bottom Logo
+  footer_bottom: Footer Bottom
+  alliance_partner : Alliance Partner
+
+libraries:
+  - cio/cio-styling

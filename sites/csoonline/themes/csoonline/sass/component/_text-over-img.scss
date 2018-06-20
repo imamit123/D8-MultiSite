@@ -1,0 +1,112 @@
+.text-over-img {
+  .txt {
+    position: absolute;
+    bottom:4px;
+    padding: 0 20px;
+    z-index: 1;
+    color: $color-white;
+    &.large {
+      font-size: 22px;
+      @media(max-width: 767px) {
+        font-size: 19px;
+      }
+    }
+    a, p {
+      color: white;
+    }
+  }
+  .img {
+    position: relative;
+    z-index: 1;
+    @at-root .cols#{&} {
+      margin-bottom: 0;
+    }
+    @at-root .slider#{&} {
+      &:before {
+        position: inherit;
+      }
+      a {
+        &:before {
+          position: absolute;
+          content: '';
+          background: rgba(0,0,0,.3);
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    a {
+      &:before {
+        position: absolute;
+        content: '';
+        background: rgba(0,0,0,.3);
+        width: 100%;
+        height: 100%;
+      }
+    }  
+  }
+}
+
+/*
+** text over hover.
+*/
+.text-over-hover {
+  .img {
+    border: 1px solid $color-black;
+    position: relative;
+    margin-bottom: 0 !important; 
+  }
+  .views-row {
+    overflow: hidden;
+    &:hover {
+      .text-over-img {
+        height: 60px;
+        overflow: visible;
+      }
+    }
+    @media (max-width: 767px) {
+      width: 50%;
+    }     
+  }
+  .text-over-img {
+    background: $color-lightblue;
+    position: absolute;
+    bottom: 1px;
+    overflow: hidden;
+    transition: height .5s;
+      -moz-transition: height .5s;
+      -webkit-transition: height .5s;
+    height: 0; 
+    right: 0;
+    left: 6%; 
+    width: 88%;
+    a {
+      color: $color-white;
+      display: block;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 16px;
+      text-overflow: ellipsis;
+    }
+    .designation {
+      a {
+        color: $color-border-3;
+        font-size: 11px;
+        line-height: 12px;
+        white-space: initial;
+        overflow: hidden;
+      }
+    }
+    .wrap-text {
+      position: absolute;
+      overflow: hidden;
+      top: 60%;
+      left: 6%;
+      transform: translate(-6%,-60%);
+      -ms-transform: translate(-6%,-60%);
+      width: inherit;
+      padding-left: 5px;
+      white-space: nowrap;
+    }   
+  }
+}

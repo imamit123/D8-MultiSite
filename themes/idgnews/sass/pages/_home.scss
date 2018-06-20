@@ -1,0 +1,292 @@
+/* style for home page */
+.page-title {
+	background: $image-title-bg;
+  color: $color-white;
+  font-size: 19px;
+  line-height: 32px;
+  margin-top: .8em;
+  margin-bottom: 0;
+  padding-left: 7.2%;
+  text-transform: uppercase;
+  width: 20em;
+}
+
+.view-publish-content {
+	.views-row {
+		border-bottom: 1px solid $color-greyone;
+    display: inline-block;
+    margin-top: 1.7em;
+    padding-bottom: 4%;
+    width: 100%;
+    &:last-child {
+    	border-bottom: none;
+    }
+	}
+	.content-type {
+		font-family: arial,sans-serif;
+	}
+	.content-title {
+    font: 21px/1.3 sans-serif;
+    left: 0;
+    margin: 5px 0 0 0;
+    text-decoration: none;
+		a {
+			background: $color-black;
+			color: $color-white;
+   		padding: 0 4px;
+   		text-decoration: none;
+		}
+	}
+	.content-date {
+    font: italic .9em arial,sans-serif;
+    margin-top: 5px;
+	}
+	.content-teaser {
+    margin: 5px 0 10px 0;
+	}
+  .user-img-home {
+    display: inline-block;
+    margin: 7px 5px 0 0;
+    img {
+      border: 1px solid $colo-lightgrey;
+      height: 15px;
+      width: 25px;
+    }
+    &:empty {
+      display: none;
+    }  
+  }
+  .view-empty {
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 300px;
+    }
+  }
+  .wrap-fields {
+    p {
+      display: inline;
+      margin: 0;
+    }
+  }
+  .wrap-see-story {
+    margin-top: 1em;
+    .views-label  {
+      float: left;
+      margin: 8px 8px 0 0;
+    }
+    a {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  }
+}
+
+.block-view-drafts {
+	h2 {
+		background: $image-draft-bg;
+	  color: $color-black;
+	  font-size: 19px;
+	  line-height: 32px;
+	  margin-top: 2.1em;
+	  padding-left: 5%;
+	  text-transform: uppercase;
+	  width: 14.6em;
+	}
+	.view-idg-homepage-content {
+		margin-bottom: 10px;
+	}
+	.view-content {
+		padding: 5px 4px 5px 10px;
+    height: 310px;
+    width: 290px;
+    .views-row {
+    	margin-bottom: .8em;
+      margin-top: .8em;
+    }
+	}
+	.views-field-title {
+		a {
+			color: $color-black;
+    	text-decoration: none;
+    	&:hover {
+    		text-decoration: underline;
+    	}
+		}
+	}
+}
+
+.block-view-media {
+	border-top: 20px solid $color-white;
+	@extend .block-view-drafts;
+	.fetch-media-release {
+		background: $color-blue;
+    border-radius: 5px;
+    color: $color-white;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-left: 17px;
+    padding: 12px 25px;
+    text-decoration: none;
+  } 
+  h2 {
+  	margin-top: 0;
+  }
+  .view-header {
+  	p {
+  		margin: .8em 0;
+  	}	
+  } 
+}
+
+.btn-publish {
+  background: #37a1e2;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+  float: right;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-left: 17px;
+  padding: 4px 10px;
+  text-decoration: none;
+}
+.publish-filters {
+  .wrap-publish-filter {
+    border: 2px solid $color-red;
+    display: inline-block;
+    margin-top: 10px;
+    padding: 15px 10px;
+    min-height: 25px;
+    height: 100%;
+    width: 97%;
+    .publish-drop-wrap {
+      margin-bottom: 14px;
+      margin-left: 14px;
+      float: left;
+      width: auto;
+    }
+    li {
+      display: inline;
+      padding-right: 0;
+    }
+    .publish-main-drop {
+      color: $color-white;
+      cursor: pointer;
+      font-weight: 400;
+      height: 25px;
+      position: relative;
+      text-align: left;
+     img {
+        float: left;
+      }
+    }
+    .pcworld {
+      display: none;
+    } 
+  }  
+  // .cioworld {
+  //   .publish-main-drop {
+  //     background: url('../images/cio_logo.png') no-repeat scroll 0 0 rgba(0,0,0,0);
+  //     width: 71px;
+  //   }   
+  // }
+  // .chworld {
+  //   .publish-main-drop {
+  //     background: url('../images/chworld.png') no-repeat scroll 0 0 rgba(0,0,0,0);
+  //     width: 88px;
+  //   } 
+  // }
+  // .cwworld {
+  //  .publish-main-drop {
+  //     background: url('../images/cwworld.png') no-repeat scroll 0 0 rgba(0,0,0,0);
+  //     width: 114px;
+  //   } 
+  // } 
+  // .csoworld {
+  //   .publish-main-drop {
+  //     background: url('../images/CSO.png') no-repeat scroll 0 -17px rgba(0,0,0,0);
+  //     width: 114px;
+  //     height: 34px;
+  //   } 
+  // } 
+  .form-submit {
+    background: none repeat scroll 0 0 #ed1a3b;
+    border: medium none;
+    color: #ffffff;
+    font: bold 16px arial,sans-serif;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-right: 0;
+    position: absolute;
+    bottom: -22px;
+    right: 0;
+    z-index: 9;
+  }
+  .list-hideshow {
+    background: none repeat scroll 0 0 #e5e5e5;
+    border: 1px solid #999;
+    float: left;
+    list-style: outside none none;
+    margin-top: 0;
+    overflow: hidden;
+    padding: 1px;
+    position: absolute;
+    text-align: left;
+    width: 316px;
+    z-index: 10;
+    .form-item {
+      display: block;
+      font-size: 13px;
+      padding: 0 5px;
+      width: 140px;
+      word-wrap: break-word;
+      float: left;
+      margin:3px 1px;
+      input {
+        cursor: pointer;
+        display: inline;
+        vertical-align: middle;
+      }
+      label {
+        cursor: pointer;
+      }
+    }
+  } 
+}
+#idg_publish {
+  position: relative;
+  margin-bottom: 1.5em;
+}
+#idg_update {
+  position: relative;
+  right: 5.5em;
+  bottom: 1.5em;
+  &.hide {
+    .form-submit{
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+  &.show{
+    .form-submit {
+      opacity: 1;
+    }
+  }
+}
+#idg_update 
+#message {
+  clear: left;
+}
+
+body {
+  .ui-dialog  {
+    .ui-dialog-content {
+        overflow: inherit;
+    }
+  }
+}

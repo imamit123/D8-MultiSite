@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function computerw_custom_migration_uninstall() {
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.d6_article')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.drupal6_images')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.coo_d6_taxonomy_term')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.coo_d6_taxonomy_vocabulary')->delete();
+ \Drupal::configFactory()->getEditable('migrate_plus.migration.cowgroup')->delete();
+}

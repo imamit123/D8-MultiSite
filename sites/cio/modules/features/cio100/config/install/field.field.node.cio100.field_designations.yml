@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_designations
+    - node.type.cio100
+id: node.cio100.field_designations
+field_name: field_designations
+entity_type: node
+bundle: cio100
+label: Designations
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

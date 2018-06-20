@@ -1,0 +1,108 @@
+footer {
+  font-size: 14px;
+  font-family: $font-secondary;
+  &:before, &:after {
+    content: "";
+    display: table;
+    width: 100%;
+  }
+  .footer__top {
+    background: $color-grey;
+    padding: 27px 0;
+    text-transform: uppercase;
+    nav {
+      margin-bottom: 18px;
+      @media all and (max-width: 767px) {
+        width: 100%;
+      }
+      &:first-child {
+        margin-bottom: 15px;
+      }
+      a {
+        color: $color-text-one;
+        &.is-active {
+          color: $color-text-one;
+        }
+      }
+    }
+    .menu--main-menu {
+      li {
+        color: $color-secondary;
+        list-style-type: square;
+        text-indent: -3px;
+      }
+      a {
+        margin-right: 17px;
+      }
+    }
+    .menu--main {
+      ul.menu {
+        li {
+          margin-right: 30px;
+        }
+      }
+    }
+    @media all and (max-width: 767px) {
+      .block-block-content {
+        width: 100%;
+      }
+      ul.menu {
+        @include flex-direction(column);
+        > li {
+          margin: 0 0 15px 0;
+        }
+      }
+      .menu--hyphen {
+        .menu-item {
+          &:after {
+            content: none;
+          }
+        }    
+      }
+    }
+  }
+  .footer__bottom {
+    background: $color-bg-three;
+    padding: 20px 0;
+    .container {
+      @include flexbox();
+      .region-footer-bottom-logo {
+        margin-right: 55px;
+        @media all and (max-width: 767px) {
+          margin-right: 0;
+          text-align: center;
+          width: 100%;
+        }
+      }
+      a {
+        color: $color-black;
+      }
+    }
+    p {
+      margin-bottom: 2px;
+    }
+    @media all and (max-width: 767px) {
+      ul.menu {
+        @include flex-wrap(wrap);
+        padding: 0 10px;
+        > li {
+          &:first-child {
+            margin: 0 0 10px 0 !important;
+            text-align: center;
+            width: 100%;
+          }  
+          &:not(:first-child) {
+            flex: 1;
+            margin-right: 0;
+            text-align: center;
+            padding: 0 10px;
+          }
+        }
+      }
+      .copyright-block {
+        padding: 20px 20px 10px;
+        text-align: center;
+      }
+    }
+  }
+}

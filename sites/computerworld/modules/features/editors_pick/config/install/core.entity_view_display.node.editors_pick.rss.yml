@@ -1,0 +1,99 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.rss
+    - field.field.node.editors_pick.body
+    - field.field.node.editors_pick.comment
+    - field.field.node.editors_pick.field_editor_type
+    - field.field.node.editors_pick.field_guid
+    - field.field.node.editors_pick.field_layout
+    - field.field.node.editors_pick.field_local_guid
+    - field.field.node.editors_pick.field_new_guid
+    - field.field.node.editors_pick.field_node_as_block
+    - field.field.node.editors_pick.field_publish_site
+    - field.field.node.editors_pick.field_teaser
+    - field.field.node.editors_pick.field_top_story
+    - field.field.node.editors_pick.field_top_story_node_ref
+    - field.field.node.editors_pick.upload
+    - node.type.editors_pick
+  module:
+    - text
+    - user
+id: node.editors_pick.rss
+targetEntityType: node
+bundle: editors_pick
+mode: rss
+content:
+  field_editor_type:
+    label: above
+    weight: 40
+    type: number_integer
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    region: content
+  field_guid:
+    label: above
+    weight: 56
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_layout:
+    label: above
+    weight: 37
+    type: number_integer
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    region: content
+  field_local_guid:
+    label: above
+    weight: 54
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_new_guid:
+    label: above
+    weight: 58
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_publish_site:
+    label: above
+    weight: 52
+    type: number_integer
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    region: content
+  field_teaser:
+    label: above
+    weight: 51
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_top_story:
+    label: above
+    weight: 39
+    type: entity_reference_label
+    settings:
+      link: true
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden:
+  body: true
+  comment: true
+  field_node_as_block: true
+  field_top_story_node_ref: true
+  upload: true

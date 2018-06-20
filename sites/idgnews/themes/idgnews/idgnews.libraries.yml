@@ -1,0 +1,6 @@
+idg-styling:
+  css:
+    main:
+      css/style.css: {}
+    normalize:
+      css/normalize.css: {}

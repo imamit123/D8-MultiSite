@@ -1,0 +1,49 @@
+id: d6_partner_tab
+label: d6_partner_tab
+migration_tags:
+  - Drupal 6
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+migration_group: ciogroup
+source:
+  plugin: d6_node
+  node_type: partner_tab
+process:
+#  nid and vid commented out will allow them to autoincrement. Safe as long
+#    as nothing else is referencing them.
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: partner_tab
+  path: alias
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid:
+    plugin: default_value
+    default_value: 1
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: "full_html"
+  'body/value': body
+  field_teaser: field_teaser
+  field_partner_label: field_partner_label
+  field_partner_content_refernce: field_partner_content_refernce
+  field_top_story_node_ref: field_top_story_node_ref
+  field_tabs_page_layout: field_tabs_layout
+  field_new_guid: field_new_guid
+  field_idg_new_taxonomy: field_idg_new_taxonomy
+  # field_home_page_image: field_home_page_image
+  # field_home_page_image:
+  #     plugin: new_cck_file
+  #     source: field_home_page_image
+destination:
+  plugin: entity:node
+migration_dependencies: {}

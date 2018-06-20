@@ -1,0 +1,68 @@
+id: d6_article
+label: d6_article
+migration_tags:
+  - Drupal 6
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+migration_group: rbgroup
+source:
+  plugin: d6_node
+  node_type: story
+process:
+#  nid and vid commented out will allow them to autoincrement. Safe as long
+#    as nothing else is referencing them.
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: common_content
+  path: alias
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: "full_html"
+  'body/value': body
+  field_home_page_image: field_home_page_image
+  field_video_script: field_video_script
+  field_strapline: field_strapline
+  field_teaser: field_teaser
+  field_auth_name: field_author_name
+  field_source_name: field_source_name
+  field_slider_title: field_slider_title
+  field_slider_teaser : field_slider_teaser
+  field_story_leader: field_story_leader
+  field_redirect_page: field_redirect_page
+  field_featured: field_featured
+  field_guid: field_guid
+  field_org_url: field_org_url
+  field_org_ref: field_org_ref
+  field_org_type: field_org_type
+  field_webformid: field_webformid
+  field_new_guid: field_new_guid
+  field_common_category: field_common_category
+  #field_it_road_map: field_it_road_map
+  field_new_idg_taxonomy: field_new_idg_taxonomy
+  #field_case_study_industry: field_case_study_industry
+  #field_case_study_technology: field_case_study_technology
+  field_image_slideshow: field_image_slideshow
+  field_file_attachments: field_file_attachments
+  field_slider_image: field_slider_image
+  field_social_share: field_social_share
+  field_first_publish_date: created
+      #source: field_home_page_image
+  #field_external_link:
+    #plugin: d6_cck_link
+    #source: field_externallinktarget
+  #field_location: field_location
+destination:
+  plugin: entity:node
+migration_dependencies: {}

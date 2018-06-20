@@ -1,0 +1,13 @@
+name: 'Field map taxonomy'
+description: 'This feature is created for field map taxonomy which helps in importing content from parent site'
+type: module
+core: 8.x
+dependencies:
+  - field
+  - options
+  - path
+  - taxonomy
+  - text
+  - user
+  - views
+version: 8.x-1.1

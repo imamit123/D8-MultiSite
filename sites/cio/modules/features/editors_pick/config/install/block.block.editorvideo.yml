@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_node_as_block
+  content:
+    - 'node:editors_pick:52feffb9-bd69-4f8a-b14a-e60baa1028ab'
+  module:
+    - block_class
+    - entityblock
+  theme:
+    - cio
+third_party_settings:
+  block_class:
+    classes: ''
+id: editorvideo
+theme: cio
+region: sidebar_second
+weight: -19
+provider: null
+plugin: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|52feffb9-bd69-4f8a-b14a-e60baa1028ab|0'
+settings:
+  id: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|52feffb9-bd69-4f8a-b14a-e60baa1028ab|0'
+  label: 'Editor Video'
+  provider: entityblock
+  label_display: visible
+  label_override: 0
+visibility: {  }

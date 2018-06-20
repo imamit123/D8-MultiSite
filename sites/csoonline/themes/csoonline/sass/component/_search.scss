@@ -1,0 +1,37 @@
+/*
+** style for google search.
+*/
+.block-search {
+  .form-search {
+    position: relative;
+  }
+	.google_search_text {
+		border: none;
+		height: 24px;
+		padding: 0 0 0 5px;
+		width: 269px;
+		input {
+			outline: none;
+		}
+	}
+	.search {
+    background: url("../images/Sprite.png") no-repeat scroll -152px -35px $color-white;
+    border: medium none;
+    cursor: pointer;
+    height: 24px;
+    margin: 0 0 0 -5px;
+    text-indent: -9999px;
+    width: 22px;
+    &:hover, &:focus {
+      background: url("../images/Sprite.png") no-repeat scroll -152px -35px $color-white;
+      border: none;
+    }
+  } 
+  // .reset {
+  //   background: $color-white;
+  //   border: medium none;
+  //   color: $color-border;
+  //   cursor: pointer;
+  //   margin: 0 -5px;
+  // }
+}	

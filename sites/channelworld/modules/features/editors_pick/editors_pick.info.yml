@@ -1,0 +1,20 @@
+name: 'Editors Pick'
+description: 'Provides Editors Pick content type and related configuration. '
+type: module
+core: 8.x
+dependencies:
+  - block
+  - block_class
+  - comment
+  - common_content
+  - entityblock
+  - field
+  - file
+  - image
+  - node
+  - options
+  - path
+  - taxonomy
+  - text
+  - user
+version: 8.x-1.2

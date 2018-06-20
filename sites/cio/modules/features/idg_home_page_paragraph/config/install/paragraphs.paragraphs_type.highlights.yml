@@ -1,0 +1,6 @@
+langcode: en
+status: true
+dependencies: {  }
+id: highlights
+label: 'Home page content'
+behavior_plugins: {  }

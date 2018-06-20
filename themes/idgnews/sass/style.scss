@@ -1,0 +1,19 @@
+/* include all partial files */
+@import 'helpers/_var';
+@import 'helpers/_mixins';
+
+/* layout files */
+@import 'layout/_header';
+@import 'layout/_sidebar';
+
+/* component */
+@import 'component/_navigation';
+@import 'component/_form';
+@import 'component/_dropdowns';
+@import 'component/filters';
+@import 'component/buttons';
+
+/* pages */
+@import 'pages/_login';
+@import 'pages/_home';
+@import 'pages/_inner';

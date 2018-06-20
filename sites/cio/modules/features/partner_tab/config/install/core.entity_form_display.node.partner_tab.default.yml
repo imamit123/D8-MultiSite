@@ -1,0 +1,175 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.partner_tab.body
+    - field.field.node.partner_tab.comment
+    - field.field.node.partner_tab.field_guid
+    - field.field.node.partner_tab.field_home_page_image
+    - field.field.node.partner_tab.field_idg_new_taxonomy
+    - field.field.node.partner_tab.field_local_guid
+    - field.field.node.partner_tab.field_new_guid
+    - field.field.node.partner_tab.field_partner_content_refernce
+    - field.field.node.partner_tab.field_partner_label
+    - field.field.node.partner_tab.field_tabs_page_layout
+    - field.field.node.partner_tab.field_teaser
+    - field.field.node.partner_tab.field_top_story_node_ref
+    - field.field.node.partner_tab.upload
+    - image.style.thumbnail
+    - node.type.partner_tab
+  module:
+    - comment
+    - file
+    - image
+    - path
+    - text
+id: node.partner_tab.default
+targetEntityType: node
+bundle: partner_tab
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 7
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+    region: content
+  comment:
+    type: comment_default
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  created:
+    type: datetime_timestamp
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_guid:
+    weight: 9
+    type: string_textarea
+    settings:
+      placeholder: ''
+      rows: 5
+    third_party_settings: {  }
+    region: content
+  field_home_page_image:
+    weight: 26
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_idg_new_taxonomy:
+    weight: 28
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_local_guid:
+    weight: 10
+    type: string_textarea
+    settings:
+      placeholder: ''
+      rows: 5
+    third_party_settings: {  }
+    region: content
+  field_new_guid:
+    weight: 11
+    type: string_textarea
+    settings:
+      placeholder: ''
+      rows: 5
+    third_party_settings: {  }
+    region: content
+  field_partner_content_refernce:
+    type: entity_reference_autocomplete
+    weight: 14
+    region: content
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_partner_label:
+    weight: 8
+    type: string_textarea
+    settings:
+      placeholder: ''
+      rows: 5
+    third_party_settings: {  }
+    region: content
+  field_tabs_page_layout:
+    weight: 27
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_teaser:
+    weight: 13
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_top_story_node_ref:
+    type: entity_reference_autocomplete
+    weight: 15
+    region: content
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  promote:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 3
+    region: content
+    third_party_settings: {  }
+  sticky:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 4
+    region: content
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    region: content
+    third_party_settings: {  }
+  upload:
+    settings:
+      progress_indicator: throbber
+    type: file_generic
+    weight: 12
+    third_party_settings: {  }
+    region: content
+hidden: {  }

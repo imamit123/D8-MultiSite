@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function rb_custom_migration_uninstall() {
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.d6_article')->delete();
+    \Drupal::configFactory()->getEditable('migrate_plus.migration.author_profile_cso')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.program_image')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.rb_d6_taxonomy_term')->delete();
+  \Drupal::configFactory()->getEditable('migrate_plus.migration.rb_d6_taxonomy_vocabulary')->delete();
+ \Drupal::configFactory()->getEditable('migrate_plus.migration.rbgroup')->delete();
+}

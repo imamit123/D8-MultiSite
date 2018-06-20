@@ -1,0 +1,9 @@
+cse.search:
+  path: '/g_search'
+  defaults:
+    _controller: '\Drupal\cse\Controller\CreateSearchController::create_search'
+    _title: 'Search'
+  requirements:
+    _permission: 'access content'
+
+

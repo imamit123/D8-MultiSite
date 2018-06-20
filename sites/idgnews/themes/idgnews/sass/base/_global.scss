@@ -1,0 +1,6 @@
+/* global idg */
+.conatiner {
+  @include push--auto();
+  max-width: 1080px;
+  width: 100%;
+}

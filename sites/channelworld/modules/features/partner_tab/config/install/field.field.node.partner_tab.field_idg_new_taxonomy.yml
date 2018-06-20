@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_idg_new_taxonomy
+    - node.type.partner_tab
+    - taxonomy.vocabulary.idg_new_taxonomy
+id: node.partner_tab.field_idg_new_taxonomy
+field_name: field_idg_new_taxonomy
+entity_type: node
+bundle: partner_tab
+label: 'IDG NEW TAXONOMY'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      idg_new_taxonomy: idg_new_taxonomy
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

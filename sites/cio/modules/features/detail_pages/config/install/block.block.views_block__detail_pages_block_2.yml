@@ -1,0 +1,34 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.detail_pages
+  module:
+    - block_class
+    - system
+    - views
+  theme:
+    - cio
+third_party_settings:
+  block_class:
+    classes: ''
+id: views_block__detail_pages_block_2
+theme: cio
+region: content
+weight: -9
+provider: null
+plugin: 'views_block:detail_pages-block_2'
+settings:
+  id: 'views_block:detail_pages-block_2'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility:
+  request_path:
+    id: request_path
+    pages: "/videos/*\r\n/video/*\r\n/cio-tv/*\r\n/content/*"
+    negate: false
+    context_mapping: {  }

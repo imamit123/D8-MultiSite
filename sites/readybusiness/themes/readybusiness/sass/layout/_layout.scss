@@ -1,0 +1,46 @@
+main {
+  section {
+    &.col-sm-8 {
+      padding-left: 0;
+      margin-right: 18px;
+    }
+  }
+  .sidebar {
+    max-width: 300px;
+    padding: 0;
+    @media (max-width: 1000px) {
+      max-width: inherit;
+    }
+    img {
+      width: 100%;
+    }
+  }
+  @media (max-width: 640px) {
+    margin-bottom: 30px;
+  }  
+}
+
+.page-node-type-page {
+  .section.col-sm-12 {
+    padding: 0;
+  }
+}
+
+.path-frontpage {
+  section {
+    &.col-sm-8 {
+      @media (max-width: 640px) {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      @media (max-width: 1000px) {
+        margin-right: auto;
+      }  
+    }  
+  }    
+}
+@media (max-width: 1000px) {
+  .page {
+    overflow: hidden;
+  }
+}  

@@ -1,0 +1,117 @@
+<?php
+use \Drupal\node\Entity\Node;
+use \Drupal\file\Entity\File;
+use \Drupal\paragraphs\Entity\Paragraph;
+// function cio_publish_content_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+//   drupal_set_message($form_id);
+//   /*if ($form_id == 'node_common_content_edit_form') { 
+//    echo '<pre>';print_r($form);die();
+//   }*/
+
+// }
+
+function cio_publish_content_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'node_common_content_edit_form') { 
+    //echo '<pre>';print_r($form['field_auth_name']['value']);die();
+    $host = \Drupal::request()->getHost();;
+    $node = \Drupal::routeMatch()->getParameter('node');
+    $guid = $node->get('field_guid')->getValue();
+    $guid = $guid[0]['value'];
+    if ($guid != NULL){
+      $uri = 'http://dev-idgnews.gailabs.com/api/v-1/copy_content/'. $guid; ;
+      $node = \Drupal\node\Entity\Node::load($nid);
+      $response = \Drupal::httpClient()->get($uri, array('headers' => array('Accept' => 'text/plain')));
+      $data = (string) $response->getBody();
+      $output = json_decode($data);
+      //echo '<pre>';print_r($output[0]->field_guid[0]);die();
+      $parent_guid = $output[0]->field_guid[0]->value;
+      if ($parent_guid == $guid){
+        $home_page_image = $output[0]->field_home_page_image[0]->url;
+        //print_r($field_home_page_image);die();
+        $home_page_image_path = explode("/",$home_page_image);
+        $home_page_image_name = $home_page_image_path[6];
+        $upload = $output[0]->upload[0]->url;
+        $upload_path = explode("/",$upload);
+        $upload_name = $upload_path[7];
+        $file_attachments = $output[0]->field_file_attachments[0]->url;
+        $file_attachments_path = explode("/", $file_attachments);
+        $file_attachments_name = $file_attachments_path[7];  
+        /* for home page image */
+        $home_page_image_id = fileCopy($home_page_image,$home_page_image_name);
+        $upload_id = fileCopy($upload,$upload_name);
+        $file_attachments_id = fileCopy($file_attachments, $file_attachments_name);
+        $newsletter_title = $output[0]->field_nwsl_title[0]->value;
+        $newsletter_teaser = $output[0]->field_nwsl_teaser[0]->value;
+        $field_author_name = $output[0]->field_author_name[0]->value;
+        $field_sponsor = $output[0]->field_sponsored[0]->value;
+        $field_teaser = $output[0]->field_teaser[0]->value;
+        $field_video_script = $output[0]->field_video_script[0]->value;
+        $field_detail_vidoe_script = $output[0]->field_detail_video_script[0]->value;
+        $field_local_guid = $output[0]->field_local_guid[0]->value;
+        $field_org_ref = $output[0]->field_org_ref[0]->value;
+        $field_org_type = $output[0]->field_org_type[0]->value;
+        $field_org_url = $output[0]->field_org_url[0]->value;
+        $field_new_guid = $output[0]->field_new_guid[0]->value;
+
+        /* for paragraph field */
+        $field_slideshow_id = $output[0]->field_image_slideshow[0]->target_id;
+        $field_slideshow_url = "http://dev-idgnews.gailabs.com/api/v-1/slideshow/".$field_slideshow_id;
+        $slideshow_response = \Drupal::httpClient()->get($field_slideshow_url, array('headers' => array('Accept' => 'text/plain')));
+        $data_slideshow = (string) $slideshow_response->getBody();
+        $output_slideshow = json_decode($data_slideshow);
+        $slideshow_image_url = $output_slideshow[0]->field_image[0]->url;
+        $slideshow_image_path = explode("/",$slideshow_image_url);
+        $slideshow_image_name = $slideshow_image_path[7];
+        $field_image_credit = $output_slideshow[0]->field_image_credit[0]->value;
+        $field_slideshow_caption = $output_slideshow[0]->field_slideshow_caption[0]->value;
+        $field_slideshow_description = $output_slideshow[0]->field_slideshow_description[0]->value;
+        $paragraph_fid = fileCopy($slideshow_image_url,$slideshow_image_name);
+        //print($paragraph_fid);die();
+        /*$ppt_values = array(
+          'id' => NULL,
+          'type' => 'slideshow',
+          'field_slideshow_description' => $field_slideshow_description,
+          'field_image_credit' => $field_image_credit,
+          'field_slideshow_caption' => $field_slideshow_caption,
+          'field_image' => $paragraph_fid,
+        );
+        $ppt_paragraph = Paragraph::create($ppt_values);
+        $ppt_paragraph->save();*/
+        //$ppt_paragraph_id = $ppt_paragraph->id();
+        $form['field_teaser']['widget'][0]['#default_value'] = $field_teaser;
+        $form['field_nwsl_title']['widget'][0]['value']['#default_value'] = $newsletter_title;
+        $form['field_newsletter_teaser']['widget'][0]['value']['#default_value'] = $newsletter_teaser;
+        $form['field_home_page_image']['widget'][0]['#default_value']['fids'][0] = $home_page_image_id;
+        $form['field_sponsored']['widget'][0]['value']['#default_value'] = $field_sponsor;
+        $form['field_local_guid']['widget'][0]['value']['#default_value'] = $field_local_guid;
+        $form['field_org_ref']['widget'][0]['value']['#default_value'] = $field_org_ref;
+        $form['field_org_type']['widget'][0]['value']['#default_value'] = $field_org_type;
+        $form['field_org_url']['widget'][0]['value']['#default_value'] = $field_org_url;
+        $form['field_new_guid']['widget'][0]['value']['#default_value'] = $field_new_guid;
+        $form['field_video_script']['widget'][0]['value']['#default_value'] = $field_video_script;
+        $form['field_home_video']['widget'][0]['value']['#default_value'] = $field_detail_vidoe_script;
+        $form['upload']['widget'][0]['#default_value']['fids'][0] = $upload_id;
+        $form['field_image_slideshow']['widget'][0]['subform']['field_image_credit']['widget'][0]['value']['#default_value']= $field_image_credit;
+        $form['field_image_slideshow']['widget'][0]['subform']['field_image']['widget'][0]['#default_value']['fids'][0] = $paragraph_fid;
+        $form['field_image_slideshow']['widget'][0]['subform']['field_slideshow_description']['widget'][0]['#default_value'] = $field_slideshow_description;
+        $form['field_image_slideshow']['widget'][0]['subform']['field_slideshow_caption']['widget'][0]['value']['#default_value'] = $field_slideshow_caption;
+        $form['field_file_attachments']['widget'][0]['#default_value']['fids'][0] = $file_attachments_id;
+      }
+    }
+    else{
+      return true;
+    }
+  }
+}
+function fileCopy($image,$image_name){
+  $data = file_get_contents($image);
+  $file = file_save_data($data, 'public://'.$image_name, FILE_EXISTS_REPLACE);
+  $uri = 'public://'.$image_name;
+  $file = File::Create([
+  'uri' => $uri,
+  'uid' => 1,
+  'filename'=> $image_name, 
+  ]);
+  $file->save();
+  return $file->id();
+}

@@ -1,0 +1,456 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the CIO theme.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Database\Database;
+use Drupal\taxonomy\Entity\Term;
+//use Drupal\Core\Cache\Cache;
+
+/**
+ * Implements hook_preprocess_HOOK() for HTML document templates.
+ *
+ * Adds body classes if certain regions have content.
+ */
+function readybusiness_preprocess_html(&$variables) {
+  // Add information about the number of sidebars.
+  if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = 'two-sidebars';
+  }
+  elseif (!empty($variables['page']['sidebar_first'])) {
+    $variables['attributes']['class'][] = 'one-sidebar';
+    $variables['attributes']['class'][] = 'sidebar-first';
+  }
+  elseif (!empty($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = 'one-sidebar';
+    $variables['attributes']['class'][] = 'sidebar-second';
+  }
+  else {
+    $variables['attributes']['class'][] = 'no-sidebars';
+  }
+   $variables['google_analytics'] = google_analytics();
+   $path = \Drupal::request()->getpathInfo();
+   $arg  = explode('/',$path);
+
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+// print "its node";
+   $type = $node->bundle();
+   $taxname = 'none';
+   $node_teaser = 'none';
+   $node_title = $node->get('title')->value;
+   if($type == 'common_content') {
+
+     $tid = $node->get('field_common_category')->getValue();
+     $tid = $tid[0]['target_id'];
+     $term = Term::load($tid);
+     $taxname = $term->getName();
+     $node_teaser = $node->get('field_teaser')->value;
+   
+   
+   $linkarray = array('Articles'=>'articles','Case Study'=>'case-studies','Industry Overview'=>'industry-overview','Video'=>'videos','Whitepaper'=>'whitepapers','Webinar'=>'webinars');
+    $head_title = $node_title.' | ReadyBusiness.in';
+    $meta_desc = strip_tags($node_teaser);
+    $meta_keywords = '';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/'.$linkarray[$taxname].'",
+         "name": "'.$taxname.'"
+       }
+      },
+      {
+       "@type": "ListItem",
+      "position": 3,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in'.$path.'",
+         "name": "'.$node_title.'"
+       }
+      }
+     ]
+    }
+ </script>';
+   }
+   else {
+    $head_title = $node_title.' | ReadyBusiness.in';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in'.$path.'",
+         "name": "'.$node_title.'"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+   }
+  }
+  elseif($arg[1] == 'articles'){
+    $head_title = 'Ready Business | Articles';
+    $meta_desc = 'Ready Business Articles| Articles, Features, News, Slide Shows  on Vodafone Ready Business|';
+    $meta_keywords = 'Article,Vodafone news, Vodafone feature';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/articles",
+         "name": "Articles"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+  }
+  elseif($arg[1] == 'industry-overview'){
+    $head_title = 'Ready Business | Industry Overview ';
+    $meta_desc = 'Ready Business Industry Overview | Download latest reports and white papers for Ready Business which discuss many significant & implications trends shaping of Ready Businesses';
+    $meta_keywords = 'Ready Business Industry Overview, Ready Business report, Vodafone Industry Overview';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/industry-overview",
+         "name": "Industry Overview"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+
+  }
+  elseif($arg[1] == 'case-studies'){
+    $head_title = 'Ready Business | Success Stories, Case Studies ';
+    $meta_desc = 'Ready Business Case Studies | Vodafone Implementations, Technology Solutions Deployments that has helped enterprises to improve their productivity and efficiency in a cost-effective manner ';
+    $meta_keywords = 'Ready Business stories, Vodafone case study, Vodafone Business services stories, Vodafone success stories';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/case-studies",
+         "name": "Case Studies"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+  }
+  elseif($arg[1] == 'interviews'){
+    $head_title = ' Ready Business | Executive Interviews ';
+    $meta_desc = 'Ready Business View Points | Interviews and Opinions by Vodafone Executives on the role of Vodafone in todays changing business';
+    $meta_keywords = 'Ready Business solutions, Vodafone executive interview, Vodafone interview';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/interviews",
+         "name": "Interviews"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+  }
+  elseif($arg[1] == 'webinars'){
+    $head_title = 'Ready Business | Webinars ';
+    $meta_desc = 'Ready Business Webinars |Watch exclusive interviews with key enterprise leaders explaining how businesses can be ready in this ever-changing environment of communication and technology.';
+    $meta_keywords = 'Ready Business solutions, Ready solutions webinar, Vodafone webinar, Vodafone ready business solutions';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/webinars",
+         "name": "Webinars"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+  }
+  elseif($arg[1] == 'videos'){
+    $head_title = 'Ready Business | Videos ';
+    $meta_desc = 'Ready Business Videos |Watch exclusive interviews with key enterprise leaders explaining how businesses can be ready in this ever-changing environment of communication and technology.';
+    $meta_keywords = 'Ready Business solutions, Ready solutions Videos, Vodafone webinar, Vodafone ready business solutions';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/videos",
+         "name": "Videos"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+  }
+  elseif($arg[1] == 'contact-us') {
+    $head_title = 'Ready Business | Contact Us';
+    $meta_desc = 'Ready Business Contact Us |Watch exclusive interviews with key enterprise leaders explaining how businesses can be ready in this ever-changing environment of communication and technology.';
+    $meta_keywords = 'Ready Business solutions, Ready solutions Videos, Vodafone webinar, Vodafone ready business solutions';
+    $googlebreadcrumbs = '<script type="application/ld+json">
+    {
+     "@context": "http://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement":
+     [
+      {
+       "@type": "ListItem",
+      "position": 1,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/",
+         "name": "Ready Business"
+       }
+      },
+       {
+       "@type": "ListItem",
+      "position": 2,
+      "item":
+       {
+         "@id": "https://www.readybusiness.in/contact-us",
+         "name": "Contact Us"
+       }
+      }
+      
+     ]
+    }
+ </script>';
+  }
+  elseif($arg[1] == 'ready-business'){
+    $head_title = 'Become a Ready Business | Vodafone Business Services helps you find the way to exploit the readiness advantages & good understanding of business to achieve ongoing success';
+
+  }
+  // else{
+  //   print "not a node";
+  //   $head_title = $vars['node']->title.' | ReadyBusiness.in ';
+  //   $meta_desc = strip_tags($vars["node"]->field_teaser[0]["value"]);
+  //   $meta_keywords = '';
+  // }
+  $variables['googlebreadcrumbs']= $googlebreadcrumbs;
+}
+
+/**
+ * Implements hook_preprocess_page() for page.html.twig.
+ */
+function readybusiness_preprocess_page(&$variables, $hook) {
+  if (!empty($variables['node']) && $variables['node']->hasField('field_common_category')){
+    $tid = $variables['node']->get('field_common_category')->getValue();
+    $tid = $tid[0]['target_id'];
+    $term = Term::load($tid);
+    $name = $term->getName();
+    $variables['#attached']['drupalSettings']['taxo'] = $name;
+  }
+  if (!empty($variables['node'])) {
+    $title = $variables['node']->getTitle();
+    $variables['#attached']['drupalSettings']['title'] = $title;
+  }
+}
+
+function readybusiness_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  // Add content type suggestions.
+  if ($node = \Drupal::request()->attributes->get('node')) {
+    array_splice($suggestions, 1, 0, 'page__node__' . $node->getType());
+  }
+}
+
+function google_analytics() {
+  $author = get_author_name();
+  $author_name = $author['author_name'];
+    $guid = $author['guid'];
+    $type = $author['type'];
+    $published = $author['created'];
+  return "<script type='text/javascript'>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61646-27', 'auto');
+  ga('send', 'pageview' ,{'dimension1':'".$author_name."',dimension2:'".$guid."','dimension3':'".$type."','dimension4':'".$published."'});
+
+</script>";
+}
+
+function get_author_name() {
+ // error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+  $google_array = array();
+  
+  //$path = \Drupal::request()->getpathInfo();
+  //$arg  = explode('/',$path);
+  //$node = \Drupal::routeMatch()->getParameter('node');
+  //print_r($node);
+  
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+       //its a node
+    $node_type = $node->bundle();
+    if ($node_type == 'common_content') {
+      $node_author = $node->get('field_auth_name')->value;
+        $node_guid = $node->get('field_guid')->value;
+        $tid = $node->get('field_common_category')->getValue();
+        $tid = $tid[0]['target_id'];
+        $term = Term::load($tid);
+        $name = $term->getName();
+        $node_date = $node->get('created')->value;
+        $google_array['author_name'] = $node_author;
+        $google_array['guid'] = $node_guid;
+        $google_array['type'] = $name;
+        $google_array['created'] = date('m/d/Y',$node_date);   
+        
+    }
+    else {
+        $google_array['guid'] = "none";
+        $google_array['created'] = "none";
+        $google_array['type'] = "none";
+        $google_array['author_name'] = "none";
+    }
+  }
+  else {
+   $google_array['guid'] = "none";
+   $google_array['created'] = "none";
+   $google_array['type'] = "none";
+   $google_array['author_name'] = "none";
+  }
+  
+  return $google_array;
+}

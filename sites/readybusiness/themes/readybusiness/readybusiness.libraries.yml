@@ -1,0 +1,12 @@
+readybusiness-styling:
+  css:
+    main:
+      css/style.css: {}
+    normalize:
+      css/normalize.css: {}
+  js:
+    js/readmore.min.js: {}
+    js/custom.js: { weight: N }
+  dependencies:
+    - owlcarousel/owlcarousel
+

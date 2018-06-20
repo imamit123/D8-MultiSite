@@ -1,0 +1,60 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_partner_content_fields
+    - node.type.partner_content
+    - paragraphs.paragraphs_type.part
+    - paragraphs.paragraphs_type.partner_left_
+    - paragraphs.paragraphs_type.partner_right_column
+  module:
+    - entity_reference_revisions
+id: node.partner_content.field_partner_content_fields
+field_name: field_partner_content_fields
+entity_type: node
+bundle: partner_content
+label: 'Partner content fields'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      part: part
+      partner_left_: partner_left_
+      partner_right_column: partner_right_column
+    target_bundles_drag_drop:
+      highlight:
+        weight: 11
+        enabled: false
+      home_page_fields:
+        weight: 12
+        enabled: false
+      part:
+        enabled: true
+        weight: 13
+      partner_content:
+        weight: 14
+        enabled: false
+      partner_left_:
+        enabled: true
+        weight: 15
+      partner_right_column:
+        enabled: true
+        weight: 16
+      popular_:
+        weight: 17
+        enabled: false
+      slider_section:
+        weight: 18
+        enabled: false
+      slideshow:
+        weight: 19
+        enabled: false
+      video_section:
+        weight: 20
+        enabled: false
+field_type: entity_reference_revisions

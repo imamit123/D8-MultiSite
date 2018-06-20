@@ -1,0 +1,269 @@
+/* form style */
+.block-system-main-block {
+	margin: 0 auto;
+	padding-bottom: 1em;
+	padding-top: .8em;
+	width: 90%;
+	.tabledrag-toggle-weight-wrapper {
+		display: none;
+	}
+	select {
+		border: 2px solid $color-green;
+		width: 100%;
+	}
+}
+.path-frontpage, .path-filter {
+	.block-system-main-block {
+		width: 100%;
+	}	
+	.view-publish-content {
+		margin-left: 2em;
+	}
+}
+.field--name-field-website-ref,
+.field--name-idg-new-taxonomy,
+.text-format-wrapper {
+	select {
+		width: auto;
+	}
+}
+
+.field-multiple-table,
+.field--type-integer,
+.form-type-select,
+.form-type-textfield,
+.form-type-managed-file,
+.form-type-entity-autocomplete,
+.form-type-textarea {
+	label,.label {
+		background: $color-green;
+		font-weight: bold;
+		padding: 3px 4px;
+	}
+	input[type="text"],
+	input[type="number"],
+	textarea {
+		border: 2px solid $color-green;
+		height: 24px;
+		width: 100%;
+	}
+}
+
+.field-multiple-table {
+	text-align: left;
+	.field-multiple-drag {
+		display: none;
+	}
+}
+
+.form-type-managed-file {
+	border-bottom: 2px solid $color-green;
+	.form-managed-file {
+		border: 2px solid $color-green;
+		border-bottom: 0;
+		padding: 1em 0 0 2em;
+		.image-widget-data {
+			padding-bottom: 1em;
+		}
+	}
+	.description {
+		border-left: 2px solid $color-green;
+		border-right: 2px solid $color-green;
+		padding: 0 0 1em 2.3em;
+	}
+}
+
+.form-type-vertical-tabs,
+details {
+	border: 2px solid $color-green;
+}
+
+.vertical-tabs {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.form-item-field-show-profile-value,
+.field--name-field-sponsored,
+.fieldset-legend {
+	background: $color-green;
+	display: inline-block;
+	font-weight: bold;
+	padding: 3px 4px;
+	margin: 0;
+}
+
+.fieldgroup {
+	.form-type-checkbox {
+		float: left;
+		margin-left: 1em;
+		width: 28%;
+	}
+}
+
+.text-format-wrapper {
+	.form-textarea-wrapper,
+	.filter-wrapper {
+		border: 2px solid $color-green;
+	}
+}
+
+.field--name-field-cio-url,
+.field--name-field-idgns-image-url,
+.field--name-field-hidden-company-name,
+.field--name-field-hidden-agency-name,
+.field--name-field-channelworld-url,
+.field--name-field-computerworld-url,
+.field--name-field-cso-url,
+.field--name-field-video-script,
+.field--name-field-detail-video-script,
+.field--name-field-local-guid,
+.field--name-field-guid-version,
+.field--name-field-org-ref,
+.field--name-field-org-type,
+.field--name-field-org-url,
+.field--name-field-quote,
+.field--name-field-person-name,
+.field--name-field-design,
+.field--name-field-company,
+.field--name-field-select-company,
+.field--name-field-select-agency,
+.field--name-field-fb,
+.field--name-field-twitter,
+.field--name-field-linkedin,
+.field--name-field-google-plus-link,
+.field--name-field-guid,
+.field--name-field-new-guid {
+	display: inline-block;
+	vertical-align: top;
+	width: 49%;
+}
+
+.field--name-field-computerworld-url,
+.field--name-field-cio-url,
+.field--name-field-idgns-image-url,
+.field--name-field-hidden-agency-name,
+.field--name-field-org-type,
+.field--name-field-video-script,
+.field--name-field-guid-version,
+.field--name-field-person-name,
+.field--name-field-company,
+.field--name-field-select-agency,
+.field--name-field-fb,
+.field--name-field-linkedin,
+.field--name-field-guid {
+	margin-right: .8em;
+}
+
+.field--name-field-bio,
+.field--name-field-nwsl-teaser {
+	textarea {
+		height: auto;
+	}
+}
+
+.field--name-it-road-map,
+.field--name-cio-case-study-technology,
+.field--name-content-category,
+.field--name-cio-case-study-industry-vertical {
+	display: inline-block;
+	width: 26%;
+	select {
+		width: 100%;
+	}
+}
+
+.field--name-content-category {
+	width: 19%;
+}
+
+.field--name-it-road-map,
+.field--name-cio-case-study-technology,
+.field--name-content-category {
+	margin-right: .2em;
+}
+
+.field--name-field-sponsored {
+	.form-item {
+		margin: 0;
+	}
+}
+
+.field--name-field-image-slideshow {
+	.field--type-string {
+		margin: 10px 0;
+	}
+}
+
+.field--name-field-author-profile-name {
+	border: 2px solid $color-green;
+	padding: 0 1em;
+	.description {
+		background: $color-green;
+		border: 1px solid $color-green;
+		float: left;
+		font-weight: bold;
+		padding: 3px 4px;
+		margin: .7em 1em 0 0;
+		a {
+			color: $color-black;
+			text-decoration: none;
+		}
+	}
+}
+
+.paragraphs-subform {
+	.form-wrapper {
+		margin-top: 1em;
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+}
+
+.block-idg-wordtracer {
+	background: $color-white;
+	border: 1px solid $color-green;
+	padding: 5px 8px 14px;
+	position: fixed;
+	left: 0;
+	top: 15%;
+	width: 220px;
+	input {
+		background: $color-green;
+    border: 1px solid $color-green;
+    color: $color-white;
+    font-weight: bold;
+		margin: 0 10px 5px 0;
+		padding: 5px 8px;
+	}
+	#edit-search-keyword-output {
+		height: 42px;
+	}
+	h2 {
+		font-size: 18px;
+    line-height: 22px;
+    margin: .3em 0;
+	}
+	.form-item {
+		margin-top: .4em;
+	}
+}
+#counted_keywords {
+	font-size: 16px;
+	.keyword-wrap {
+		margin-top: 5px;
+		height: 240px;
+	}
+	label {
+		font-weight: bold;
+		display: block;
+		margin-top: 5px;
+	}
+}
+
+.node-newsletter-form {
+	display: inline-block;
+	margin-bottom: 1em;
+	width: 100%;
+}

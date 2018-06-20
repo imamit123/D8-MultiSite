@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.editors_pick
+id: node.editors_pick.status
+field_name: status
+entity_type: node
+bundle: editors_pick
+label: 'Publishing status'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_auth_name
+    - node.type.partner_content
+id: node.partner_content.field_auth_name
+field_name: field_auth_name
+entity_type: node
+bundle: partner_content
+label: 'Author Name'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

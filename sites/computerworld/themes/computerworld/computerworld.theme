@@ -1,0 +1,251 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the computerworld theme.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Database\Database;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_preprocess_HOOK() for HTML document templates.
+ *
+ * Adds body classes if certain regions have content.
+ */
+function computerworld_preprocess_html(&$variables) {
+  // Add information about the number of sidebars.
+  if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = 'two-sidebars';
+  }
+  elseif (!empty($variables['page']['sidebar_first'])) {
+    $variables['attributes']['class'][] = 'one-sidebar';
+    $variables['attributes']['class'][] = 'sidebar-first';
+  }
+  elseif (!empty($variables['page']['sidebar_second'])) {
+    $variables['attributes']['class'][] = 'one-sidebar';
+    $variables['attributes']['class'][] = 'sidebar-second';
+  }
+  else {
+    $variables['attributes']['class'][] = 'no-sidebars';
+  }
+
+  $variables['google_analytics'] = google_analytics();
+}
+
+/**
+ * Implements hook_preprocess_page() for page.html.twig.
+ */
+
+function computerworld_preprocess_page(&$variables, $hook) {
+  $config = \Drupal::config('system.site');
+  $variables['site_name'] = $config->get('name');
+  $variables['site_slogan'] = $config->get('slogan');
+  $variables['site_logo'] = $config->get('logo');
+
+  //Define variables for Special Pages
+  if (!empty($variables['node']) && $variables['node']->hasField('field_partner_reference')){
+    $ref_tid = $variables['node']->get('field_partner_reference')->getValue();
+    if (!empty($ref_tid)){
+      $partner_content_tid =  $ref_tid[0]['target_id'];
+      //Get Partner content NID
+      $connection = Database::getConnection();
+      $query = $connection->select('node__field_partner_reference', 'nfpr');
+      $query->condition('nfpr.field_partner_reference_target_id', $partner_content_tid);
+      $query->condition('nfpr.bundle', 'partner_content');
+      $query->fields('nfpr', array('entity_id'));
+      $result = $query->execute()->fetchAll(\PDO::FETCH_OBJ);
+      $pc_nid = $result[0]->entity_id;
+
+      //Get Background color, Partner tab, Partner logo and other required fields
+      $pc_node = \Drupal::entityTypeManager()->getStorage('node')->load($pc_nid);
+      $variables['bg_color'] = $pc_node->get('field_background_color')->value;
+      $bg_color = $pc_node->get('field_background_color')->value;
+      $variables['tab_color'] = $pc_node->get('field_tab_color')->value;
+      $tab_color = $pc_node->get('field_tab_color')->value;
+      $banner_image_id = $pc_node->get('field_banner_top')->getValue();
+      if(!empty($banner_image_id)){
+        $file = \Drupal\file\Entity\File::load($banner_image_id[0]['target_id']);
+        $variables['bg_image'] = $file->getFileUri();
+      }
+      $variables['pc_id']=$pc_node->id();
+      $variables['pc_sidebar'] = sizeof($pc_node->get('field_knowledgevault_side')->getValue());
+      $_SESSION['pc_nid'] = $pc_node->id();
+      $variables['pc_node'] = $pc_node;
+
+      //Get Partner tab Id and labels
+      $pt_id_refs = $pc_node->get('field_knowledge_vault_navigation')->getValue();
+      $variables['tab_count'] = $pt_id_refs;
+      $url_main = Url::fromRoute('entity.node.canonical', ['node' => $pc_nid])->toString();
+      $output = '<div class="tabs-content"><div class="field-content"><div id="specialtabid"><a href='.$url_main.' style="background:'.$tab_color.';color:'.$bg_color.'" class="specialbtn">Home</a>';
+      foreach ($pt_id_refs as $key => $value) {
+        $pt_node = \Drupal::entityTypeManager()->getStorage('node')->load($value['target_id']);
+        $pt_nid = $value['target_id'];
+        $url = Url::fromRoute('entity.node.canonical', ['node' => $pt_nid])->toString();
+        $pt_node_lbl = $pt_node->get('field_partner_label')->value;
+        $output .= '<a href='.$url.' style="background:'.$tab_color.';color:'.$bg_color.'" class="specialbtn" >'.$pt_node_lbl.'</a>';
+      }
+      $output .= '<style>
+            .page-title, .block-title {
+                  color: '.$bg_color.';
+                border-bottom: 2px solid '.$bg_color.';
+
+            }
+            .common-detail-pages .title-text {
+                  color:#000;
+
+                }
+            </style>';
+      $output .= '</div></div></div>';
+      $variables['pc_tabs'] = $output;
+
+    }
+  }
+
+  $mobile_detect = libraries_get_path('Mobile-Detect') . '/Mobile_Detect.php';
+  require_once $mobile_detect;
+  $detect = new Mobile_Detect;
+  $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+  $variables['deviceType'] = $deviceType;
+}
+
+/**
+ * Implements hook_preprocess_view().
+ */
+function computerworld_preprocess_views_view_unformatted (&$variables) {
+  $mobile_detect = libraries_get_path('Mobile-Detect') . '/Mobile_Detect.php';
+  require_once $mobile_detect;
+  $detect = new Mobile_Detect;
+  $deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+  $variables['deviceType'] = $deviceType;
+}
+
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function computerworld_preprocess_node(&$variables) {
+  $variables['pc_nid'] =  $_SESSION['pc_nid'];
+}
+
+function computerworld_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  // Add content type suggestions.
+  if ($node = \Drupal::request()->attributes->get('node')) {
+    array_splice($suggestions, 1, 0, 'page__node__' . $node->getType());
+  }
+}
+
+
+function google_analytics() {
+  $author = get_author_name();
+  $author_name = $author['author_name'];
+    $guid = $author['guid'];
+    $type = $author['type'];
+    $published = $author['created'];
+if ($node = \Drupal::routeMatch()->getParameter('node')) {
+  $node_type = $node->bundle();
+    if ($node_type == 'common_content') {
+  return "<script type='text/javascript'>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-61646-10', 'auto');
+    ga('send', 'pageview' ,{'dimension1':'".$author_name."','dimension2':'".$guid."','dimension3':'".$type."','dimension4':'".$published."'});
+    
+   
+  </script>";
+ } else {
+  return "<script type='text/javascript'>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-61646-10', 'auto');
+    ga('send', 'pageview');
+    
+   
+  </script>";
+  }
+}
+  else {
+  return "<script type='text/javascript'>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-61646-10', 'auto');
+    ga('send', 'pageview');
+    
+   
+  </script>";
+  }
+}
+
+function get_author_name() {
+ //error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+  $google_array = array();
+
+  //$path = \Drupal::request()->getpathInfo();
+  //$arg  = explode('/',$path);
+  //$node = \Drupal::routeMatch()->getParameter('node');
+  //print_r($node);
+
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+       //its a node
+    $node_type = $node->bundle();
+if($node_type == 'common_content') {
+   if(isset($node->get('field_author')->value) && !empty($node->get('field_author')->value)) {
+     $node_author = $node->get('field_author')->value;
+   }
+  else {
+    $noderef = $node->get('field_author_reference')->getValue();
+    if(!empty($noderef)) {
+          $noderefid = $noderef[0]['target_id'];
+            $noderefload = \Drupal\node\Entity\Node::load($noderefid);
+              $node_author = $noderefload->getTitle();
+            }
+      else {
+        $node_author = "none";
+      }
+}
+      $node_guid = $node->get('field_new_guid')->value;
+        $tid = $node->get('field_common_category')->getValue();
+        $tid = $tid[0]['target_id'];
+        $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid);
+
+
+    $name = $term->getName();
+//echo $name;
+       // $node_date = $node->get('created')->value;
+$node_date = $node->get('field_first_publish_date')->value;
+ $google_array['author_name'] = $node_author;
+       $google_array['guid'] = $node_guid;
+        $google_array['type'] = $name;
+        $google_array['created'] = date('m/d/Y',$node_date);
+
+    }
+    else {
+        $google_array['guid'] = "none";
+        $google_array['created'] = "none";
+        $google_array['type'] = "none";
+        $google_array['author_name'] = "none";
+    }
+  }
+  else {
+   $google_array['guid'] = "none";
+    $google_array['created'] = "none";
+   $google_array['type'] = "none";
+   $google_array['author_name'] = "none";
+  }
+
+  return $google_array;
+}
+
+

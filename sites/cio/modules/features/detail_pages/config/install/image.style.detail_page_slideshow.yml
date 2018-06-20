@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: detail_page_slideshow
+label: 'detail page slideshow'
+effects:
+  e7972c29-3595-475e-8ffd-3e19292693ba:
+    uuid: e7972c29-3595-475e-8ffd-3e19292693ba
+    id: image_scale
+    weight: 1
+    data:
+      width: 620
+      height: 465
+      upscale: false

@@ -1,0 +1,8 @@
+name: Channelworld Custom migrate
+type: module
+description: Defines custom migration for Channelworld.
+core: 8.x
+package: Custom
+dependencies:
+  - migrate_drupal
+  - migrate_plus

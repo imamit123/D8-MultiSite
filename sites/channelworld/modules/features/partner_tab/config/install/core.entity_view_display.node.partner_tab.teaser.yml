@@ -1,0 +1,79 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.partner_tab.body
+    - field.field.node.partner_tab.comment
+    - field.field.node.partner_tab.field_guid
+    - field.field.node.partner_tab.field_local_guid
+    - field.field.node.partner_tab.field_new_guid
+    - field.field.node.partner_tab.field_partner_content_refernce
+    - field.field.node.partner_tab.field_partner_label
+    - field.field.node.partner_tab.field_top_story_node_ref
+    - node.type.partner_tab
+  module:
+    - text
+    - user
+id: node.partner_tab.teaser
+targetEntityType: node
+bundle: partner_tab
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  field_guid:
+    label: above
+    weight: 35
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_local_guid:
+    label: above
+    weight: 37
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_new_guid:
+    label: above
+    weight: 39
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_partner_content_refernce:
+    label: above
+    weight: 32
+    type: entity_reference_label
+    settings:
+      link: true
+    third_party_settings: {  }
+    region: content
+  field_partner_label:
+    label: above
+    weight: 31
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_top_story_node_ref:
+    label: above
+    weight: 33
+    type: entity_reference_label
+    settings:
+      link: true
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden:
+  comment: true

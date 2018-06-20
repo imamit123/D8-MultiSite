@@ -1,0 +1,8 @@
+name: 'Partner content cio'
+type: module
+core: 8.x
+dependencies:
+  - field
+  - node
+  - options
+version: 8.x-1.0

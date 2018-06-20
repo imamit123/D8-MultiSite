@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_entity_bu
+    - taxonomy.vocabulary.field_mapping_for_common_content
+id: taxonomy_term.field_mapping_for_common_content.field_entity_bu
+field_name: field_entity_bu
+entity_type: taxonomy_term
+bundle: field_mapping_for_common_content
+label: 'Entity bundle'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

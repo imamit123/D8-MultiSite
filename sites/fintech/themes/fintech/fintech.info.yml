@@ -1,0 +1,20 @@
+name: fintech
+type: theme
+base theme: classy
+Description: "A modern & responsive Drupal 8 Theme"
+package: custom
+core: 8.x
+
+regions:
+  quick_links: Quick links
+  menu: menu
+  menu_collapse: Menu Collapse
+  content_top: Content top
+  content_top_left: Content top left
+  content_top_right: Content top right
+  content: Content
+  content_bottom: Content Bottom
+  footer: Footer
+
+libraries:
+  - fintech/fintech-styling

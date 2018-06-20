@@ -1,0 +1,221 @@
+ul.menu {
+  @include flexbox();
+  padding-left: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  > li {
+    padding: 0;
+    margin-right: 25px;
+    list-style-type: none;
+    position: relative;
+  }
+  .menu-item--expanded {
+    list-style-type: none;
+    list-style-image: none;
+  }
+  ul {
+    padding-left: 0;
+    li {
+      list-style-type: none;
+      list-style-image: none;
+    }
+  }
+}
+
+.menu--hyphen {
+  .menu-item {
+    position: relative;
+    &:after {
+      content: "|";
+      position: absolute;
+      right: -12px;
+      top: -1px;
+      @at-root .menu--hyphen__not-first#{&} {
+        right: -16px;
+        @media all and (max-width: 767px) {
+          right: -5px;
+        }
+      }
+      @at-root .menu-small#{&} {
+        color: $color-text-one;
+      }
+    }
+    &:last-child {
+      &:after {
+        content: "";
+      }
+    }
+    &:first-child {
+      @at-root .menu--hyphen__not-first#{&} {
+        margin-right: 15px;
+        &:after {
+          content: '';
+        }
+      }
+    }
+  }
+}
+
+.menu-small {
+  font-size: 12px;
+  ul.menu {
+    > li {
+      margin-right: 20px;
+      @at-root .menu--quick-links#{&} {
+        color: $color-top-menu;
+        margin-left: 16px;
+        margin-right: 16px;
+        &:before {
+          content: '';
+          background: $color-top-menu;
+          width: 3px;
+          height: 3px;
+          position: absolute;
+          left: -10px;
+          top: 12px;
+        }
+        &:first-child {
+          background: $color-secondary-1;
+          margin-left: 0;
+          padding: 0 6px 0 10px;
+          list-style-type: none;
+          a {
+            color: $color-black;
+          }
+          &:before {
+            height: 0;
+            width: 0;
+          }
+          &:after {
+            content: "";
+            background: $color-secondary-1;
+            position: absolute;
+            right: -6px;
+            top: 0;
+            width: 10px;
+            height: 30px;
+            transform: skewX(-15deg);
+          }
+        }
+      }
+    }
+  }
+}
+.menu-bold {
+  font-family: $font-scondary-semiBold;
+  color: $color-black;
+  margin-top: 10px;
+}
+
+/*********** collapsed menu ***********/
+.collapse__menu {
+  display: none;
+  position: relative;
+  @media(max-width: 767px) {
+    background: #292929;
+    padding: 20px 15px;
+    max-height: calc(100vh - 50px);
+    overflow-x: scroll;
+  }
+  ul.menu {
+    @include flex-direction(column);
+    @media (min-width: 768px) {
+      background: #333;
+      box-shadow: 1px 1px 3px #000;
+      position: absolute;
+      z-index: 99;
+      width: 190px;
+    }
+    li {
+      @media (min-width: 768px) {
+        border-bottom: 1px solid #000;
+      }
+      margin-right: 0;
+      a {
+        color: #fff;
+        padding: 7px 0 7px 17px;
+        @media (max-width: 767px) {
+          padding-left: 0px;
+        }
+        display: inline-block;
+        font-weight: bold;
+      }
+       &.menu-item--expanded {
+        > a {
+          position: relative;
+            &:before {
+              content: "";
+              position: absolute;
+              width: 16px;
+              height: 12px;
+              right: -15px;
+              top: 10px;
+              z-index: 999;
+              display: block;
+              background: url(../images/Sprite.png) no-repeat;
+              background-position: -200px -7px;
+            }
+          }
+        }
+      .dropdown-menu {
+        position: initial !important;
+        background: #000;
+      }
+    }
+  }
+  @media (max-width: 767px) {
+    .menu--quick-links {
+      .menu {
+        li {
+          &:first-child {
+            display: none;
+          }
+        }
+      }
+    }
+    h2 {
+      border-bottom: 1px solid #666;
+      font-size: 19px;
+      color: #999;
+      padding-bottom: 5px;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    .block {
+      margin-bottom: 20px;
+    }
+    .social {
+      li {
+        margin-left: 7px;
+        &:first-child {
+          margin-left: 0;
+        }
+        a {
+          background: url(../images/social-mobile.png) no-repeat;
+          height: 49px;
+          width: 49px;
+        }
+        &.fb {
+          a {
+            background-position: -57px 0;
+          }
+        }
+        &.yt {
+          a {
+            background-position: -173px 0;
+          }
+        }
+        &.gp {
+          a {
+            background-position: -115px 0;
+          }
+        }
+        &.rss {
+          a {
+           background-position: -231px 0;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+header {
+  .container {
+    background: $color-red;
+    padding: 0;
+  }
+}
+
+.logo-title {
+  margin-left: 20px;
+  color: white;
+  font-family: VodafoneRgBd;
+  font-size: 20.5px;
+  line-height: 11px;
+  letter-spacing: 0.3px;
+  @media (max-width: 1000px) {
+    font-size: 19.5px;
+    line-height: 18px;
+  }
+}
+
+.Ready-business-logo {
+  color: white;
+  margin-left: 20px;
+  margin-top: 6px;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: vodafone_exbregular;
+  text-transform: uppercase;
+  @media (max-width: 1000px) {
+    font-size: 38px;
+  }
+}
+
+.light {
+  font-size: 40px;
+  font-family: VodafoneRg;
+  text-transform: uppercase;
+  @media (max-width: 797px) {
+    font-size: 28px;
+  }  
+}
+
+.pull-logo {
+  display: block;
+  float: left;
+  margin-right: 20px;
+  @media (max-width: 797px) {
+    margin-right: 10px;
+  }
+}
+
+.text-by {
+  color: #ffffff;
+  font-family: VodafoneRgBd;
+  font-size: 13px;
+  margin: 18px 0 2px;
+  text-transform: capitalize;
+}
+
+.cio-logo {
+  > img {
+    width: 65px;
+    margin-top: 6px;
+  }
+}
+
+.idg-logo > img {
+  width: 120px;
+  margin-top: 6px;
+}
+
+@media (min-width: 1200px) {
+  .hidden-lg {
+    display: none !important;
+  }
+}
+

@@ -1,0 +1,156 @@
+/*
+** style for ready busniess page.
+*/
+.cus-staticreadybusiness {
+	h1.red {
+		color: $color-red;
+    font-family: $font-vodafone;
+    font-size: 45px;
+    font-weight: normal;
+    padding: 0px 0px;
+    float: left;
+    width: 96%;
+    font-weight: 400;
+    margin: 10px 0;
+	}
+	h3 {
+		color: $color-black-1;
+    font-size: 32px;
+    font-weight: normal;
+    margin-top: 15px;
+    margin-bottom: 13px;
+    line-height: 1.1;
+	}
+	p {
+		color: $color-grey;
+    font-size: 16px;
+	}
+	h4 {
+		margin-top: 0;
+    font-size: 24px;
+    font-weight: normal;
+    margin-bottom: 13px;
+	}
+	.cus-each {
+	  border-bottom: 1px solid $color-border-2;
+	  padding-bottom: 20px;
+	  padding-top: 20px;
+	  @media (max-width: 640px) {
+	  	overflow: hidden;
+	  }
+	  .cus-graphic {
+	    background: linear-gradient(to bottom,#fff 0,#f1f1f1 98%);
+	    border: 1px solid #c9c9c9;
+	    padding: 24px;
+	    margin: 0 auto 20px !important;
+	    width: 100%;
+	    @media (max-width: 640px) {
+	    	text-align: center;
+	    }
+	    p {
+	    	color: #333;
+		    font-size: 23px;
+		    text-align: center;
+	    }	
+		}
+		.cus-charater {
+			margin-left: 0;
+			margin-right: 0;
+		}
+	}
+	.cus-inside-page-row {
+		.row {
+			margin: 0;
+		}
+	}
+	.imgContent {
+		text-align: center;
+    display: block;
+    min-height: 129px;
+	}
+}
+.wecanHelpYou {
+	float: left;
+  clear: both;
+  padding-bottom: 21px;
+  margin: 0 auto;
+  width: 100%;
+	h3 {
+    font-size: 22px;
+  }
+}
+.imageContainer-wrapper {
+  float: left;
+  width: 100%;
+  overflow: hidden;
+  .imageContainer {
+    position: relative;
+    background: url("../images/StaticPage/wecanhelpyou.png") no-repeat;
+    clear: both;
+    width: 452px;
+    height: 127px;
+    margin: 30px auto;
+    ul > li {
+    	float: left;
+	    margin-left: 44px;
+	    text-align: center;
+	    width: 121px;
+	    &:first-child {
+	    	margin-left: -40px;
+	    }
+	    h2 {
+	    	color: $color-white;
+		    font-size: 20px;
+		    font-family: "vodafone_rgregular";
+		    font-weight: normal;
+		    margin-bottom: 7px;
+		    margin-top: 19px;
+	    }
+	    p {
+	    	font-family: Arial,Helvetica,sans-serif;
+		    color: $color-white;
+		    font-size: 15px;
+		    padding: 0 15px;
+		    font-size: 14px;
+		    line-height: 16px;
+	    }
+    }
+	}
+	ul {
+		list-style: none;
+	}
+}
+.cus-br-left {
+	border-left: 1px solid $color-border-2;
+  height: 230px;
+  .imgCOntainer {
+    min-height: 100px;
+    margin-top: 10px;
+	}
+}
+.cus-br-right {
+  border-right: 1px solid $color-border-2;
+}
+.cus-inside-page-row {
+	ul {
+		li {
+			list-style-type: disc;
+		}
+	}
+}
+
+.path-frontpage  {
+	.node__submitted {
+		display: none;
+	}
+	.block-views-blockhome-page-content-block-1 {
+		h2 {
+			margin-top: -33px;
+		}
+	}
+}
+.ready-business {
+	.downmr-2  {
+		margin: 10px auto 30px;
+	}
+}

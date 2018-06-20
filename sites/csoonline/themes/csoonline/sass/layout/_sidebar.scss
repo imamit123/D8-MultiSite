@@ -1,0 +1,22 @@
+/* ------------------ Sidebar ----------------- */
+
+@media all and (min-width: 768px) {
+  .one-sidebar .sidebar {
+    width: 25%;
+  }
+  #sidebar-first {
+    width: 25%;
+    padding-right: 10px;
+  }
+  #sidebar-second {
+    width: 25%;
+    padding-left: 10px;
+  }
+}
+
+.sidebar {
+  @media all and (max-width: 767px) {
+    margin-top: 1em;
+  }  
+}
+

@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_node_as_block
+  content:
+    - 'node:editors_pick:8ba1a8f9-0082-4ece-9244-9f0f651942ea'
+  module:
+    - block_class
+    - entityblock
+  theme:
+    - cio
+third_party_settings:
+  block_class:
+    classes: ''
+id: editorspick
+theme: cio
+region: sidebar_second
+weight: -21
+provider: null
+plugin: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|8ba1a8f9-0082-4ece-9244-9f0f651942ea|0'
+settings:
+  id: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|8ba1a8f9-0082-4ece-9244-9f0f651942ea|0'
+  label: 'Editor''s Pick'
+  provider: entityblock
+  label_display: visible
+  label_override: 1
+visibility: {  }

@@ -1,0 +1,193 @@
+/* base for idg */
+html {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -ms-overflow-style: scrollbar;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, section {
+  display: block;
+}
+
+body {
+  margin: 0; // 1
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $body-color;
+  background-color: $body-bg; // 2
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: $headings-margin-bottom;
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+  line-height: $headings-line-height;
+  color: $headings-color;
+}
+
+h1 {
+  font-size: $h1-font-size;
+}
+
+h2 {
+  font-size: $h2-font-size;
+}
+
+h3 {
+  font-size: $h3-font-size;
+}
+
+h4 {
+  font-size: $h4-font-size;
+}
+
+h5 {
+  font-size: $h5-font-size;
+}
+
+h6 {
+  font-size: $h6-font-size;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+a {
+  @include linx($link, $visit, $hover, $active);
+}
+
+.clearfix {
+  @include clearfix();
+}
+
+/********* for order list ***********/
+ol,
+ul,
+dl {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+ol ol,
+ul ul,
+ol ul,
+ul ol {
+  margin-bottom: 0;
+}
+
+/********* blockquote *********/
+blockquote {
+  margin: 0 0 1rem;
+}
+
+/********* strong ************/
+b,
+strong {
+  font-weight: bolder; // Add the correct font weight in Chrome, Edge, and Safari
+}
+
+/********* pre **************/
+pre {
+  // Remove browser default top margin
+  margin-top: 0;
+  // Reset browser default of `1em` to use `rem`s
+  margin-bottom: 1rem;
+  // Don't allow content to break outside
+  overflow: auto;
+}
+
+/*********** Figures **********/
+figure {
+  // Apply a consistent margin strategy (matches our type styles).
+  margin: 0 0 1rem;
+}
+
+/********** Images and content *********/
+img {
+  vertical-align: middle;
+  border-style: none; // Remove the border on images inside links in IE 10-.
+}
+
+/******** touch ***************/
+a,
+area,
+button,
+[role="button"],
+input,
+label,
+select,
+summary,
+textarea {
+  touch-action: manipulation;
+}
+
+/*********** table *************/
+table {
+  border-collapse: collapse; // Prevent double borders
+}
+
+/************ label *************/
+label {
+  // Allow labels to use `margin` for spacing.
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+/********** form browsers ref *********/
+input,
+button,
+select,
+optgroup,
+textarea {
+  margin: 0; // Remove the margin in Firefox and Safari
+}
+
+button,
+select {
+  text-transform: none; // Remove the inheritance of text transform in Firefox
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  box-sizing: border-box; // 1. Add the correct box sizing in IE 10-
+  padding: 0; // 2. Remove the padding in IE 10-
+}
+
+fieldset {
+  // Browsers set a default `min-width: min-content;` on fieldsets,
+  // unlike e.g. `<div>`s, which have `min-width: 0;` by default.
+  // So we reset that to ensure fieldsets behave more like a standard block element.
+  min-width: 0;
+  // Reset the default outline behavior of fieldsets so they don't affect page layout.
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+// 1. Correct the text wrapping in Edge and IE.
+// 2. Correct the color inheritance from `fieldset` elements in IE.
+legend {
+  display: block;
+  width: 100%;
+  max-width: 100%; // 1
+  padding: 0;
+  margin-bottom: .5rem;
+  font-size: 1.5rem;
+  line-height: inherit;
+  color: inherit; // 2
+  white-space: normal; // 1
+}

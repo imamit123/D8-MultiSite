@@ -1,0 +1,20 @@
+{% set knowledge_ref = node.field_knowledge_vault_navigation %}
+{% set tab_color = node.field_tab_color.value %}
+{% set banner_top = node.field_banner_top[0].entity.fileuri %}
+<div class="special-pages">
+  {% if node.field_banner_top is not empty %}
+  <a href="{{url}}"><img src="{{ file_url(banner_top)}}"></a>
+  {% endif %}
+  <div class="tabs-content">
+    <div class="field-content">
+      <div>
+        <a href="{{url}}" style="background:{{tab_color}}" class="active">Home</a>
+        {% for item in knowledge_ref%}
+          <a href="/node/{{item.entity.field_partner_label[0].entity.nid[0].value}}" style="background:{{tab_color}}">
+            {{item.entity.field_partner_label.value}}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

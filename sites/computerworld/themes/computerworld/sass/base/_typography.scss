@@ -1,0 +1,92 @@
+/* font face desine for site */
+
+@font-face {
+  font-family: 'RobotoSlabBold';
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Bold.eot');
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Bold.eot') format('embedded-opentype'),
+      	url('../fonts/Roboto_Slab/RobotoSlab-Bold.woff2') format('woff2'),
+         url('../fonts/Roboto_Slab/RobotoSlab-Bold.woff') format('woff'),
+         url('../fonts/Roboto_Slab/RobotoSlab-Bold.ttf') format('truetype'),
+         url('../fonts/Roboto_Slab/RobotoSlab-Bold.svg#RobotoSlabBold') format('svg');
+}
+@font-face {
+  font-family: 'RobotoSlabLight';
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Light.eot');
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Light.eot') format('embedded-opentype'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Light.woff2') format('woff2'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Light.woff') format('woff'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Light.ttf') format('truetype'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Light.svg#RobotoSlabLight') format('svg');
+}
+@font-face {
+  font-family: 'RobotoSlabRegular';
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Regular.eot');
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Regular.eot') format('embedded-opentype'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Regular.woff2') format('woff2'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Regular.woff') format('woff'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Regular.ttf') format('truetype'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Regular.svg#RobotoSlabRegular') format('svg');
+}
+@font-face {
+  font-family: 'RobotoSlabThin';
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Thin.eot');
+  src: url('../fonts/Roboto_Slab/RobotoSlab-Thin.eot') format('embedded-opentype'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Thin.woff2') format('woff2'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Thin.woff') format('woff'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Thin.ttf') format('truetype'),
+       url('../fonts/Roboto_Slab/RobotoSlab-Thin.svg#RobotoSlabThin') format('svg');
+}
+@font-face {
+  font-family: 'OpenSansBold';
+  src: url('../fonts/Open_Sans/OpenSans-Bold.eot');
+  src: url('../fonts/Open_Sans/OpenSans-Bold.eot') format('embedded-opentype'),
+       url('../fonts/Open_Sans/OpenSans-Bold.woff2') format('woff2'),
+       url('../fonts/Open_Sans/OpenSans-Bold.woff') format('woff'),
+       url('../fonts/Open_Sans/OpenSans-Bold.ttf') format('truetype'),
+       url('../fonts/Open_Sans/OpenSans-Bold.svg#OpenSansBold') format('svg');
+}
+@font-face {
+  font-family: 'OpenSansLight';
+  src: url('../fonts/Open_Sans/OpenSans-Light.eot');
+  src: url('../fonts/Open_Sans/OpenSans-Light.eot') format('embedded-opentype'),
+       url('../fonts/Open_Sans/OpenSans-Light.woff2') format('woff2'),
+       url('../fonts/Open_Sans/OpenSans-Light.woff') format('woff'),
+       url('../fonts/Open_Sans/OpenSans-Light.ttf') format('truetype'),
+       url('../fonts/Open_Sans/OpenSans-Light.svg#OpenSansLight') format('svg');
+}
+@font-face {
+  font-family: 'OpenSansRegular';
+  src: url('../fonts/Open_Sans/OpenSans-Regular.eot');
+  src: url('../fonts/Open_Sans/OpenSans-Regular.eot') format('embedded-opentype'),
+       url('../fonts/Open_Sans/OpenSans-Regular.woff2') format('woff2'),
+       url('../fonts/Open_Sans/OpenSans-Regular.woff') format('woff'),
+       url('../fonts/Open_Sans/OpenSans-Regular.ttf') format('truetype'),
+       url('../fonts/Open_Sans/OpenSans-Regular.svg#OpenSansRegular') format('svg');
+}
+@font-face {
+  font-family: 'OpenSansSemiBold';
+  src: url('../fonts/Open_Sans/OpenSans-SemiBold.eot');
+  src: url('../fonts/Open_Sans/OpenSans-SemiBold.eot') format('embedded-opentype'),
+       url('../fonts/Open_Sans/OpenSans-SemiBold.woff2') format('woff2'),
+       url('../fonts/Open_Sans/OpenSans-SemiBold.woff') format('woff'),
+       url('../fonts/Open_Sans/OpenSans-SemiBold.ttf') format('truetype'),
+       url('../fonts/Open_Sans/OpenSans-SemiBold.svg#OpenSansSemiBold') format('svg');
+}
+@font-face {
+  font-family:'MyriadProBold';
+  src: url('../fonts/MyriadProBold.eot');
+  src: url('../fonts/MyriadProBold.eot') format('embedded-opentype'),
+       url('../fonts/MyriadProBold.woff2') format('woff2'),
+       url('../fonts/MyriadProBold.woff') format('woff'),
+       url('../fonts/MyriadProBold.ttf') format('truetype'),
+       url('../fonts/MyriadProBold.svg#MyriadProBold') format('svg');
+}
+@font-face {
+  font-family:'MyriadProRegular';
+  src: url('../fonts/MyriadProRegular.eot');
+  src: url('../fonts/MyriadProRegular.eot') format('embedded-opentype'),
+       url('../fonts/MyriadProRegular.woff2') format('woff2'),
+       url('../fonts/MyriadProRegular.woff') format('woff'),
+       url('../fonts/MyriadProRegular.ttf') format('truetype'),
+       url('../fonts/MyriadProRegular.svg#MyriadProRegular') format('svg');
+}

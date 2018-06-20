@@ -1,0 +1,30 @@
+/* dropdown style */
+.form-actions {
+	margin-bottom: 2em;
+	.dropbutton-widget {
+		border: 2px solid $color-green;
+		&:hover {
+			border-color: $color-green;
+		} 
+	}
+	.dropbutton {
+		border-right: 2px solid $color-green;
+		.secondary-action {
+			border-top: 2px solid $color-green;
+		} 
+	}
+	.dropbutton-multiple {
+		input[type="submit"] {
+			background-color: $color-green;
+			border: 1px solid $color-green;
+			font-weight: bold;
+			margin-right: 0;
+		}
+	}	
+	input[value="Preview"] {
+		background-color: $color-green;
+		border: 1px solid $color-green;
+		font-weight: bold;
+		height: 27px;
+	}	
+}

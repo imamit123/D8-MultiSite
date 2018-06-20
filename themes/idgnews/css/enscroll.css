@@ -1,0 +1,21 @@
+/*
+ * CSS Styles that are needed by jScrollPane for it to operate correctly.
+ *
+ * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
+ * may not operate correctly without them.
+ */
+
+.vertical-track {
+  width: 13px;           
+  background-color: #fff; 
+}
+.vertical-handle {
+  width: 13px;            
+  background-color: #37A0E1; 
+}
+#counted_keywords + div {
+  margin-top: 5px !important;
+}
+#counted_keywords + div .vertical-track {
+  border: 1px solid #37A0E1;
+}

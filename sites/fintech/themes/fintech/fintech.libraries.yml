@@ -1,0 +1,16 @@
+fintech-styling:
+  css:
+    main:
+      css/font-awesome.min.css: {}
+      css/bootstrap.css: {}
+      css/custombootsrap.css: {}
+      css/custommedia.css: {}
+      css/style.css: {}
+      'https://cloud.typography.com/6293596/6644572/css/fonts.css': {type: external}
+    normalize:
+      css/normalize.css: {}
+  js:
+    js/custom.js: { weight: N }
+  dependencies:
+    - owlcarousel/owlcarousel
+

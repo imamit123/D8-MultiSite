@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Field mapping for Common Content'
+vid: field_mapping_for_common_content
+description: 'This taxonomy is for mapping of fields and field types from parent sites to child sites'
+hierarchy: 0
+weight: 0

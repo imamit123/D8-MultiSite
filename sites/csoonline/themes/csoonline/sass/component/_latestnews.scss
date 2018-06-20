@@ -1,0 +1,26 @@
+.latest-news {
+  .views-row {
+    border-bottom: 1px solid $color-border;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+  .more-link {
+    text-align: left;
+    font-family: $font-secondary-bold;
+    font-size: 14px;
+    a {
+      color: $color-blue;
+      &:after {
+        content: '';
+        background: url('../images/Sprite.png') no-repeat -204px -7px;
+        height: 12px;
+        width: 12px;
+        display: inline-block;
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}

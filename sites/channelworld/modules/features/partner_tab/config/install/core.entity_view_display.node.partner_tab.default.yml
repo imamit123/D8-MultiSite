@@ -1,0 +1,103 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.partner_tab.body
+    - field.field.node.partner_tab.comment
+    - field.field.node.partner_tab.field_guid
+    - field.field.node.partner_tab.field_home_page_image
+    - field.field.node.partner_tab.field_idg_new_taxonomy
+    - field.field.node.partner_tab.field_local_guid
+    - field.field.node.partner_tab.field_new_guid
+    - field.field.node.partner_tab.field_partner_content_refernce
+    - field.field.node.partner_tab.field_partner_label
+    - field.field.node.partner_tab.field_tabs_page_layout
+    - field.field.node.partner_tab.field_teaser
+    - field.field.node.partner_tab.field_top_story_node_ref
+    - field.field.node.partner_tab.upload
+    - node.type.partner_tab
+  module:
+    - file
+    - image
+    - text
+    - user
+id: node.partner_tab.default
+targetEntityType: node
+bundle: partner_tab
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_guid:
+    label: above
+    weight: 1
+    type: basic_string
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_home_page_image:
+    weight: 6
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_idg_new_taxonomy:
+    weight: 8
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_local_guid:
+    label: above
+    weight: 2
+    type: basic_string
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_new_guid:
+    label: above
+    weight: 3
+    type: basic_string
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_tabs_page_layout:
+    weight: 7
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_teaser:
+    weight: 0
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  upload:
+    label: hidden
+    settings: {  }
+    type: file_default
+    weight: 5
+    third_party_settings: {  }
+    region: content
+hidden:
+  comment: true
+  field_partner_content_refernce: true
+  field_partner_label: true
+  field_top_story_node_ref: true
+  links: true

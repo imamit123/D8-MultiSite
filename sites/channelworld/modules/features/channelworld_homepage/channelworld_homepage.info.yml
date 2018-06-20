@@ -1,0 +1,12 @@
+name: channelworld-homepage
+type: module
+core: 8.x
+dependencies:
+  - common_content
+  - homepage_paragraph_features
+  - image
+  - node
+  - owlcarousel
+  - paragraphs
+  - views
+version: 8.x-1.0

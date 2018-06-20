@@ -1,0 +1,56 @@
+.latest-news {
+  .views-row {
+    border-bottom: 1px solid $color-border;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+  .more-link {
+    text-align: left;
+    font-family: $font-secondary-bold;
+    font-size: 14px;  
+    a {  
+      &:after {
+        content: '';
+        background: url('../images/Sprite.png') no-repeat -177px -5px;
+        height: 12px;
+        width: 12px;
+        display: inline-block;
+      }  
+    }
+  }
+}
+
+.paragraph--type--slider-section {
+  .latest-news {
+    .more-link { 
+      position: relative;
+      text-align: center;
+      font-family: $font-secondary;
+      text-transform: uppercase;
+      a {
+        color: $color-border-title;
+        &:after {
+          border-top: 1px solid $color-border;
+          background: none;
+          height: auto;
+          width: 30%;
+          position: absolute;
+          top: 8px;
+          left: 0;
+        }
+        &:before {
+          content: "";
+          border-top: 1px solid $color-border;
+          display: inline-block;
+          width: 30%;
+          position: absolute;
+          top: 8px;
+          right: 0;
+        }  
+      }
+    }  
+  }
+}

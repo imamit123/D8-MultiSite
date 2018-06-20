@@ -1,0 +1,48 @@
+.text-over-img {
+  .txt {
+    position: absolute;
+    bottom: 4px;
+    padding: 0 20px;
+    z-index: 1;
+    color: $color-white;
+    &.large {
+      font-size: 22px;
+      @media(max-width: 767px) {
+        font-size: 19px;
+      }
+    }
+    a, p {
+      color: white;
+    }
+  }
+  .img {
+    position: relative;
+    z-index: 1;
+    @at-root .cols#{&} {
+      margin-bottom: 0;
+    }
+    @at-root .slider#{&} {
+      &:before {
+        position: inherit;
+      }
+      a {
+        &:before {
+          position: absolute;
+          content: '';
+          background: rgba(0,0,0,.3);
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    a {
+      &:before {
+        position: absolute;
+        content: '';
+        background: rgba(0,0,0,.3);
+        width: 100%;
+        height: 100%;
+      }  
+    }
+  }
+}

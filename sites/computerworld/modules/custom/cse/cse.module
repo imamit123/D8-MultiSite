@@ -1,0 +1,72 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeTypeInterface;
+use Drupal\Component\Utility\UrlHelper;
+use Drupal\node\NodeInterface;
+
+/**
+ * @file
+ * Currently (31/07/2016) , Drupal needs this blank file.
+ */
+ function cse_theme($existing, $type, $theme, $path) {
+  return array(
+        'cse_theme' => array(
+            'variables' => array('value' => NULL), /////Array passed to controller///
+        ),
+    );
+}
+
+
+/**
+ * Implements hook_form_alter().
+ */
+function cse_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  //drupal_set_message($form_id);
+  if ($form_id == 'node_common_content_edit_form' || $form_id == 'node_common_content_form') {
+    $form['field_video_script']['widget'][0]['#type']  = textarea;
+    $form['field_detail_video_script']['widget'][0]['#type']  = textarea;
+     foreach (array_keys($form['actions']) as $action) {
+    if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
+        $form['actions'][$action]['#submit'][] = 'cse_common_content_submit';
+    }
+  }
+  }
+}
+
+
+/**
+ * Implements Common content submit handler().
+ */
+
+function cse_common_content_submit($form, FormStateInterface $form_state){
+  $field_video_script = $form_state->getValue('field_video_script');
+  $field_detail_video_script = $form_state->getValue('field_detail_video_script');
+  $entity = $form_state->getFormObject()->getEntity();
+  $entity->set('field_video_script', $field_video_script[0]);
+  $entity->set('field_detail_video_script', $field_detail_video_script[0]);
+  $entity->save();
+}
+
+/* 
+ * change page title
+ */
+function cse_page_attachments_alter(array &$page) {
+  $urlArray = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+  $segments = explode('/', $urlArray);
+  $numSegments = count($segments);
+  $currentSegment = $segments[$numSegments - 1];
+  $config = \Drupal::config('system.site');
+  $variables['site_name'] = $config->get('name');
+  if ($currentSegment == 'g_search' && $_REQUEST['q']){
+    $page['#attached']['html_head'][] = [
+        [
+          '#tag' => 'title',
+          '#value' => $_REQUEST['q'].' | Search Results | '.$variables['site_name'],
+        ],
+        'title'
+    ];
+  }
+}

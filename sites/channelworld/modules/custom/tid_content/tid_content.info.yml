@@ -1,0 +1,5 @@
+name: Webform tid
+description: custom module to generate tid for webform 
+core: 8.x
+package: Custom
+type: module

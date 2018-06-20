@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_new_guid
+    - node.type.editors_pick
+id: node.editors_pick.field_new_guid
+field_name: field_new_guid
+entity_type: node
+bundle: editors_pick
+label: 'New GUID'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

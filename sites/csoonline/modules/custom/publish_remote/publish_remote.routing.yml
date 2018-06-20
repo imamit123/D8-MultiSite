@@ -1,0 +1,7 @@
+publish_remote:
+  path: '/fetch-publish-content'
+  defaults:
+    _controller: '\Drupal\publish_remote\Controller\PublishRemoteController::publish_remote_content'
+    _title: 'Remotely publish content '
+  requirements:
+    _permission: 'access content'

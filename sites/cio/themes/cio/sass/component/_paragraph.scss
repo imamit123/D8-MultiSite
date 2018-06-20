@@ -1,0 +1,51 @@
+.paragraph {
+  margin-bottom: 3px;
+}
+
+/********* partner tab winners **********/
+.field--name-field-winner-section {
+  margin-top: 20px;
+  > .field__item {
+    float: left;
+    width: 50%;
+    @media (max-width: 767px) {
+      width: 100%;
+    }
+    &:first-child {
+      a {
+        font-size: 14px;
+      }
+      .field--name-field-node-reference {
+        border: 1px solid #ddd;
+        padding: 10px;
+        width: 86.2%;
+        margin-top: 10px;
+      }
+    }
+    &:before, &:after {
+      content: "";
+      width: 100%;
+      display: table;
+    }
+  }
+  .field--name-field-label {
+    h2 {
+      font-size: 19px;
+      margin-bottom: 2px;
+    }
+    p {
+      font-size: 14px;
+      padding-bottom: 8px;
+      display: block;
+      color: #5e5e5e;
+      font-weight: bold;
+      margin-bottom: 0;
+    }
+  }
+  a {
+    font-size: 16px;
+    color: #8b0304;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+}

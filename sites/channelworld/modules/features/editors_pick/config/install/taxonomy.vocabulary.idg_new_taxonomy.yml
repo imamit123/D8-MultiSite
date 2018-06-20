@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'IDG NEW TAXONOMY'
+vid: idg_new_taxonomy
+description: ''
+hierarchy: 1
+weight: -9

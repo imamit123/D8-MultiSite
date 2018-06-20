@@ -1,0 +1,18 @@
+name: 'Related Blocks'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - block_class
+  - channel_listing_pages
+  - cio_listing_pages
+  - common_content
+  - editors_pick
+  - field
+  - image
+  - node
+  - owlcarousel
+  - system
+  - taxonomy
+  - user
+  - views

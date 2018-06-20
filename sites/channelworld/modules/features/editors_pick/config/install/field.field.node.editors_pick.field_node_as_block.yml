@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_node_as_block
+    - node.type.editors_pick
+  module:
+    - entityblock
+id: node.editors_pick.field_node_as_block
+field_name: field_node_as_block
+entity_type: node
+bundle: editors_pick
+label: 'Node as block'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    token_tree: ''
+    enabled: 1
+    title: '[node:title]'
+    view_mode: full
+default_value_callback: ''
+settings:
+  enabled: true
+  title: '1'
+  view_mode: full
+field_type: entityblock

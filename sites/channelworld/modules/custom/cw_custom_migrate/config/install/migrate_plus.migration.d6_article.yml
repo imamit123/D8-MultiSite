@@ -1,0 +1,82 @@
+id: d6_article
+label: d6_article
+migration_tags:
+  - Drupal 6
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+migration_group: cwgroup
+source:
+  plugin: d6_node
+  node_type: common_content
+process:
+#  nid and vid commented out will allow them to autoincrement. Safe as long
+#    as nothing else is referencing them.
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: common_content
+  path: alias
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: "full_html"
+  'body/value': body
+  field_home_page_image: field_home_page_image
+  field_nwsl_title: field_nwsl_title
+  field_newsletter_teaser: field_newsletter_teaser
+  field_strapline: field_strapline
+  field_teaser: field_teaser
+  field_auth_name: field_author
+  field_author_reference: field_author_reference
+  field_video_script: field_video_script
+  field_detail_video_script: field_detail_video_script
+  field_editorspick_video: field_editorspick_video
+  field_guid: field_guid
+  field_guid_version: field_guid_version
+  field_source: field_source
+  field_org_url: field_org_url
+  field_org_ref: field_org_ref
+  field_org_type: field_org_type
+  field_local_content_to_share: field_local_content_to_share
+  field_sponsored_content: field_sponsored_content
+  field_it_road_map_event: field_it_roadmap_event
+  field_listing_page_content: field_right_side_content
+  field_event_knowledgevault_ref: field_event_knowledgevault_ref
+  field_breaking_news: field_breaking_news
+  field_webformid: field_webformid
+  field_insider: field_insider
+  field_vancast_url: field_vancast_url
+  field_sponsor_link: field_sponsor_link
+  field_old_nid: field_old_nid
+  field_edited_by: field_edited_by
+  field_new_guid: field_new_guid
+  #field_slide_caption: field_slide_caption
+  field_slide_image: field_slide_image
+  #field_slide_desc: field_slide_desc
+  field_common_category: field_common_category
+  field_it_road_map: field_it_road_map
+  field_new_idg_taxonomy: field_new_idg_taxonomy
+  field_file_attachments: field_file_attachments
+  #field_case_study_industry: field_case_study_industry
+  #field_case_study_technology: field_case_study_technology
+  field_image_slideshow: field_image_slideshow
+  field_social_share: field_social_share
+  field_first_publish_date: created
+      #source: field_home_page_image
+  #field_external_link:
+    #plugin: d6_cck_link
+    #source: field_externallinktarget
+  #field_location: field_location
+destination:
+  plugin: entity:node
+migration_dependencies: {}

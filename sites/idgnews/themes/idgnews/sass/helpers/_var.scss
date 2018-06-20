@@ -1,0 +1,27 @@
+/* variables for the IDG site */
+
+$container: 1080px;
+
+/* color variables */
+$color-black: #000;
+$color-lightblack: #2d2d2d;
+$color-white: #fff;
+$color-orange: #ffa500;
+$color-green: #8BBC35;
+$color-skyblue: #37a1e2;
+$color-pink: #dd5280;
+
+$color-text: #444;
+$color-tophdr-bg: #e4e4e4;
+$color-header-bg: #ed1c24;
+$color-gray-border: #d1d1d1;
+
+/* font variables */
+$font-robot: 'Roboto Slab', serif;
+$font-opensans: 'Open Sans', sans-serif;
+$font-size: 16px;
+
+/* images */
+/* images */
+$url: "../images"; 
+$image-body-bg: url('#{$url}/bg-img-png8.png') no-repeat center center fixed;

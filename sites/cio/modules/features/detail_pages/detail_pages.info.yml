@@ -1,0 +1,23 @@
+name: 'Detail Pages'
+description: 'Detail pages block view'
+type: module
+core: 8.x
+dependencies:
+  - block
+  - block_class
+  - common_content
+  - entity_reference_revisions
+  - image
+  - node
+  - owlcarousel
+  - paragraphs
+  - slideshow_paragraph
+  - social_media
+  - social_share
+  - system
+  - taxonomy
+  - text
+  - user
+  - views
+  - views_field_view
+version: 8.x-1.0

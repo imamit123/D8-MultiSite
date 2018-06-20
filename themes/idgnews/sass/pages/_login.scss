@@ -1,0 +1,83 @@
+/* style for login page */
+.bg-clr {
+  background: $color-skyblue;
+  bottom: 0;
+  box-shadow: 0 2px 6px 5px $color-blackone;
+  height: 420px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 625px;
+  .logo {
+  	background: $image-logo-login;
+    background-size: contain;
+    margin: 0 auto;
+    margin-top: 22px;
+    margin-bottom: -13px;
+    height: 90px;
+    width: 400px;
+  }
+}
+
+.login-page {
+  height: 360px;
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 391px;
+  .messages--error {
+    a {
+      display: none;
+    }
+  }
+  .messages {
+    background-position: 10px 9px;
+    padding: 8px 20px 8px 35px;
+  }
+}
+
+.user-login-form {
+	background: $color-skyblue-light;
+	font-family: arial;
+	margin-top: 7px;
+	width: 385px;
+  height: 265px;
+  input[type="text"], 
+  input[type="password"] {
+    background: $color-lightblack;
+    border: none;
+    color: $color-skyblue;
+    font-size: 24px;
+    font-family: arial;
+    margin: 30px 0 0 30px;
+    padding: 0 20px;
+    height: 57px;
+    width: 280px;
+	}
+	label,
+	.description {
+		display: none;
+	}
+	.button  {
+    background: $image-submit;
+    border: medium none;
+    color: $color-skyblue;
+    cursor: pointer;
+    font: 24px arial;
+    height: 46px;
+    margin-left: 30px;
+    margin-top: 20px;
+    padding-left: 18px;
+    padding-top: 2px;
+    width: 313px;
+    text-align: left;
+    text-transform: uppercase;
+	}
+	.form-actions,
+	.form-item {
+		margin: 0;
+	}
+}

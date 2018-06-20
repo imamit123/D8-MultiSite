@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_special_award_text
+    - node.type.cio100
+id: node.cio100.field_special_award_text
+field_name: field_special_award_text
+entity_type: node
+bundle: cio100
+label: 'Special Award Text'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

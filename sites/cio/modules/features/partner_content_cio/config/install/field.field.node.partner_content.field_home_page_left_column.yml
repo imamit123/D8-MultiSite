@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_home_page_left_column
+    - node.type.partner_content
+id: node.partner_content.field_home_page_left_column
+field_name: field_home_page_left_column
+entity_type: node
+bundle: partner_content
+label: 'Home Page Left Column'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings: {  }
+field_type: entity_reference

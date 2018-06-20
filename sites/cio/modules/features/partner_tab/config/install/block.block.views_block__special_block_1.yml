@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.special
+  module:
+    - block_class
+    - views
+  theme:
+    - cio
+third_party_settings:
+  block_class:
+    classes: ''
+id: views_block__special_block_1
+theme: cio
+region: special_tabs
+weight: 0
+provider: null
+plugin: 'views_block:special-block_1'
+settings:
+  id: 'views_block:special-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+  context_mapping: {  }
+visibility: {  }

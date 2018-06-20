@@ -1,0 +1,30 @@
+cio.screen-small-max:
+  label: screen-small-max
+  mediaQuery: 'all and (max-width: 767px)'
+  weight: 1
+  multipliers:
+    - 1x
+cio.screen-xsmall-max:
+  label: screen-xsmall-max
+  mediaQuery: 'all and (max-width: 520px)'
+  weight: 1
+  multipliers:
+    - 1x    
+cio.screen-medium:
+  label: screen-medium
+  mediaQuery: 'all and (min-width: 768px) and (max-width: 1024px)'
+  weight: 1
+  multipliers:
+    - 1x
+cio.screen-medium-min:
+  label: screen-medium-min
+  mediaQuery: 'all and (min-width: 991px)'
+  weight: 1
+  multipliers:
+    - 1x
+cio.screen-large-min:
+  label: screen-large-min
+  mediaQuery: 'all and (min-width: 1200px)'
+  weight: 1
+  multipliers:
+    - 1x

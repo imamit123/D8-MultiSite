@@ -1,0 +1,229 @@
+<?php
+
+ /**
+  * @file
+  * Contains custom_migrate.module.
+  */
+use Drupal\migrate\Row;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\file\Entity\File;
+use Drupal\paragraphs\Entity\Paragraph;
+
+/**
+  * Implements hook_migrate_prepare_row().
+  */
+ function channelworld_custom_migrate_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+   // ID from the migrate.migration.d6_article.yml.
+   if ($migration->id() == 'd6_article') {
+      //Fetch Value from D6 DataBase.
+      $uid = $row->getSourceProperty('node_uid');
+      $row->setSourceProperty('uid', $uid);
+      $query = $source->getDatabase()->select('term_node', 'n');
+      $query->fields('n', array('tid','nid'));
+      $query->join('term_data', 'd', 'n.tid = d.tid');
+      $query->condition('d.vid', '3');
+      $query->condition('n.nid', $row->getSourceProperty('nid'));
+      $mt_results = $query->execute()->fetchAllKeyed();
+      //Fetch Valuse from Custom table
+      $query1 = $source->getDatabase()->select('content_categorization', 'n');
+      $query1->fields('n', array('agency','company'));
+      $query1->condition('n.nid', $row->getSourceProperty('nid'));
+      $mt_results1 = $query1->execute()->fetchAllKeyed();
+      foreach ($mt_results1 as $key => $value) {
+
+        $agency = getTidByName($key, 'select_agency');
+        $company = getTidByName($value, 'select_company');
+        $select_agency[0]['target_id'] = $agency;
+        $select_agency[0]['target_type'] = 'taxonomy_term';
+        $select_company[0]['target_id'] = $company;
+        $select_company[0]['target_type'] = 'taxonomy_term';
+
+        $row->setSourceProperty('field_hidden_agency_name', $key);
+        $row->setSourceProperty('field_hidden_company_name', $value);
+
+      }
+      $row->setSourceProperty('field_select_agency', $select_agency);
+      $row->setSourceProperty('field_select_company', $select_company);
+
+      //IDG NEW TAXONOMY -- Open
+      $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+      $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+      $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+      $query_idg_new_taxonomy->condition('d.vid', '5');
+      $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+      foreach ($results_idg_new_taxonomy as $key => $val) {
+        $idg_new_taxonomy[$key]['target_id'] = $key;
+        $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('idg_new_taxonomy', $idg_new_taxonomy);
+      //IDG NEW TAXONOMY -- Close
+
+      //IT Road Map -- Open
+      $query_it_road_map = $source->getDatabase()->select('term_node', 'n');
+      $query_it_road_map->fields('n', array('tid','nid'));
+      $query_it_road_map->join('term_data', 'd', 'n.tid = d.tid');
+      $query_it_road_map->condition('d.vid', '6');
+      $query_it_road_map->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_it_road_map = $query_it_road_map->execute()->fetchAllKeyed();
+      foreach ($results_it_road_map as $key => $val) {
+        $it_road_map[$key]['target_id'] = $key;
+        $it_road_map[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('it_road_map', $it_road_map);
+      //IT Road Map -- Close
+
+      //IDG Content Category -- Open
+      $query_content_category = $source->getDatabase()->select('term_node', 'n');
+      $query_content_category->fields('n', array('tid','nid'));
+      $query_content_category->join('term_data', 'd', 'n.tid = d.tid');
+      $query_content_category->condition('d.vid', '3');
+      $query_content_category->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_content_category = $query_content_category->execute()->fetchAllKeyed();
+      foreach ($results_content_category as $key => $val) {
+        $content_category[0]['target_id'] = $key;
+        $content_category[0]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('content_category', $content_category);
+      //IDG Content Category -- Close
+
+      //CIO Case Study Industry Vertical -- Open
+      $query_cio_case_study_industry_vertical = $source->getDatabase()->select('term_node', 'n');
+      $query_cio_case_study_industry_vertical->fields('n', array('tid','nid'));
+      $query_cio_case_study_industry_vertical->join('term_data', 'd', 'n.tid = d.tid');
+      $query_cio_case_study_industry_vertical->condition('d.vid', '7');
+      $query_cio_case_study_industry_vertical->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_cio_case_study_industry_vertical = $query_cio_case_study_industry_vertical->execute()->fetchAllKeyed();
+      foreach ($results_cio_case_study_industry_vertical as $key => $val) {
+        $cio_case_study_industry_vertical[0]['target_id'] = $key;
+        $cio_case_study_industry_vertical[0]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('cio_case_study_industry_vertical', $cio_case_study_industry_vertical);
+      //CIO Case Study Industry Vertical -- Close
+
+      //CIO Case Study Technology -- Open
+      $query_cio_case_study_technology = $source->getDatabase()->select('term_node', 'n');
+      $query_cio_case_study_technology->fields('n', array('tid','nid'));
+      $query_cio_case_study_technology->join('term_data', 'd', 'n.tid = d.tid');
+      $query_cio_case_study_technology->condition('d.vid', '8');
+      $query_cio_case_study_technology->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_cio_case_study_technology = $query_cio_case_study_technology->execute()->fetchAllKeyed();
+      foreach ($results_cio_case_study_technology as $key => $val) {
+        $cio_case_study_technology[0]['target_id'] = $key;
+        $cio_case_study_technology[0]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('cio_case_study_technology', $cio_case_study_technology);
+      //CIO Case Study Technology -- Close
+
+      //File Attachment -- Open
+      $query_fa = $source->getDatabase()->select('upload', 'u');
+      $query_fa->fields('u', array('fid','vid','description','list','weight'));
+      $query_fa->condition('u.nid', $row->getSourceProperty('nid'));
+      $query_fa->orderBy('fid', 'ASC');
+      //$query_fa->sort('fid', 'DESC');
+      $mt_results_fa = $query_fa->execute()->fetchAll();
+      foreach ($mt_results_fa as $key => $value) {
+        $fa[$key]['target_id'] = $value->fid;
+        $fa[$key]['target_type'] = 'files';
+        $fa[$key]['description'] = $value->description;
+      }
+      $row->setSourceProperty('field_file_attachments', $fa);
+      //print_r($mt_results_fa);
+      //SlideShow
+       $query_paragraphs_fid = $source->getDatabase()->select('content_field_slideshow_image', 'fsi');
+       $query_paragraphs_fid->fields('fsi', array('nid','field_slideshow_image_fid','delta'));
+       $query_paragraphs_fid->orderBy('fsi.field_slideshow_image_fid', 'ASC');
+       $query_paragraphs_fid->condition('fsi.nid', $row->getSourceProperty('nid'));
+       $mt_results_paragraphs_fid = $query_paragraphs_fid->execute()->fetchAll();
+       foreach ($mt_results_paragraphs_fid as $key => $value) {
+        if ($value->field_slideshow_image_fid) {
+       $query_paragraphs = $source->getDatabase()->select('content_field_slide_caption', 'c`');
+       $query_paragraphs->fields('c', array('field_slide_caption_value'));
+       $query_paragraphs->fields('d', array('field_slide_desc_value'));
+       $query_paragraphs->fields('ic', array('field_image_credit_value'));
+       $query_paragraphs->join('content_field_slide_desc', 'd', 'c.nid = d.nid');
+       $query_paragraphs->join('content_field_image_credit', 'ic', 'c.nid = ic.nid');
+       $query_paragraphs->condition('c.nid', $row->getSourceProperty('nid'));
+       $query_paragraphs->condition('c.delta', $value->delta);
+       $query_paragraphs->condition('d.delta', $value->delta);
+       $query_paragraphs->condition('ic.delta', $value->delta);
+       $mt_results_paragraphs = $query_paragraphs->execute()->fetchAssoc();
+       $file = File::load($value->field_slideshow_image_fid);
+       $ppt_values = array(
+           'id' => NULL,
+           'type' => 'slideshow',
+           'field_slideshow_description' => $mt_results_paragraphs['field_slide_desc_value'],
+           'field_image_credit' => $mt_results_paragraphs['field_image_credit_value'],
+           'field_slideshow_caption' => $mt_results_paragraphs['field_slide_caption_value'],
+           'field_image' => $file,
+           );
+        $ppt_paragraph = Paragraph::create($ppt_values);
+        $ppt_paragraph->save();
+        $target_id_dest = $ppt_paragraph->Id();
+        $target_revision_id_dest = $ppt_paragraph->getRevisionId();
+        $paragraphs[] = array('target_id' => $target_id_dest, 'target_revision_id' => $target_revision_id_dest);
+       }
+       }
+       $row->setSourceProperty('field_image_slideshow', $paragraphs);
+        //Slideshow End
+        //Edited By Start
+        $nid = $row->getSourceProperty('nid');
+        $text = $row->getSourceProperty('field_author_name');
+        $edit = $row->getSourceProperty('field_edited_by');
+        $author = $row->getSourceProperty('field_author_profile_name');
+        foreach ($author as $key => $val) {
+          $value1[$key]['target_id'] = $val['nid'];
+          $value1[$key]['target_type'] = 'node';
+        }
+        $row->setSourceProperty('field_author_profile_name', $value1);
+        foreach ($edit as $key1 => $val1) {
+          $edited_by[$key1]['target_id'] = $val1['nid'];
+          $edited_by[$key1]['target_type'] = 'node';
+        }
+        $row->setSourceProperty('field_edited_by', $edited_by);
+      //Field Teaser Open
+      $query_field_teaser = $source->getDatabase()->select('content_field_teaser', 't');
+      $query_field_teaser->fields('t', array('field_teaser_value','field_teaser_format'));
+      $query_field_teaser->condition('t.nid', $row->getSourceProperty('nid'));
+      $result_field_teaser = $query_field_teaser->execute()->fetchAll();
+      foreach ($result_field_teaser as $key => $value) {
+        $field_teaser[0]['value'] = $value->field_teaser_value;
+        $field_teaser[0]['format'] = "full_html";
+      }
+      $row->setSourceProperty('field_teaser', $field_teaser);
+      //Field Teaser Close
+      // $text[0]['value'] = 'rishi';
+      // $text[0]['delta'] = '0';
+      // $row->setSourceProperty('field_author_name', $text);
+        foreach ($mt_results as $key => $val) {
+          $value2[0]['target_id'] = $key;
+          $value2[0]['target_type'] = 'taxonomy_term';
+        }
+        $row->setSourceProperty('field_common_category', $value2);
+      //url alias
+        $query = $source->getDatabase()->select('url_alias', 'ua')
+        ->fields('ua', ['dst']);
+        $query->condition('ua.src', 'node/' . $nid);
+        $alias = $query->execute()->fetchField();
+        $row->setSourceProperty('alias', '/' . $alias);
+        $process = $migration->getProcess();
+    }
+ }
+
+/**
+*Get Term ID Ftom Term Name.
+*
+**/
+function cioGetTidByName($name = NULL, $vid = NULL) {
+    $properties = [];
+    if (!empty($name)) {
+      $properties['name'] = $name;
+    }
+    if (!empty($vid)) {
+      $properties['vid'] = $vid;
+    }
+    $terms = \Drupal::entityManager()->getStorage('taxonomy_term')->loadByProperties($properties);
+    $term = reset($terms);
+    return !empty($term) ? $term->id() : 0;
+  }

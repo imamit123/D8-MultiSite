@@ -1,0 +1,50 @@
+/*
+** style for more link.
+*/
+.more-link {
+  text-align: right;
+  font-family: $font-secondary-bold;
+  font-size: 14px;
+  @media (max-width: 767px) {
+    margin-bottom: 20px;
+  }
+  a {
+    &:after {
+      content: '';
+      background: url('../images/Sprite.png') no-repeat -177px -5px;
+      height: 12px;
+      width: 12px;
+      display: inline-block;
+    }
+  }
+}
+.wrap-more {
+  color: $color-body-text;
+  font-size: 14px;
+  margin-top: 20px;
+  text-align: right;
+  text-transform: capitalize;
+  .backtotop {
+    a {
+      color: $color-secondary;
+      &:before {
+        content: "";
+        background: url('#{$url}/top.png') no-repeat 2px 4px;
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
+  .morelink {
+    &:after {
+      border: 1px solid $color-border-2;
+      content: "";
+      margin: 0 10px 0 14px;
+      padding: 5px 0;
+    }
+    &:hover {
+      color: $color-secondary;
+    }
+  }
+}

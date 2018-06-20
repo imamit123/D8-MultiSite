@@ -1,0 +1,5 @@
+name: rb custom migration
+description: Url import from child to parent.
+core: 8.x
+package: Custom
+type: module

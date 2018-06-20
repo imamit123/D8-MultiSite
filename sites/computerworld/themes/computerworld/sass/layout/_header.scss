@@ -1,0 +1,202 @@
+.quick__links {
+  background: $color-black;
+  padding: 0;
+  @media (max-width: 767px) {
+    display: none;
+  }
+  .menu {
+    & > li {
+      & > a {
+        color: $color-top-menu;
+        font-size: 12px;
+        padding: 7px 0;
+        display: block;
+      }
+    }
+  }
+  .menu {
+    & > .menu-item {
+      &:first-child {
+        margin-top: -2px;
+        a {
+          @include nolink();
+          font-family: $font-primary;
+        }
+      }
+    }
+    .dropdown-menu {
+      background: $quick-link-bg;
+      top: 22px;
+      border-top: 1px solid #eee;
+    }
+    .menu-item--expanded {
+      > a:after {
+        background: url(../images/Sprite.png) no-repeat;
+        background-position: -200px 0px;
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 20px;
+        right: -15px;
+        top: 1px;
+      }
+    }
+  }
+  .region {
+    min-height: 30px;
+    @media(max-width: 1024px) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    @media(max-width: 767px) {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+}
+
+.main__menu {
+  background: $color-black;
+  height: 70px;
+  @media (max-width: 767px) {
+    .block-system-branding-block {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  @include flexbox();
+  .region-menu {
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(space-between);
+    height: 70px;
+    @media(max-width: 1024px) {
+      padding: 0 20px;
+    }
+    @media(max-width: 767px) {
+      padding: 0 10px;
+      position: relative;
+      .block-search {
+        display: none;
+      }
+    }
+    @media(max-width: 992px) {
+      .menu--main-menu {
+        display: none;
+      }
+    }
+  }
+  ul.menu {
+    a {
+      color: $color-white;
+      font-size: 14px;
+      &.is-active {
+        font-family: $font-secondary-bold;
+        color: $color-secondary-1;
+        padding: 0 4px;
+        &:hover {
+          font-family:  $font-secondary-bold;
+        }
+      }
+      &:hover {
+        color: $color-secondary-1;
+        font-family: $font-secondary;
+      }
+    }
+    > li {
+      position: relative;
+      margin: 0 18px;
+      &:first-child {
+        margin-left: 0;
+      }
+      > a {
+        &.is-active, &:hover {
+          &:after {
+            content: "";
+            border-bottom: 4px solid $color-secondary-1;
+            position: absolute;
+            top: 25px;
+            display: block;
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      &:last-child {
+        display: none;
+      }
+      .dropdown-menu {
+        background: #000;
+        top: 20px;
+        width: auto !important;
+        li {
+          border-bottom: 1px solid #f5cd55;
+        }
+      }
+      &.menu-item--expanded {
+        > a {
+          display: inline-block;
+          &:before {
+            content: "";
+            background: url(../images/Sprite.png) no-repeat;
+            background-position: -197px -7px;
+            position: absolute;
+            width: 16px;
+            height: 12px;
+            right: -15px;
+            top: 3px;
+            z-index: 999;
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+header {
+  text-transform: uppercase;
+  font-family: $font-secondary;
+  .container {
+    padding: 0;
+  }
+  #menu-hamburger {
+    background: url(../images/hamburger.png) no-repeat;
+    display: inline-block;
+    width: 25px;
+    margin-right: 15px;
+    height: 18px;
+    vertical-align: middle;
+    @media (max-width: 767px) {
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  }
+  &.fixed {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    .ad__section {
+      display: none;
+    }
+  }
+  .site-logo {
+    display: inline-block;
+    width: 218px;
+    @media(max-width: 767px) {
+      text-align: center;
+    }
+  }
+}
+
+.as-localnav-placeholder {
+  display: none;
+}
+
+.fixed + .as-localnav-placeholder {
+  display: block;
+}

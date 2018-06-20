@@ -1,0 +1,3 @@
+excluded:
+  - paragraphs.paragraphs_type.partner_left_
+required: true

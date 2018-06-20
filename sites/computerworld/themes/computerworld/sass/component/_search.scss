@@ -1,0 +1,61 @@
+/*
+** style for google search.
+*/
+.block-search {
+  position: relative;
+  .form-search {
+    position: relative;
+    display: none;
+    &.active {
+      display: block;
+      position: absolute;
+      right: 0;
+      width: 300px;
+      margin-top: -5px;
+    }
+  }
+  .google_search_text {
+    border: none;
+    height: 24px;
+    padding: 0 0 0 5px;
+    width: 260px;
+    input {
+      outline: none;
+      &:focus {
+        outline: 0 none;
+      }
+    }
+  }
+  .search {
+    background: url("../images/Sprite.png") no-repeat scroll -152px -35px $color-white;
+    border: medium none;
+    cursor: pointer;
+    height: 24px;
+    margin: 0 0 0 -5px;
+    text-indent: -9999px;
+    width: 22px;
+    &:hover, &:focus {
+      background: url("../images/Sprite.png") no-repeat scroll -152px -35px $color-white;
+      border: none;
+    }
+  }
+  // .reset {
+  //   background: $color-white;
+  //   border: medium none;
+  //   color: $color-border;
+  //   cursor: pointer;
+  //   margin: 0 -5px;
+  // }
+}
+
+.search-icon {
+  background: url('../images/search-icon.png') no-repeat;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  position: relative;
+  z-index: 1;
+  &.active {
+    background: url('../images/search-icon-close.png') no-repeat;
+  }
+}

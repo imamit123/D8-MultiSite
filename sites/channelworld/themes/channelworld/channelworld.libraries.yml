@@ -1,0 +1,15 @@
+channelworld-styling:
+  css:
+    main:
+      css/style.css: {}
+    normalize:
+      css/normalize.css: {}
+  js:
+    js/custom.js: { weight: N }
+  dependencies:
+    - owlcarousel/owlcarousel
+
+seven_custom:
+  css:
+    theme:
+      css/seven.css: {}

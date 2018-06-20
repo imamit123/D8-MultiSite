@@ -1,0 +1,53 @@
+id: d6_editors_pick
+label: d6_editors_pick
+migration_tags:
+  - Drupal 6
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+migration_group: cwgroup
+source:
+  plugin: d6_node
+  node_type: editors_pick
+process:
+#  nid and vid commented out will allow them to autoincrement. Safe as long
+#    as nothing else is referencing them.
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: editors_pick
+  path: alias
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid:
+    plugin: default_value
+    default_value: 1
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: "full_html"
+  'body/value': body
+  field_teaser: field_teaser
+  field_layout: field_layout
+  field_editor_type: field_editors_listing_page
+  field_top_story_node_ref: field_top_story_node_ref
+  field_publish_site: field_publish_site
+  field_guid: field_guid
+  field_new_guid: field_new_guid
+  #field_org_url: field_org_url
+  #field_cio_anniversary: field_cio_anniversary
+  field_new_idg_taxonomy: field_new_idg_taxonomy
+  field_it_road_map: field_it_road_map
+  field_home_page_image: field_home_page_image
+  # field_home_page_image:
+  #     plugin: new_cck_file
+  #     source: field_home_page_image
+destination:
+  plugin: entity:node
+migration_dependencies: {}

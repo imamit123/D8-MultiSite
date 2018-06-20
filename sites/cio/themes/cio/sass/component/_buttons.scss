@@ -1,0 +1,89 @@
+/**
+ * @file
+ * Styles for cio buttons.
+ */
+
+.button {
+	 &:hover {
+
+  }
+  &:active {
+
+  }
+  &:focus {
+
+  }
+  &:visited {
+
+  }
+}
+
+/*
+** style for webform cio site.
+*/
+
+.common-detail-pages {
+	.views-field-webform {
+		clear: both;
+	}
+}
+
+.webform-submission-form {
+	margin-top: 10px;
+	label {
+		display: block;
+		font-family: 'OpenSansBold', sans-serif;
+	}
+	input {
+		height: 21px;
+    font-size: 13px;
+	}
+	input[type="submit"] {
+		height: auto;
+		font-size: 13px;
+	}		
+	.description {
+		font-size: 13px;
+    margin-top: 5px;
+	}
+	.form-type-webform-markup {
+		font-family: "OpenSansRegular", sans-serif;
+    font-size: 18px;
+    &:empty {
+    	display: none;
+    }
+	}
+}
+
+.download-btn {
+	background: $color-btn;
+  color: $color-white;
+  padding: 10px 15px;
+  margin-top: 10px;
+  float: right;
+  display: inline-block;
+  &:hover, &:focus {
+  	background: $color-secondary;
+  }
+}
+
+/*
+** add style for special agenda page.
+*/ 
+a[href="/specials/agenda-2018"] {
+	+ .tabs-content {
+		> div a {
+		  font-size: 14px !important;
+		  padding: 7px 19.8px;
+		  font-weight: bold;
+		}  
+	}  
+}
+
+a[href="/specials/agenda-2018"] {
+	+ .tabs-content {
+		> div div a:nth-child(n+7) {
+  		background: #22c0c1 !important;
+  	}
+ 	} 		
+}

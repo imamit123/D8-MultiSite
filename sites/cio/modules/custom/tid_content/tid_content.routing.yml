@@ -1,0 +1,7 @@
+tid_content.generate:
+  path: '/generate_wf_tid'
+  defaults:
+    _controller: '\Drupal\tid_content\Controller\WebformGen::generate_tid'
+    _title: 'Hello'
+  requirements:
+    _permission: 'access content'

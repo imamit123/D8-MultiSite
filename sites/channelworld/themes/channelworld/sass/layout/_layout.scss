@@ -1,0 +1,84 @@
+.container {
+  @include push--auto();
+  max-width: 1080px;
+  width: 100%;
+}
+
+.layout {
+  min-height: 300px;
+  margin-top: 14px;
+  background: $color-white;
+  padding: 20px;
+  @media (max-width: 767px) {
+    padding: 20px 10px;
+  }
+}
+
+@media all and (min-width: 768px) {
+  .main-content {
+    float: left; /* LTR */
+    position: relative;
+  }
+  .two-sidebars {
+    .main-content {
+      width: 50%;
+      padding: 0 10px;
+    }
+    .layout {
+      @include flexbox();
+    }
+  }
+  .one-sidebar {
+    .main-content {
+      width: 69.3%;
+      max-width: 720px;
+    }
+    .layout {
+  /*     @include flexbox();
+  @include flex-wrap(wrap);
+   */
+    }
+  }
+  .no-sidebars {
+    .main-content {
+      width: 100%;
+    }
+  }
+  .sidebar-first {
+    .main-content {
+      margin-right: 0; /* LTR */
+      padding: 0 0 0 10px;
+    }
+  }
+  .sidebar-second {
+    .main-content {
+      margin-left: 0;
+      padding: 0 10px 0 0;
+    }
+  }
+}
+
+.flex-container {
+  .region {
+    @include flexbox();
+    @include justify-content(space-between);
+    @include align-items(center);
+  }
+}
+
+.flex-column {
+  .region {
+    @include flexbox();
+    @include flex-wrap(wrap);
+    @include flex-direction(column);
+    @include align-items(center);
+  }
+}
+
+main {
+  &:before, &:after {
+    content: "";
+    display: table;
+    width: 100%;
+  }
+}

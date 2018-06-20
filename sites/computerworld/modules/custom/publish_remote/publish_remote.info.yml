@@ -1,0 +1,5 @@
+name: 'Publish Remote content'
+description:  'Remotely publish content'
+type: module
+core: 8.x
+version: 8.x

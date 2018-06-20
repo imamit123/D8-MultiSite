@@ -1,0 +1,14 @@
+/************ mobile home *************/
+.mobile {
+  .view-footer {
+    margin-top: -8px;
+    .views-row {
+      &:first-child {
+        padding-right: 1.5px;
+      }
+      &:last-child {
+        padding-left: 1.5px;
+      }
+    }
+  }
+}

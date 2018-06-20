@@ -1,0 +1,43 @@
+.custom-title  {
+  h2 {
+    font-family: $font-secondary-bold;
+    color: $color-lightblack;
+    border-bottom: 2px solid $color-secondary;
+    margin-bottom: 15px;
+    font-size: 16px;
+    padding-bottom: 5px;
+    margin-top: 0;
+    @at-root .ms#{&} {
+      margin-bottom: 20px;
+    }
+    @at-root .title-img.video-img#{&} {
+      position: relative;
+      border-bottom: 0 none;
+      padding-left: 40px;
+      margin-bottom: 10px;
+      &:before {
+        background: $social-icons;
+        background-position: -187px -33px;
+        content: "";
+        width: 26px;
+        display: block;
+        position: absolute;
+        height: 29px;
+        left: 0px;
+        top: -6px;
+      }
+    }
+  }
+}
+.page-title, .block-title {
+  font-family: $font-secondary-bold;
+  color: $color-lightblack;
+  border-bottom: 2px solid $color-secondary;
+  margin-bottom: 15px;
+  font-size: 16px;
+  padding-bottom: 5px;
+  margin-top: 0;
+  &:empty {
+    display: none;
+  }
+}

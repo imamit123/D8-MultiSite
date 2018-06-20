@@ -1,0 +1,116 @@
+.main__menu {
+  padding-left: 15px;
+  .menu {
+    background: #333333;
+    color: #fff;
+    width: 100%;
+    @media(min-width: 768px) {
+      float: left;
+      margin: 0;
+      > li {
+        float: left;
+      }
+    }
+    @media (max-width: 768px) { 
+      margin: 5px -15px;
+      background: $color-white;
+    }
+    li {
+      position: relative;
+      padding-top: 0;
+      @media (max-width: 768px) {
+        border-bottom: 1px solid #dbdbdb;
+        text-align: center;
+      }  
+      a {
+        padding: 5px 18.5px;
+        font-size: 16px;
+        display: inline-block;
+        position: relative;
+        line-height: 27px;
+        @media (max-width: 768px) {
+          color: #333333;
+          font-family: VodafoneRgBd;
+          font-size: 14px;
+          padding: 8px;
+          display: block;
+        }
+        &.is-active {
+          background: #eaeaea;
+          color: #333333;
+        }
+        &:hover {
+          background-color: #eee;
+          color:#333;
+        }
+      }
+    }
+  }
+}
+
+.main__menu {
+  @media (max-width: 768px) {
+    display: none;
+    padding-left: 0;
+    .menu--main-menu {
+      padding: 0 10px 0 15px;
+      background: #fff;
+      max-width: 100% !important;
+      flex: 0 0 100%;
+    }
+  }
+  .region-menu {
+    @extend .row;
+    @media (max-width: 768px) {
+      margin: 0;
+    }  
+  }
+}
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu {
+    position: relative;
+    display: block;
+  }
+  .menuicon {
+    background: #ffffff none repeat scroll 0 0;
+    cursor: pointer;
+    float: right;
+    height: 35px;
+    padding: 6px 0 0;
+    width: 45px;
+    span {
+      background: #e90000 none repeat scroll 0 0;
+      display: block;
+      height: 3px;
+      margin: 3px auto 0;
+      width: 25px;
+    }
+    &.hidden-lg {
+      bottom: -1px;
+      display: block;
+      position: absolute;
+      right: 20px;
+    }
+    &.open {
+      span {
+        position: relative;
+        transition: all 500ms ease-in-out 0s;
+        &:nth-of-type(1) {
+          top: 6px;
+          transform: rotate(45deg);
+        }
+        &:nth-of-type(2) {
+          background-color: rgba(0,0,0,0);  
+        }
+        &:nth-of-type(3) {
+          top: -6px;
+          transform: rotate(-45deg);  
+        }  
+      }  
+    }  
+  }
+}

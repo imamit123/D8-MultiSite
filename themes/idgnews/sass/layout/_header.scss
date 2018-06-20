@@ -1,0 +1,108 @@
+body {
+	background: $image-body-bg;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	font-family: arial,sans-serif;
+	margin: 0 auto;
+}
+
+.user-logged-in {
+	margin: 0;
+	padding: 0;
+}
+
+.layout-container {
+	border-color: -moz-use-text-color rgba(0, 0, 0, 0.6) -moz-use-text-color rgba(0, 0, 0, 0.5);
+	border-left: 12px solid rgba(0, 0, 0, 0.5);
+	border-right: 12px solid rgba(0, 0, 0, 0.6);
+	border-style: none solid;
+	border-width: 0 12px;
+	box-shadow: 0 2px 6px 5px rgb(33, 22, 33);
+	height: auto;
+	margin: 0 auto;
+	width: 960px;
+}
+
+header {
+	background: $color-lightblack;
+	height: 182px;
+	position: relative;
+	.region-header {
+		margin: 0 auto;
+		width: 90%;
+	}
+	.site-logo {
+		display: inline-block;
+		padding-top: 28px;
+	}
+	.user {
+    float: right;
+    margin-right: 3em;
+    padding-top: 1em;
+	}
+	.username {
+		color: $color-grey;
+		font-style: italic;
+	}
+	.logout {
+		background-color: $color-lightred;
+    color: $color-white;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    margin-left: 10px;
+    padding: 6px 12px;
+    text-transform: uppercase;
+    text-decoration: none;
+	}   
+}
+
+.block-system-branding-block {
+	float: left;
+}
+
+.js {
+	.search-block-form {
+		float: right;
+		margin-top: 15px;
+		input.form-search {
+		  background: $image-searchbox;
+		  border: medium none;
+		  height: 29px;
+		  margin-right: -5px;
+		  width: 250px;
+		}
+		.form-submit {
+		  background: $image-searchicon;
+		  border: medium none;
+		  cursor: pointer;
+		  height: 31px;
+		  text-indent: -9999px;
+		  width: 32px;
+		}
+		.form-autocomplete {
+			background: none;
+			border: none;
+			&.ui-autocomplete-loading {
+				background: $image-searchbox;
+				border: none;
+			}
+		}
+	}		
+}
+
+.main {
+	background-color: $color-white;
+	border-top: 5px solid $color-skyblue;
+	display: inline-block;
+  margin-bottom: 90px;
+  min-height: 300px;
+  width: 100%;
+}
+
+.media-status {
+	margin-top: 2em;
+	text-align: center;	
+}

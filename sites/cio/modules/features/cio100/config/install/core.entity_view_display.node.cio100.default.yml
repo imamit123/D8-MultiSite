@@ -1,0 +1,138 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.cio100.body
+    - field.field.node.cio100.field_company
+    - field.field.node.cio100.field_crm_id
+    - field.field.node.cio100.field_designations
+    - field.field.node.cio100.field_excel_id
+    - field.field.node.cio100.field_home_page_image
+    - field.field.node.cio100.field_image_slideshow
+    - field.field.node.cio100.field_image_slideshows
+    - field.field.node.cio100.field_keynote_speaker
+    - field.field.node.cio100.field_name_of_the_winner
+    - field.field.node.cio100.field_new_idg_taxonomy
+    - field.field.node.cio100.field_special_award_text
+    - field.field.node.cio100.field_video
+    - node.type.cio100
+  module:
+    - entity_reference_revisions
+    - image
+    - text
+    - user
+id: node.cio100.default
+targetEntityType: node
+bundle: cio100
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_company:
+    weight: 104
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_crm_id:
+    weight: 111
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_designations:
+    weight: 103
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_excel_id:
+    weight: 110
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_home_page_image:
+    weight: 105
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_image_slideshow:
+    weight: 107
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    type: entity_reference_revisions_entity_view
+    region: content
+  field_image_slideshows:
+    type: entity_reference_revisions_entity_view
+    weight: 113
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    region: content
+  field_keynote_speaker:
+    weight: 108
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_name_of_the_winner:
+    weight: 102
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_new_idg_taxonomy:
+    weight: 112
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_special_award_text:
+    weight: 106
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_video:
+    weight: 109
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden: {  }

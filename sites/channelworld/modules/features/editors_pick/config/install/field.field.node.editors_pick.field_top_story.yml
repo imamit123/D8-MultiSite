@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_top_story
+    - node.type.editors_pick
+id: node.editors_pick.field_top_story
+field_name: field_top_story
+entity_type: node
+bundle: editors_pick
+label: 'Top Story References'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings: {  }
+field_type: entity_reference

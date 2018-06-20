@@ -1,0 +1,55 @@
+ul.social {
+  padding: 0;
+  margin: 5px 0 0 0;
+  li {
+    display: inline-block;
+    margin-left: 2px;
+    a {
+      background: $social-icons;
+      height: 26px;
+      width: 26px;
+      display: inline-block;
+      text-indent: -9999em;
+    }
+    &.tw {
+      a {
+        background-position: 0 0;
+        &:hover {
+          background-position: 0px -33px;
+        }
+      }
+    }
+    &.fb {
+      a {
+        background-position: -30px 0;
+        &:hover {
+          background-position: -31px -33px;
+        }
+      }
+    }
+    &.yt {
+      a {
+        background-position: -59px 0;
+        &:hover {
+          background-position: -61px -33px;
+        }
+      }
+    }
+    &.gp {
+      a {
+        background-position: -88px 0;
+        &:hover {
+          background-position: -91px -33px;
+        }
+      }
+    }
+    &.rss {
+      a {
+        background-position: -117px 0;
+        &:hover {
+          background-position: -121px -33px;
+        }
+      }
+    }
+  }
+}

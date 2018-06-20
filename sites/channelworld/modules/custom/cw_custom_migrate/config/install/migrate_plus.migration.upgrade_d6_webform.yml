@@ -1,0 +1,45 @@
+id: upgrade_d6_webform
+label: upgrade_d6_webform
+migration_tags:
+  - Drupal 6
+deriver: Drupal\node\Plugin\migrate\D6NodeDeriver
+migration_group: cwgroup
+source:
+  plugin: d6_node
+  node_type: webform
+process:
+#  nid and vid commented out will allow them to autoincrement. Safe as long
+#    as nothing else is referencing them.
+  nid: nid
+  vid: vid
+  webform: webform
+  type:
+    plugin: default_value
+    default_value: webform
+  path: alias
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid:
+    plugin: default_value
+    default_value: 1
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/format':
+    plugin: default_value
+    default_value: "full_html"
+  'body/value': body
+  field_guid: field_guid
+  field_event_knowledgevault_ref: field_event_knowledgevault_ref
+  field_idg_new_taxonomy: field_idg_new_taxonomy
+  field_it_road_map: field_it_road_map
+  field_new_guid: field_new_guid
+  field_file_attachments: field_file_attachments
+destination:
+  plugin: entity:node
+migration_dependencies: {}

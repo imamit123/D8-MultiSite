@@ -1,0 +1,19 @@
+name: 'Partner Tab'
+description: 'Provides Partner Tab content type and related configuration. '
+type: module
+core: 8.x
+dependencies:
+  - block
+  - block_class
+  - comment
+  - editors_pick
+  - field
+  - file
+  - image
+  - node
+  - partner_pages_tabs
+  - path
+  - text
+  - user
+  - views
+version: 8.x-1.1

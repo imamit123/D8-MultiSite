@@ -1,0 +1,55 @@
+/********** mixin ***********/
+@mixin linx ($link, $visit, $hover, $active) {
+  a {
+    color: $link;
+    text-decoration: none;
+    &:visited {
+      color: $visit;
+      text-decoration: none;
+    }
+    &:hover {
+      color: $hover;
+      text-decoration: none;
+    }
+    &:active {
+      color: $active;
+      text-decoration: none;
+    }
+  }
+}
+
+@mixin push--auto {
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}
+
+@mixin input-placeholder {
+  &.placeholder { @content; }
+  &:-moz-placeholder { @content; }
+  &::-moz-placeholder { @content; }
+  &:-ms-input-placeholder { @content; }
+  &::-webkit-input-placeholder { @content; }
+}
+
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+}
+
+@mixin font($font-family-base,$font-size-base,$font-style,$font-weight-base:normal,$line-height-base:auto) {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-style: $font-style;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+}
+
+@mixin nolink() {
+  cursor: default;
+  pointer-events: none;
+}

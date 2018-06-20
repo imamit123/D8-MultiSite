@@ -1,0 +1,9 @@
+cse.search:
+  path: '/g_search'
+  defaults:
+    _controller: '\Drupal\cse\Controller\CreateSearchController::create_search'
+    _title: 'FintechCentral: The Knowledge Hub For Everything On FinTech | FinTechCentral.in'
+  requirements:
+    _permission: 'access content'
+
+

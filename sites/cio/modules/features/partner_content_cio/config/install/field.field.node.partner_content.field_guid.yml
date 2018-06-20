@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_guid
+    - node.type.partner_content
+id: node.partner_content.field_guid
+field_name: field_guid
+entity_type: node
+bundle: partner_content
+label: Guid
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

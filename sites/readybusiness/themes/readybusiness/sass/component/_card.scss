@@ -1,0 +1,102 @@
+/*
+** card style.
+*/
+.card-layout {
+	.card-bg {
+		background: $color-bg-two;
+    min-width: 300px;
+	  min-height: 235px;
+	  position: relative;
+	  padding: 2px 20px;
+	  line-height: 1.1;
+	  &.card-bg-1 {
+	  	background: #f4f4f4;
+	  	min-height: 125px;
+	  }
+	}
+  img {
+    width: 300px;
+    height: 225px;
+    @media (max-width: 768px) {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  h4 {
+  	color: $color-grey;
+    font-weight: bold;
+    font-size: 22px;
+    margin-top: 10px;
+    margin-bottom: 13px;
+    min-height: 50px;
+  }
+  .card-bg-1 {
+  	.text-desc {
+  		margin: 15px 0;
+      font-size: 19px;
+  	}	
+  }
+  .text-desc {
+  	color: $color-grey;
+    font-family: $font-vodafone;
+    font-size: 17px;
+    line-height: 21px;
+    margin-top: -6px;
+  }
+  .readmore {
+    background: $color-red;
+    bottom: 20px;
+    color: $color-white;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0 9px;
+    position: absolute;
+    line-height: 1.4;
+    &:hover {
+      background: #494d4e;
+      color: $color-white;
+    }
+	}
+	.views-row {
+    margin-bottom: 20px;
+  }
+}
+.view-col {
+  .view-content, 
+  .views-infinite-scroll-content-wrapper {
+    @extend .row;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    justify-content: space-between;
+  }
+  .pager {
+    margin-top: 10px;
+    text-align: center;
+    .button {
+      background: #494d4e;
+      color: $color-white;
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 19px;
+      line-height: 1.4;
+      width: 128px;
+      &:hover {
+        background: $color-red;
+        color: $color-white;
+      }
+    }
+  }
+}
+.block-views {
+	h2 {
+		color: #e70000;
+    font-size: 34px;
+    font-family: "VodafoneRgBd";
+    margin: 18px 0 12px;
+	}
+}
+.layout-col2 {
+  .views-row {
+    width: 100%;
+  }
+}

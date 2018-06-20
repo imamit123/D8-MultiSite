@@ -1,0 +1,47 @@
+/* variables for the IDG site */
+
+$container: 1080px;
+
+/* color variables */
+$color-black: #000;
+$color-black-one: #28272a;
+$color-lightblack: #2d2d2d;
+$color-blackone: #211621;
+$color-white: #fff;
+$color-orange: #ffa500;
+$color-green: #8BBC35;
+$color-skyblue: #37a1e2;
+$color-skyelight: #37a0e1;
+$color-skytwo: #a5e4f2;
+$color-skyblue-light: #2d87be;
+$color-skyone: #cef3fa;
+$color-pink: #dd5280;
+$color-grey: #bfbfbf;
+$color-greyone: #808080;
+$color-greytwo: #dedede;
+$colo-lightgrey: #d3d3d3;
+$color-lightgreyone: #d2d2d2;
+$color-lightred: #f46d66;
+$color-blue: #3546ec;
+$color-yellow: #ffe13a;
+$color-red: #ff0000;
+$color-img-bg: #eef4f2;
+
+/* font variables */
+$font-robot: 'Roboto Slab', serif;
+$font-opensans: 'Open Sans', sans-serif;
+$font-size: 16px;
+
+/* images */
+/* images */
+$url: "../images"; 
+$image-body-bg: url('#{$url}/bg-img-png8.png') no-repeat center center fixed;
+$image-searchbox: url('#{$url}/searchlogo1.png') no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+$image-searchicon: url('#{$url}/searchlogo.png') no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+$image-logo-login: url('#{$url}/idg-cms-loginlogo.png') no-repeat;
+$image-submit: url('#{$url}/logintext-tab.png') no-repeat scroll 0 0 rgba(0,0,0,0);
+$image-title-bg: url('#{$url}/contentedcreatedbyyou-bg.png') no-repeat scroll 0 0 $color-skyelight;
+$image-draft-bg: url('#{$url}/sidebar-heading-logo.png') no-repeat scroll 0 0 rgba(0,0,0,0);
+$imag-goback: url('#{$url}/back_btn.png') repeat scroll 0 0 rgba(0,0,0,0);
+$image-toparrow: url('#{$url}/top-arrow.png') no-repeat scroll 0 0 $color-white;
+$image-filter: url('#{$url}/Contact-Filter.png') no-repeat;

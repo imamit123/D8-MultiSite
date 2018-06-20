@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.editors_pick
+id: node.editors_pick.sticky
+field_name: sticky
+entity_type: node
+bundle: editors_pick
+label: 'Sticky at the top of lists'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

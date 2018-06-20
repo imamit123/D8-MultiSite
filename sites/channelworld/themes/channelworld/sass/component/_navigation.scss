@@ -1,0 +1,56 @@
+/*
+** style for breadcrumb.
+*/
+.breadcrumb {
+	padding: 0;
+	li {
+		background: url('#{$url}/crumb-arrow.png') no-repeat -2px 5px;
+		color: $color-body-text;
+		font-size: 12px;
+		font-family: $font-scondary-light;
+		display: inline-block;
+		margin: 0 2px 0 0;
+		@media all and (max-width: 767px) {
+			display: inline;
+			background-position: -2px -2px;
+		}
+		&:before {
+			content: "";
+			display: inline-block;
+			height: 20px;
+    	width: 14px;
+		}
+		a {
+			color: $color-body-text;
+		}
+		&:first-child {
+			background: none;
+			&:after {
+				content: none !important; // remove first child after style. 
+			}
+		}
+		&:last-child {
+			&:after {
+				border-bottom: 1px solid $color-secondary-1;
+				content: "";
+				display: block;
+    		margin-left: 18px;
+    		@media all and (max-width: 767px) {
+    			border-bottom: none;
+    		}
+			}
+		}
+	}
+	ol {
+		margin-top: 4px;
+		@media all and (max-width: 767px) {
+			padding: 0 10px;
+		}
+		@media all and (min-width: 768px) and (max-width: 1024px) {
+			padding: 0 20px;
+		}	
+	}
+	.container {
+		padding: 0;
+	}
+}

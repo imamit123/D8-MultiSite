@@ -1,0 +1,65 @@
+/* font face desine for site */
+
+@font-face {
+  font-family: 'RobotoSlabBold';
+  src: url('fonts/RobotoSlabBold.eot');
+  src: url('fonts/RobotoSlabBold.eot') format('embedded-opentype'),
+      	url('fonts/RobotoSlabBold.woff2') format('woff2'),
+         url('fonts/RobotoSlabBold.woff') format('woff'),
+         url('fonts/RobotoSlabBold.ttf') format('truetype'),
+         url('fonts/RobotoSlabBold.svg#RobotoSlabBold') format('svg');
+}
+@font-face {
+  font-family: 'RobotoSlabLight';
+  src: url('fonts/RobotoSlabLight.eot');
+  src: url('fonts/RobotoSlabLight.eot') format('embedded-opentype'),
+       url('fonts/RobotoSlabLight.woff2') format('woff2'),
+       url('fonts/RobotoSlabLight.woff') format('woff'),
+       url('fonts/RobotoSlabLight.ttf') format('truetype'),
+       url('fonts/RobotoSlabLight.svg#RobotoSlabLight') format('svg');
+}
+@font-face {
+  font-family: 'RobotoSlabRegular';
+  src: url('fonts/RobotoSlabRegular.eot');
+  src: url('fonts/RobotoSlabRegular.eot') format('embedded-opentype'),
+       url('fonts/RobotoSlabRegular.woff2') format('woff2'),
+       url('fonts/RobotoSlabRegular.woff') format('woff'),
+       url('fonts/RobotoSlabRegular.ttf') format('truetype'),
+       url('fonts/RobotoSlabRegular.svg#RobotoSlabRegular') format('svg');
+}
+@font-face {
+  font-family: 'RobotoSlabThin';
+  src: url('fonts/RobotoSlabThin.eot');
+  src: url('fonts/RobotoSlabThin.eot') format('embedded-opentype'),
+       url('fonts/RobotoSlabThin.woff2') format('woff2'),
+       url('fonts/RobotoSlabThin.woff') format('woff'),
+       url('fonts/RobotoSlabThin.ttf') format('truetype'),
+       url('fonts/RobotoSlabThin.svg#RobotoSlabThin') format('svg');
+}
+@font-face {
+  font-family: 'OpenSansBold';
+  src: url('fonts/OpenSansBold.eot');
+  src: url('fonts/OpenSansBold.eot') format('embedded-opentype'),
+       url('fonts/OpenSansBold.woff2') format('woff2'),
+       url('fonts/OpenSansBold.woff') format('woff'),
+       url('fonts/OpenSansBold.ttf') format('truetype'),
+       url('fonts/OpenSansBold.svg#OpenSansBold') format('svg');
+}
+@font-face {
+  font-family: 'OpenSansLight';
+  src: url('fonts/OpenSansLight.eot');
+  src: url('fonts/OpenSansLight.eot') format('embedded-opentype'),
+       url('fonts/OpenSansLight.woff2') format('woff2'),
+       url('fonts/OpenSansLight.woff') format('woff'),
+       url('fonts/OpenSansLight.ttf') format('truetype'),
+       url('fonts/OpenSansLight.svg#OpenSansLight') format('svg');
+}
+@font-face {
+  font-family: 'OpenSansRegular';
+  src: url('fonts/OpenSansRegular.eot');
+  src: url('fonts/OpenSansRegular.eot') format('embedded-opentype'),
+       url('fonts/OpenSansRegular.woff2') format('woff2'),
+       url('fonts/OpenSansRegular.woff') format('woff'),
+       url('fonts/OpenSansRegular.ttf') format('truetype'),
+       url('fonts/OpenSansRegular.svg#OpenSansRegular') format('svg');
+}

@@ -1,0 +1,15 @@
+/* style for column layout */
+.sidebar-second {
+	.layout-content {
+		float: left;
+	  margin-right: 1.5%;
+	  width: 64.5%;
+	}
+	.layout-sidebar-second {
+	  float: left;
+    background: $color-skytwo;
+    margin-bottom: 20px;
+    margin-top: 4em;
+    width: 326px;
+  }  
+}

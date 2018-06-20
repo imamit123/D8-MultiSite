@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_layout
+    - node.type.editors_pick
+  module:
+    - options
+id: node.editors_pick.field_layout
+field_name: field_layout
+entity_type: node
+bundle: editors_pick
+label: 'Design Layout'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

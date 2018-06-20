@@ -1,0 +1,148 @@
+/* include all partial files */
+/* variables for the IDG site */
+/* color variables */
+/* font variables */
+/* images */
+/* images */
+/********** mixin ***********/
+/* layout files */
+body {
+  font-family: arial,sans-serif;
+  margin: 0 auto;
+}
+
+.user-logged-in {
+  margin: 0;
+  padding: 0;
+  background: url("../images/bg-img-png8.png") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.layout-container {
+  border-color: -moz-use-text-color rgba(0, 0, 0, 0.6) -moz-use-text-color rgba(0, 0, 0, 0.5);
+  border-left: 12px solid rgba(0, 0, 0, 0.5);
+  border-right: 12px solid rgba(0, 0, 0, 0.6);
+  border-style: none solid;
+  border-width: 0 12px;
+  -webkit-box-shadow: 0 2px 6px 5px #211621;
+          box-shadow: 0 2px 6px 5px #211621;
+  height: auto;
+  margin: 0 auto;
+  width: 960px;
+}
+
+header {
+  background: #2d2d2d;
+  height: 182px;
+  position: relative;
+}
+
+header .region-header {
+  margin: 0 auto;
+  width: 90%;
+}
+
+header .site-logo {
+  display: inline-block;
+  padding-top: 28px;
+}
+
+.block-system-branding-block {
+  float: left;
+}
+
+.search-block-form {
+  clear: right;
+  float: right;
+}
+
+.search-block-form .form-search {
+  background: url("../images/searchlogo1.png") no-repeat scroll 0 0 transparent;
+  border: medium none;
+  height: 28.7px;
+  margin-right: -5px;
+  width: 250px;
+}
+
+.search-block-form .form-submit {
+  background: url("../images/searchlogo.png") no-repeat scroll 0 0 transparent;
+  border: medium none;
+  cursor: pointer;
+  height: 31px;
+  text-indent: -9999px;
+  width: 32px;
+}
+
+.menu--account {
+  float: right;
+}
+
+.main {
+  background-color: #fff;
+  border-top: 5px solid #37a1e2;
+  margin-bottom: 90px;
+}
+
+/* component */
+.menu--main {
+  position: absolute;
+  bottom: 0;
+}
+
+.menu--main .menu {
+  display: block;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.menu--main .menu li {
+  background-color: #37a1e2;
+  color: #fff;
+  float: left;
+  margin-right: 4px;
+  padding-top: 0;
+}
+
+.menu--main .menu li:nth-child(2) {
+  background-color: #8BBC35;
+}
+
+.menu--main .menu li:nth-child(3) {
+  background-color: #dd5280;
+}
+
+.menu--main .menu li:nth-child(4) {
+  background-color: #ffa500;
+}
+
+.menu--main .menu li a {
+  display: block;
+  height: 50px;
+  font-size: 1.2em;
+  line-height: 50px;
+  color: #fff;
+  text-decoration: none;
+  padding: 0 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: arial;
+  width: 155px;
+  text-align: center;
+}
+
+.menu--main .menu li:hover:nth-child(1) {
+  background: none repeat scroll 0 0 rgba(55, 161, 226, 0.75);
+  color: #fff;
+}
+
+.menu--main .menu li:hover:nth-child(2) {
+  background: none repeat scroll 0 0 rgba(139, 188, 53, 0.75);
+  color: #fff;
+}
+
+.menu--main .menu li:hover:nth-child(3) {
+  background: none repeat scroll 0 0 rgba(221, 82, 128, 0.75);
+  color: #fff;
+}
+
+/*# sourceMappingURL=style.css.map */

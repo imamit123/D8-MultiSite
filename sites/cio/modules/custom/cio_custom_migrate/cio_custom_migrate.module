@@ -1,0 +1,862 @@
+<?php
+
+ /**
+  * @file
+  * Contains custom_migrate.module.
+  */
+use Drupal\migrate\Row;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\file\Entity\File;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\WebformInterface;
+
+/**
+  * Implements hook_migrate_prepare_row().
+  */
+ function cio_custom_migrate_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+
+  if ($migration->id() == 'cio_d6_user') {
+     $uid = $row->getSourceProperty('uid');
+     $user = $source->getDatabase()->select('role', 'r');
+     $user->join('users_roles', 'ur', 'r.rid = ur.rid');
+     $user->fields('r', array('rid','name'));
+     $user->fields('ur', array('uid'));
+     $user->condition('ur.uid', $uid);
+     $user_result = $user->execute()->fetchAll();
+     //drupal function
+     $roles_list = user_role_names();
+     foreach ($user_result as $key => $val) {
+         $machine_name[]  = array_search($val->name,$roles_list);
+      }
+    $row->setSourceProperty('roles', $machine_name);
+    }
+   if ($migration->id() == 'upgrade_d6_webform') {
+
+     $nid = $row->getSourceProperty('nid');
+
+     $webform = $source->getDatabase()->select('node', 'n');
+     $webform->join('webform', 'w', 'w.nid = n.nid');
+    ///$webform->join('webform_component', 'wc', 'wc.nid = n.nid');
+     $webform->fields('n', array('nid','title'));
+     //$webform->fields('wc');
+     $webform->fields('w');
+     $webform->condition('n.type', 'webform');
+     $webform->condition('n.nid', $nid);
+     $webform_title = $webform->execute()->fetchAll();
+
+     print_r($webform_title);
+
+     $webform_handler_manager = \Drupal::service('plugin.manager.webform.handler');
+
+     $webform_handler = $webform_handler_manager->createInstance('email');
+
+     $web_title = $webform_title['0']->title;
+
+     $web_email = $webform_title['0']->email;
+
+     $web_from = $webform_title['0']->email_from_name;
+
+     $email_from_name = $webform_title['0']->email_from_name;
+
+     $email_from_address = $webform_title['0']->email_from_address;
+
+     $email_subject = $webform_title['0']->email_subject;
+
+
+     $webform = Webform::create(['id' => $nid, 'title' => $web_title]);
+
+      $webform_handler->setConfiguration([
+      'id' => 'email',
+      'label' => 'Email',
+      'handler_id' => 'email',
+      'status' => TRUE,
+      'weight' => 0,
+      'settings' => [
+      'states' => ['completed'],
+      'to_mail' => $web_email,
+      'to_options' => array(),
+      'cc_mail' => '',
+      'cc_options' => array(),
+      'bcc_mail' => '',
+      'bcc_options' => array(),
+      'from_mail' => $web_from,
+      'from_options' => array(),
+      'from_name' => $email_from_name,
+      'subject' => $email_subject,
+      'body' => '[webform_submission:values:message:value]',
+      'excluded_elements' => [],
+      'html' => TRUE,
+      'attachments' => FALSE,
+      'debug' => 0,
+      'reply_to' => '',
+      'return_path' => '',
+    ],
+  ]);
+     //$webform->setElements($elements);
+    //$webform->add_email('somebody@example.tld');
+    $webform->save();
+
+    $webform->setOriginalId($webform->id());
+
+  // Add handle to the webform, which triggers another save().
+    $webform->addWebformHandler($webform_handler);
+    $target_id_dest = $webform->Id();
+    $wforms[] = array('target_id' => $target_id_dest);
+    $row->setSourceProperty('webform', $wforms);
+
+    $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+    $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+    $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+    $query_idg_new_taxonomy->condition('d.vid', '24');
+    $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+         $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+         foreach ($results_idg_new_taxonomy as $key => $val) {
+           $idg_new_taxonomy[$key]['target_id'] = $key;
+           $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+         }
+         $row->setSourceProperty('field_new_idg_taxonomy', $idg_new_taxonomy);
+
+         //IT Road Map -- Open
+      $query_it_road_map = $source->getDatabase()->select('term_node', 'n');
+      $query_it_road_map->fields('n', array('tid','nid'));
+      $query_it_road_map->join('term_data', 'd', 'n.tid = d.tid');
+      $query_it_road_map->condition('d.vid', '31');
+      $query_it_road_map->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_it_road_map = $query_it_road_map->execute()->fetchAllKeyed();
+      foreach ($results_it_road_map as $key => $val) {
+        $it_road_map[$key]['target_id'] = $key;
+        $it_road_map[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_it_road_map', $it_road_map);
+      //IT Road Map -- Close
+
+      //File Attachment -- Open
+      $query_fa = $source->getDatabase()->select('upload', 'u');
+      $query_fa->fields('u', array('fid','vid','description','list','weight'));
+      $query_fa->condition('u.nid', $row->getSourceProperty('nid'));
+      $query_fa->orderBy('fid', 'ASC');
+      //$query_fa->sort('fid', 'DESC');
+      $mt_results_fa = $query_fa->execute()->fetchAll();
+      foreach ($mt_results_fa as $key => $value) {
+        $fa[$key]['target_id'] = $value->fid;
+        $fa[$key]['target_type'] = 'files';
+        $fa[$key]['description'] = $value->description;
+      }
+    $row->setSourceProperty('field_file_attachments', $fa);
+
+   // print_r($row);
+    }
+   // if ($migration->id() == 'drupal6_images') {
+   // // drush_print_r($row);
+   // }
+   if ($migration->id() == 'program_image') {
+     //print_r($row);
+         $original_path = $row->getSourceProperty('filepath');
+         $new_path = str_replace('sites/default/files/', 'public://', $original_path);
+         $row->setSourceProperty('filepath', $new_path);
+   }
+   
+   if ($migration->id() == 'program_image_new') {
+
+     //print_r($row);
+        $original_path = $row->getSourceProperty('filepath');
+        $new_path = str_replace('sites/default/files/', 'public://', $original_path);
+         $row->setSourceProperty('filepath', $new_path);
+   }
+
+
+   // if ($migration->id() == 'author_profile') {
+   //   //print_r($row);
+   //   //IDG NEW TAXONOMY -- Open
+   //     // $nid = $row->getSourceProperty('nid');
+   //     //     $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+   //     //     $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+   //     //     $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+   //     //     $query_idg_new_taxonomy->condition('d.vid', '24');
+   //     //     $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+   //     //     $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+   //     //     foreach ($results_idg_new_taxonomy as $key => $val) {
+   //     //       $idg_new_taxonomy[$key]['target_id'] = $key;
+   //     //       $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+   //     //     }
+   //     //     $row->setSourceProperty('field_new_idg_taxonomy', $idg_new_taxonomy);
+
+   //         $query = $source->getDatabase()->select('url_alias', 'ua')
+   //         ->fields('ua', ['dst']);
+   //         $query->condition('ua.src', 'node/' . $nid);
+   //         $alias = $query->execute()->fetchField();
+   //         $row->setSourceProperty('alias', '/' . $alias);
+   // }
+
+
+   if ($migration->id() == 'd6_cio100') {
+
+   //IDG NEW TAXONOMY -- Open
+        print $nid = $row->getSourceProperty('nid');
+       
+        $row->setSourceProperty('field_guid_version', '');
+
+         $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+         $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+         $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+         $query_idg_new_taxonomy->condition('d.vid', '24');
+         $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+         $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+         foreach ($results_idg_new_taxonomy as $key => $val) {
+           $idg_new_taxonomy[$key]['target_id'] = $key;
+           $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+         }
+         $row->setSourceProperty('field_new_idg_taxonomy', $idg_new_taxonomy);
+
+
+          //File homepage -- Open
+      $query_fa = $source->getDatabase()->select('content_field_home_page_image', 'f');
+      $query_fa->fields('f', array('field_home_page_image_fid','nid'));
+      $query_fa->condition('f.nid', $row->getSourceProperty('nid'));
+      $mt_results_fa = $query_fa->execute()->fetchAll();
+      foreach ($mt_results_fa as $key => $value) {
+        $fa[$key]['target_id'] = $value->field_home_page_image_fid;
+        $fa[$key]['target_type'] = 'files';
+      }
+      $row->setSourceProperty('field_home_page_image', $fa);
+
+      //SlideShow
+     $query_paragraphs_fid = $source->getDatabase()->select('content_field_slide_image', 'fsi');
+     $query_paragraphs_fid->fields('fsi', array('nid','field_slide_image_fid','delta'));
+     $query_paragraphs_fid->orderBy('fsi.delta', 'ASC');
+     $query_paragraphs_fid->condition('fsi.nid', $row->getSourceProperty('nid'));
+     $mt_results_paragraphs_fid = $query_paragraphs_fid->execute()->fetchAll();
+    foreach ($mt_results_paragraphs_fid as $key => $value) {
+      if ($value->field_slide_image_fid) {
+        //Caption
+        $query_caption = $source->getDatabase()->select('content_field_slide_caption', 'c');
+        $query_caption->fields('c', array('field_slide_caption_value'));
+        $query_caption->condition('c.nid', $row->getSourceProperty('nid'));
+        $query_caption->condition('c.delta', $value->delta);
+        $mt_results_caption = $query_caption->execute()->fetchAssoc();
+        //Description
+        $query_description = $source->getDatabase()->select('content_field_slide_desc', 'd');
+        $query_description->fields('d', array('field_slide_desc_value'));
+        $query_description->condition('d.nid', $row->getSourceProperty('nid'));
+        $query_description->condition('d.delta', $value->delta);
+        $mt_results_description = $query_description->execute()->fetchAssoc();
+        //end
+       $file = File::load($value->field_slide_image_fid);
+       $ppt_values = array(
+           'id' => NULL,
+           'type' => 'slideshow',
+           'field_slideshow_description' => array('value' => $mt_results_description['field_slide_desc_value'], 'format' => 'full_html'),
+           'field_slideshow_caption' => $mt_results_caption['field_slide_caption_value'],
+           'field_image' => $file,
+           );
+        $ppt_paragraph = Paragraph::create($ppt_values);
+        $ppt_paragraph->save();
+        $target_id_dest = $ppt_paragraph->Id();
+        $target_revision_id_dest = $ppt_paragraph->getRevisionId();
+        $paragraphs[] = array('target_id' => $target_id_dest, 'target_revision_id' => $target_revision_id_dest);
+       }
+       }
+       $row->setSourceProperty('field_image_slideshow', $paragraphs);
+        //Slideshow End
+
+       //File Attachment -- Open
+      $query_fu = $source->getDatabase()->select('upload', 'u');
+      $query_fu->fields('u', array('fid','vid','description','list','weight'));
+      $query_fu->condition('u.nid', $row->getSourceProperty('nid'));
+      $query_fu->orderBy('fid', 'ASC');
+      //$query_fa->sort('fid', 'DESC');
+      $mt_results_fu = $query_fu->execute()->fetchAll();
+      foreach ($mt_results_fu as $key => $value) {
+        $fu[$key]['target_id'] = $value->fid;
+        $fu[$key]['target_type'] = 'files';
+        $fu[$key]['description'] = $value->description;
+      }
+       $row->setSourceProperty('field_file_attachments', $fu);
+
+       //common category starts
+
+          $value2[0]['target_id'] = '4338';
+          $value2[0]['target_type'] = 'taxonomy_term';
+
+        $row->setSourceProperty('field_common_category', $value2);
+      //common category ends
+
+         //CIO 100 Special Awards -- Open
+
+        //  $field_cio_100_special_awards = $source->getDatabase()->select('term_node', 'n');
+        //  $field_cio_100_special_awards->fields('n', array('tid','nid'));
+        //  $field_cio_100_special_awards->join('term_data', 'd', 'n.tid = d.tid');
+        //  $field_cio_100_special_awards->condition('d.vid', '29');
+        //  $field_cio_100_special_awards->condition('n.nid', $row->getSourceProperty('nid'));
+        //  $result_cio_100_special_awards = $field_cio_100_special_awards->execute()->fetchAllKeyed();
+        //  foreach ($result_cio_100_special_awards as $key => $val) {
+        //    $cio_100_special_awards[$key]['target_id'] = $key;
+        //    $cio_100_special_awards[$key]['target_type'] = 'taxonomy_term';
+        //  }
+        //  $row->setSourceProperty('field_cio_100_special_awards', $cio_100_special_awards);
+
+
+        //  //CIO 100 Years -- Open
+
+        // $field_cio_100_years = $source->getDatabase()->select('term_node', 'n');
+        //  $field_cio_100_years->fields('n', array('tid','nid'));
+        //  $field_cio_100_years->join('term_data', 'd', 'n.tid = d.tid');
+        //  $field_cio_100_years->condition('d.vid', '28');
+        //  $field_cio_100_years->condition('n.nid', $row->getSourceProperty('nid'));
+        //  $result_field_cio_100_years = $field_cio_100_years->execute()->fetchAllKeyed();
+        //  foreach ($result_field_cio_100_years as $key => $val) {
+        //    $cio_100_years[$key]['target_id'] = $key;
+        //    $cio_100_years[$key]['target_type'] = 'taxonomy_term';
+        //  }
+        //  $row->setSourceProperty('field_cio_100_years', $cio_100_years);
+         //Field Teaser Open
+      $query_field_teaser = $source->getDatabase()->select('content_field_teaser', 't');
+      $query_field_teaser->fields('t', array('field_teaser_value','field_teaser_format'));
+      $query_field_teaser->condition('t.nid', $row->getSourceProperty('nid'));
+      $result_field_teaser = $query_field_teaser->execute()->fetchAll();
+      foreach ($result_field_teaser as $key => $value) {
+        $field_teaser[0]['value'] = $value->field_teaser_value;
+        $field_teaser[0]['format'] = "full_html";
+      }
+      $row->setSourceProperty('field_teaser', $field_teaser);
+
+      //company+title
+      $query_field_company = $source->getDatabase()->select('content_type_cio100', 't');
+      $query_field_company->fields('t', array('field_company_value'));
+      $query_field_company->condition('t.nid', $row->getSourceProperty('nid'));
+      $query_field_company_value = $query_field_company->execute()->fetchAll();
+      $title = $row->getSourceProperty('title');
+      $custom_title = $title .', '.$query_field_company_value[0]->field_company_value;
+
+      $row->setSourceProperty('title', $custom_title);
+
+
+
+      //New Guid
+      $field_new_guid_value = $source->getDatabase()->select('content_field_new_guid', 't');
+      $field_new_guid_value->fields('t', array('field_new_guid_value'));
+      $field_new_guid_value->condition('t.nid', $row->getSourceProperty('nid'));
+      $field_new_guid_result = $field_new_guid_value->execute()->fetchAll();
+
+      $row->setSourceProperty('field_new_guid', $field_new_guid_result[0]->field_new_guid_value);
+
+      //Guid Version
+      $field_guid_version = $source->getDatabase()->select('content_field_guid', 't');
+      $field_guid_version->fields('t', array('field_guid_value'));
+      $field_guid_version->condition('t.nid', $row->getSourceProperty('nid'));
+      $field_guid_version_result = $field_guid_version->execute()->fetchAll();
+      $row->setSourceProperty('field_guid_version', $field_guid_version_result[0]->field_guid_value);
+
+
+         //url alias
+           $query = $source->getDatabase()->select('url_alias', 'ua')
+           ->fields('ua', ['dst']);
+           $query->condition('ua.src', 'node/' . $nid);
+           $alias = $query->execute()->fetchField();
+           $row->setSourceProperty('alias', '/' . $alias);
+           $process = $migration->getProcess();
+          //print_r($row);
+
+
+   }
+
+   // ID from the migrate.migration.d6_article.yml.
+   if ($migration->id() == 'd6_article') {
+    echo $row->getSourceProperty('nid'); echo "<br>";
+      $uid = $row->getSourceProperty('node_uid');
+      $row->setSourceProperty('uid', $uid);
+      //Fetch Value from D6 DataBase.
+      $query = $source->getDatabase()->select('term_node', 'n');
+      $query->fields('n', array('tid','nid'));
+      $query->join('term_data', 'd', 'n.tid = d.tid');
+      $query->condition('d.vid', '30');
+      $query->condition('n.nid', $row->getSourceProperty('nid'));
+      $mt_results = $query->execute()->fetchAllKeyed();
+
+      //Fetch Valuse from Custom table
+      // $query1 = $source->getDatabase()->select('content_categorization', 'n');
+      // $query1->fields('n', array('agency','company'));
+      // $query1->condition('n.nid', $row->getSourceProperty('nid'));
+      // $mt_results1 = $query1->execute()->fetchAllKeyed();
+      // foreach ($mt_results1 as $key => $value) {
+
+      //   $agency = getTidByName($key, 'select_agency');
+      //   $company = getTidByName($value, 'select_company');
+      //   $select_agency[0]['target_id'] = $agency;
+      //   $select_agency[0]['target_type'] = 'taxonomy_term';
+      //   $select_company[0]['target_id'] = $company;
+      //   $select_company[0]['target_type'] = 'taxonomy_term';
+
+      //   $row->setSourceProperty('field_hidden_agency_name', $key);
+      //   $row->setSourceProperty('field_hidden_company_name', $value);
+
+      // }
+      // $row->setSourceProperty('field_select_agency', $select_agency);
+      // $row->setSourceProperty('field_select_company', $select_company);
+
+      //IDG NEW TAXONOMY -- Open
+      $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+      $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+      $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+      $query_idg_new_taxonomy->condition('d.vid', '24');
+      $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+      foreach ($results_idg_new_taxonomy as $key => $val) {
+        $idg_new_taxonomy[$key]['target_id'] = $key;
+        $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_new_idg_taxonomy', $idg_new_taxonomy);
+      //IDG NEW TAXONOMY -- Close
+
+      //IT Road Map -- Open
+      $query_it_road_map = $source->getDatabase()->select('term_node', 'n');
+      $query_it_road_map->fields('n', array('tid','nid'));
+      $query_it_road_map->join('term_data', 'd', 'n.tid = d.tid');
+      $query_it_road_map->condition('d.vid', '31');
+      $query_it_road_map->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_it_road_map = $query_it_road_map->execute()->fetchAllKeyed();
+      foreach ($results_it_road_map as $key => $val) {
+        $it_road_map[$key]['target_id'] = $key;
+        $it_road_map[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_it_road_map', $it_road_map);
+      //IT Road Map -- Close
+
+      // //IDG Content Category -- Open
+      // $query_content_category = $source->getDatabase()->select('term_node', 'n');
+      // $query_content_category->fields('n', array('tid','nid'));
+      // $query_content_category->join('term_data', 'd', 'n.tid = d.tid');
+      // $query_content_category->condition('d.vid', '3');
+      // $query_content_category->condition('n.nid', $row->getSourceProperty('nid'));
+      // $results_content_category = $query_content_category->execute()->fetchAllKeyed();
+      // foreach ($results_content_category as $key => $val) {
+      //   $content_category[0]['target_id'] = $key;
+      //   $content_category[0]['target_type'] = 'taxonomy_term';
+      // }
+      // $row->setSourceProperty('content_category', $content_category);
+      //IDG Content Category -- Close
+
+      //CIO Case Study Industry Vertical -- Open
+      $query_cio_case_study_industry_vertical = $source->getDatabase()->select('term_node', 'n');
+      $query_cio_case_study_industry_vertical->fields('n', array('tid','nid'));
+      $query_cio_case_study_industry_vertical->join('term_data', 'd', 'n.tid = d.tid');
+      $query_cio_case_study_industry_vertical->condition('d.vid', '23');
+      $query_cio_case_study_industry_vertical->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_cio_case_study_industry_vertical = $query_cio_case_study_industry_vertical->execute()->fetchAllKeyed();
+      foreach ($results_cio_case_study_industry_vertical as $key => $val) {
+        $cio_case_study_industry_vertical[0]['target_id'] = $key;
+        $cio_case_study_industry_vertical[0]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_case_study_industry', $cio_case_study_industry_vertical);
+      //CIO Case Study Industry Vertical -- Close
+
+      //CIO Case Study Technology -- Open
+      $query_cio_case_study_technology = $source->getDatabase()->select('term_node', 'n');
+      $query_cio_case_study_technology->fields('n', array('tid','nid'));
+      $query_cio_case_study_technology->join('term_data', 'd', 'n.tid = d.tid');
+      $query_cio_case_study_technology->condition('d.vid', '21');
+      $query_cio_case_study_technology->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_cio_case_study_technology = $query_cio_case_study_technology->execute()->fetchAllKeyed();
+      foreach ($results_cio_case_study_technology as $key => $val) {
+        $cio_case_study_technology[0]['target_id'] = $key;
+        $cio_case_study_technology[0]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_case_study_technology', $cio_case_study_technology);
+      //CIO Case Study Technology -- Close
+
+      //File Attachment -- Open
+      $query_fa = $source->getDatabase()->select('upload', 'u');
+      $query_fa->fields('u', array('fid','vid','description','list','weight'));
+      $query_fa->condition('u.nid', $row->getSourceProperty('nid'));
+      $query_fa->orderBy('fid', 'ASC');
+      //$query_fa->sort('fid', 'DESC');
+      $mt_results_fa = $query_fa->execute()->fetchAll();
+      foreach ($mt_results_fa as $key => $value) {
+        $fa[$key]['target_id'] = $value->fid;
+        $fa[$key]['target_type'] = 'files';
+        $fa[$key]['description'] = $value->description;
+      }
+    $row->setSourceProperty('field_file_attachments', $fa);
+     // //File Home page -- Open
+     // $query_home = $source->getDatabase()->select('content_field_home_page_image', 'u');
+     // $query_home->fields('u', array('field_home_page_image_fid','vid'));
+     // $query_home->condition('u.nid', $row->getSourceProperty('nid'));
+     // $query_home->orderBy('field_home_page_image_fid', 'ASC');
+     // //$query_fa->sort('fid', 'DESC');
+     // $mt_results_home = $query_home->execute()->fetchAll();
+     // foreach ($mt_results_home as $key => $value) {
+     //   $fa_home[$key]['target_id'] = $value->fid;
+     //   $fa_home[$key]['target_type'] = 'files';
+     //   //$fa_home[$key]['description'] = $value->description;
+     // }
+     // $row->setSourceProperty('field_home_page_image', $fa_home);
+
+      //print_r($mt_results_fa);
+       //File Attachment -- Open
+      $query_fa_home = $source->getDatabase()->select('content_field_home_page_image', 'f');
+      $query_fa_home->fields('f', array('field_home_page_image_fid','nid'));
+      $query_fa_home->condition('f.nid', $row->getSourceProperty('nid'));
+      $mt_results_home = $query_fa_home->execute()->fetchAll();
+      foreach ($mt_results_home as $key => $value) {
+        $fa_home[$key]['target_id'] = $value->field_home_page_image_fid;
+        $fa_home[$key]['target_type'] = 'files';
+      }
+      $row->setSourceProperty('field_home_page_image', $fa_home);
+
+      //SlideShow
+     $query_paragraphs_fid = $source->getDatabase()->select('content_field_slide_image', 'fsi');
+     $query_paragraphs_fid->fields('fsi', array('nid','field_slide_image_fid','delta'));
+     $query_paragraphs_fid->orderBy('fsi.field_slide_image_fid', 'ASC');
+     $query_paragraphs_fid->condition('fsi.nid', $row->getSourceProperty('nid'));
+     $mt_results_paragraphs_fid = $query_paragraphs_fid->execute()->fetchAll();
+    foreach ($mt_results_paragraphs_fid as $key => $value) {
+      if ($value->field_slide_image_fid) {
+        //Caption
+        $query_caption = $source->getDatabase()->select('content_field_slide_caption', 'c');
+        $query_caption->fields('c', array('field_slide_caption_value'));
+        $query_caption->condition('c.nid', $row->getSourceProperty('nid'));
+        $query_caption->condition('c.delta', $value->delta);
+        $mt_results_caption = $query_caption->execute()->fetchAssoc();
+        //Description
+        $query_description = $source->getDatabase()->select('content_field_slide_desc', 'd');
+        $query_description->fields('d', array('field_slide_desc_value'));
+        $query_description->condition('d.nid', $row->getSourceProperty('nid'));
+        $query_description->condition('d.delta', $value->delta);
+        $mt_results_description = $query_description->execute()->fetchAssoc();
+        //end
+       $file = File::load($value->field_slide_image_fid);
+       $ppt_values = array(
+           'id' => NULL,
+           'type' => 'slideshow',
+           'field_slideshow_description' => array('value' => $mt_results_description['field_slide_desc_value'], 'format' => 'full_html'),
+           'field_slideshow_caption' => $mt_results_caption['field_slide_caption_value'],
+           'field_image' => $file,
+           );
+        $ppt_paragraph = Paragraph::create($ppt_values);
+        $ppt_paragraph->save();
+        $target_id_dest = $ppt_paragraph->Id();
+        $target_revision_id_dest = $ppt_paragraph->getRevisionId();
+        $paragraphs[] = array('target_id' => $target_id_dest, 'target_revision_id' => $target_revision_id_dest);
+       }
+       }
+       $row->setSourceProperty('field_image_slideshow', $paragraphs);
+        //Slideshow End
+        //Edited By Start
+        $nid = $row->getSourceProperty('nid');
+        $text = $row->getSourceProperty('field_author_name');
+        $edit = $row->getSourceProperty('field_edited_by');
+        $author = $row->getSourceProperty('field_author_reference');
+        foreach ($author as $key => $val) {
+          $value1[$key]['target_id'] = $val['nid'];
+          $value1[$key]['target_type'] = 'node';
+        }
+        $row->setSourceProperty('field_author_reference', $value1);
+        foreach ($edit as $key1 => $val1) {
+          $edited_by[$key1]['target_id'] = $val1['nid'];
+          $edited_by[$key1]['target_type'] = 'node';
+        }
+        $row->setSourceProperty('field_edited_by', $edited_by);
+      //Field Teaser Open
+      $query_field_teaser = $source->getDatabase()->select('content_field_teaser', 't');
+      $query_field_teaser->fields('t', array('field_teaser_value','field_teaser_format'));
+      $query_field_teaser->condition('t.nid', $row->getSourceProperty('nid'));
+      $result_field_teaser = $query_field_teaser->execute()->fetchAll();
+      foreach ($result_field_teaser as $key => $value) {
+        $field_teaser[0]['value'] = $value->field_teaser_value;
+        $field_teaser[0]['format'] = "full_html";
+      }
+      $row->setSourceProperty('field_teaser', $field_teaser);
+      //Field Teaser Close
+      // $text[0]['value'] = 'rishi';
+      // $text[0]['delta'] = '0';
+      // $row->setSourceProperty('field_author_name', $text);
+        foreach ($mt_results as $key => $val) {
+          $value2[0]['target_id'] = $key;
+          $value2[0]['target_type'] = 'taxonomy_term';
+        }
+        $row->setSourceProperty('field_common_category', $value2);
+      //url alias
+        $query = $source->getDatabase()->select('url_alias', 'ua')
+        ->fields('ua', ['dst']);
+        $query->condition('ua.src', 'node/' . $nid);
+        $alias = $query->execute()->fetchField();
+        $row->setSourceProperty('alias', '/' . $alias);
+        //print_r($row);
+        $process = $migration->getProcess();
+        $row->setSourceProperty('field_social_share', '1');
+        //Event/Knowledge Vault reference
+        $navigation_ref = $row->getSourceProperty('field_event_knowledgevault_ref');
+        foreach ($navigation_ref as $key => $val) {
+          $knowledgevault_navigation_ref[$key]['target_id'] = $val['nid'];
+          $knowledgevault_navigation_ref[$key]['target_type'] = 'node';
+        }
+        $row->setSourceProperty('field_event_knowledgevault_ref', $knowledgevault_navigation_ref);
+        //$created = $row->getSourceProperty('created');
+         $process = $migration->getProcess();
+        // print_r($row);
+    }
+      // ID from the migrate.migration.d6_article.yml.
+    if ($migration->id() == 'd6_partner_content') {
+
+       $nid = $row->getSourceProperty('nid');
+
+
+   
+        //field_home_page_image
+        $query_fa = $source->getDatabase()->select('content_field_home_page_image', 'f');
+      $query_fa->fields('f', array('field_home_page_image_fid','nid'));
+      $query_fa->condition('f.nid', $row->getSourceProperty('nid'));
+      $mt_results_fa = $query_fa->execute()->fetchAll();
+      foreach ($mt_results_fa as $key => $value) {
+        $fa[$key]['target_id'] = $value->field_home_page_image_fid;
+        $fa[$key]['target_type'] = 'files';
+      }
+      $row->setSourceProperty('field_home_page_image', $fa);
+
+      //field_banner_top
+        $query_ba = $source->getDatabase()->select('content_field_banner_1', 'f');
+      $query_ba->fields('f', array('field_banner_1_fid','nid'));
+      $query_ba->condition('f.nid', $row->getSourceProperty('nid'));
+      $mt_results_ba = $query_ba->execute()->fetchAll();
+      foreach ($mt_results_ba as $keyb => $valueb) {
+        $fb[$keyb]['target_id'] = $valueb->field_banner_1_fid;
+        $fb[$keyb]['target_type'] = 'files';
+      }
+      $row->setSourceProperty('field_banner_top', $fb);
+
+        //Field Teaser Open
+      $query_field_teaser = $source->getDatabase()->select('content_field_teaser', 't');
+      $query_field_teaser->fields('t', array('field_teaser_value','field_teaser_format'));
+      $query_field_teaser->condition('t.nid', $row->getSourceProperty('nid'));
+      $result_field_teaser = $query_field_teaser->execute()->fetchAll();
+      foreach ($result_field_teaser as $key => $value) {
+        $field_teaser[0]['value'] = $value->field_teaser_value;
+        $field_teaser[0]['format'] = "full_html";
+      }
+      $row->setSourceProperty('field_teaser', $field_teaser);
+     
+      $url_field = $row->getSourceProperty('field_file_url');
+      print_r($url_field);
+      $row->setSourceProperty('field_url', $url_field);
+
+      $design = $row->getSourceProperty('field_partner_design');
+      
+      if($design[0]['value'] == 1) {
+        $new_desgin = 0;
+
+      }else {
+            $new_desgin = 1;
+
+      }
+
+      $row->setSourceProperty('field_partner_design', $new_desgin);
+     
+      //Start Knowledge Vault tab position
+      $navigation = $row->getSourceProperty('field_knowledgevault_navigation');
+      foreach ($navigation as $key => $val) {
+        $knowledgevault_navigation[$key]['target_id'] = $val['nid'];
+        $knowledgevault_navigation[$key]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_knowledge_vault_navigation', $knowledgevault_navigation);
+      //End Knowledge Vault tab position
+      //Start Home page Slideshow
+      $homepage_second_full_width = $row->getSourceProperty('field_homepage_second_full_width');
+      foreach ($homepage_second_full_width as $key => $val) {
+        $homepage_slideshow[$key]['target_id'] = $val['nid'];
+        $homepage_slideshow[$key]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_homepage_slideshow', $homepage_slideshow);
+      //End Home page Slideshow
+      //Start Left Column
+      $it = $row->getSourceProperty('field_home_page_first_2_it');
+      foreach ($it as $key => $val) {
+        $left_column[$key]['target_id'] = $val['nid'];
+        $left_column[$key]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_home_page_left_column', $left_column);
+      //End Left Column
+      //Start Right Column
+      $co = $row->getSourceProperty('field_home_page_first_2_co');
+      foreach ($co as $key1 => $val1) {
+        $right_column[$key1]['target_id'] = $val1['nid'];
+        $right_column[$key1]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_home_page_right_column', $right_column);
+      //End Right Column
+      //Start Knowledge Vault Sidebar
+      $knowledgevault_sidebar = $row->getSourceProperty('field_knowledgevault_sidebar');
+      foreach ($knowledgevault_sidebar as $key2 => $val2) {
+        $sidebar[$key2]['target_id'] = $val2['nid'];
+        $sidebar[$key2]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_knowledgevault_side', $sidebar);
+      //End Knowledge Vault Sidebar
+
+      //Start slideshow
+      $slideshow = $row->getSourceProperty('field_homepage_slideshow');
+     
+      foreach ($slideshow as $key3 => $val3) {
+        $ss[$key3]['target_id'] = $val3['target_id'];
+        $ss[$key3]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_homepage_slideshow', $ss);
+      //end slideshow
+
+      //Start IDG NEW TAXONOMY
+      $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+      $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+      $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+      $query_idg_new_taxonomy->condition('d.vid', '24');
+      $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+      foreach ($results_idg_new_taxonomy as $key => $val) {
+        $idg_new_taxonomy[$key]['target_id'] = $key;
+        $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_idg_new_taxonomy', $idg_new_taxonomy);
+      //End IDG NEW TAXONOMY
+      //url alias
+        $query = $source->getDatabase()->select('url_alias', 'ua')
+        ->fields('ua', ['dst']);
+        $query->condition('ua.src', 'node/' . $nid);
+        $alias = $query->execute()->fetchField();
+        $row->setSourceProperty('alias', '/' . $alias);
+
+        $process = $migration->getProcess();
+        print_r($row);
+    }
+    if ($migration->id() == 'd6_partner_tab') {
+      $nid = $row->getSourceProperty('nid');
+      //Start Parent Partner Refernce
+      $partner_content_refernce = $row->getSourceProperty('field_partner_content_refernce');
+      foreach ($partner_content_refernce as $key => $val) {
+        $content_refernce[$key]['target_id'] = $val['nid'];
+        $content_refernce[$key]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_partner_content_refernce', $content_refernce);
+      //End Parent Partner Refernce
+      //Start Story Node Reference
+      $top_story_node_ref = $row->getSourceProperty('field_top_story_node_ref');
+      foreach ($top_story_node_ref as $key => $val) {
+        $node_ref[$key]['target_id'] = $val['nid'];
+        $node_ref[$key]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_top_story_node_ref', $node_ref);
+      //End Story Node Reference
+      //Start IDG NEW TAXONOMY
+      $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+      $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+      $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+      $query_idg_new_taxonomy->condition('d.vid', '24');
+      $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+      foreach ($results_idg_new_taxonomy as $key => $val) {
+        $idg_new_taxonomy[$key]['target_id'] = $key;
+        $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_idg_new_taxonomy', $idg_new_taxonomy);
+      //End IDG NEW TAXONOMY
+      //Field Teaser Open
+      $query_field_teaser = $source->getDatabase()->select('content_field_teaser', 't');
+      $query_field_teaser->fields('t', array('field_teaser_value','field_teaser_format'));
+      $query_field_teaser->condition('t.nid', $row->getSourceProperty('nid'));
+      $result_field_teaser = $query_field_teaser->execute()->fetchAll();
+      foreach ($result_field_teaser as $key => $value) {
+        $field_teaser[0]['value'] = $value->field_teaser_value;
+        $field_teaser[0]['format'] = "full_html";
+      }
+      $row->setSourceProperty('field_teaser', $field_teaser);
+      //close
+       //File Attachment -- Open
+      $query_fa = $source->getDatabase()->select('content_field_home_page_image', 'f');
+      $query_fa->fields('f', array('field_home_page_image_fid','nid'));
+      $query_fa->condition('f.nid', $row->getSourceProperty('nid'));
+      $mt_results_fa = $query_fa->execute()->fetchAll();
+      foreach ($mt_results_fa as $key => $value) {
+        $fa[$key]['target_id'] = $value->field_home_page_image_fid;
+        $fa[$key]['target_type'] = 'files';
+      }
+      $row->setSourceProperty('field_home_page_image', $fa);
+      //url alias
+        $query = $source->getDatabase()->select('url_alias', 'ua')
+        ->fields('ua', ['dst']);
+        $query->condition('ua.src', 'node/' . $nid);
+        $alias = $query->execute()->fetchField();
+        $row->setSourceProperty('alias', '/' . $alias);
+        $process = $migration->getProcess();
+    }
+    if ($migration->id() == 'd6_editors_pick') {
+      $nid = $row->getSourceProperty('nid');
+      //Start IDG NEW TAXONOMY
+      $query_idg_new_taxonomy = $source->getDatabase()->select('term_node', 'n');
+      $query_idg_new_taxonomy->fields('n', array('tid','nid'));
+      $query_idg_new_taxonomy->join('term_data', 'd', 'n.tid = d.tid');
+      $query_idg_new_taxonomy->condition('d.vid', '24');
+      $query_idg_new_taxonomy->condition('n.nid', $row->getSourceProperty('nid'));
+      $results_idg_new_taxonomy = $query_idg_new_taxonomy->execute()->fetchAllKeyed();
+      foreach ($results_idg_new_taxonomy as $key => $val) {
+        $idg_new_taxonomy[$key]['target_id'] = $key;
+        $idg_new_taxonomy[$key]['target_type'] = 'taxonomy_term';
+      }
+      $row->setSourceProperty('field_idg_new_taxonomy', $idg_new_taxonomy);
+      //End IDG NEW TAXONOMY
+      //Field Teaser Open
+      $query_field_teaser = $source->getDatabase()->select('content_field_teaser', 't');
+      $query_field_teaser->fields('t', array('field_teaser_value','field_teaser_format'));
+      $query_field_teaser->condition('t.nid', $row->getSourceProperty('nid'));
+      $result_field_teaser = $query_field_teaser->execute()->fetchAll();
+      foreach ($result_field_teaser as $key => $value) {
+        $field_teaser[0]['value'] = $value->field_teaser_value;
+        $field_teaser[0]['format'] = "full_html";
+      }
+      $row->setSourceProperty('field_teaser', $field_teaser);
+      //close
+      //Start Parent Partner Refernce
+      $story_node_ref = $row->getSourceProperty('field_top_story_node_ref');
+      foreach ($story_node_ref as $key => $val) {
+        $node_ref[$key]['target_id'] = $val['nid'];
+        $node_ref[$key]['target_type'] = 'node';
+      }
+      $row->setSourceProperty('field_top_story_node_ref', $node_ref);
+      //End Parent Partner Refernce
+      //url alias
+        $query = $source->getDatabase()->select('url_alias', 'ua')
+        ->fields('ua', ['dst']);
+        $query->condition('ua.src', 'node/' . $nid);
+        $alias = $query->execute()->fetchField();
+        $row->setSourceProperty('alias', '/' . $alias);
+        $process = $migration->getProcess();
+        //print_r($process);
+        //print_r($row);
+        //close
+        //File Attachment -- Open
+      // $query_fa = $source->getDatabase()->select('content_field_home_page_image', 'f');
+      // $query_fa->fields('f', array('field_home_page_image_fid','nid'));
+      // $query_fa->condition('f.nid', $row->getSourceProperty('nid'));
+      // $mt_results_fa = $query_fa->execute()->fetchAll();
+      // foreach ($mt_results_fa as $key => $value) {
+      //   $fa[$key]['target_id'] = $value->field_home_page_image_fid;
+      //   $fa[$key]['target_type'] = 'files';
+      // }
+      // $row->setSourceProperty('field_home_page_image', $fa);
+    }
+ }
+
+/**
+*Get Term ID Ftom Term Name.
+*
+**/
+function cioGetTidByName($name = NULL, $vid = NULL) {
+    $properties = [];
+    if (!empty($name)) {
+      $properties['name'] = $name;
+    }
+    if (!empty($vid)) {
+      $properties['vid'] = $vid;
+    }
+    $terms = \Drupal::entityManager()->getStorage('taxonomy_term')->loadByProperties($properties);
+    $term = reset($terms);
+    return !empty($term) ? $term->id() : 0;
+  }

@@ -1,0 +1,415 @@
+
+@media (max-width:1200px){
+	.leaderviews .container{margin-left:15px;padding-right:30px;}
+	.leaderviews .card {
+    min-width: 100%;
+}
+.listingdiv .cus-img img {
+    height: 100%;
+    width: 100%;
+}
+.listingdiv .container {
+    margin-left: 15px;
+    padding-right: 30px;
+}
+.leaderviews .card-img-top {
+    height: 100%;
+    width: 100%;
+}
+
+
+
+
+/* hambruger code */
+.cus-navbar{block;}
+.mini-submenu {
+    background-color: rgba(0, 0, 0, 0);
+    float: left;
+    padding: 9px;
+    width: 42px;
+}
+.mini-submenu:hover{
+  cursor: pointer;
+}
+
+.mini-submenu .icon-bar {
+  border-radius: 1px;
+  display: block;
+  height: 2px;
+  width: 22px;
+  margin-top: 3px;
+}
+
+.mini-submenu .icon-bar {
+  background-color: #000;
+}
+
+.list-group {
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+    background: #1e4a93 none repeat scroll 0 0;
+    flex-direction: column;
+    margin-bottom: 0;
+    overflow: hidden;
+    padding: 2rem 1.5rem;
+    position: absolute;
+    z-index: 99999;
+}
+#slide-submenu {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border-radius: 4px;
+    color: #26a9e1;
+    cursor: pointer;
+    display: block;
+    font-size: 20px;
+    padding: 0 8px;
+    position: absolute;
+    right: 2px;
+    text-align: right;
+    top: 1px;
+    z-index: 999;
+}
+.list-group li.list-group-item {
+    border: 1px solid #26a9e1;
+	border-right:none;
+	border-left:none;
+    color: #ffffff;
+    display:flex;
+    margin-bottom: -1px;
+    padding: 0.55rem 2.35rem 0.55rem 1px;
+    position: relative;
+	background:unset;
+}
+#slide-submenu + .list-group-item,.list-group .list-group-item:last-child {
+    border: medium none;
+}
+
+.list-group li.list-group-item > a,.list-group li.list-group-item > a.active {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+/* hambruger code */
+}
+
+@media (max-width:1040px){
+	display:block;
+	
+}
+
+@media (max-width: 992px) { 
+
+.cus-navbar {
+    display: none;
+}
+.topbanner.navbar{padding:1px 30px;}
+ .navbar-toggleable-md .navbar-collapse {
+    margin-top: 20px;
+    overflow: hidden;
+	width:49%;
+	float:right;
+}
+#custom-search-input{width:100%;}
+.list-group {
+    margin-left: -17px;
+}
+}
+@media (max-width:767px){
+	.mob-he-br {
+    margin-bottom: 4px;
+}
+.cus-caption1,.cus-caption2{left:60px;}
+.services-text {
+    text-align: center;
+}
+.leaderviews .container.mb-4 {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.leaderviews .col-md-4 {
+    margin-bottom: 20px;
+}
+.leaderviews .card-block {
+    min-height: 200px;
+}
+.leaderviews .container {
+    margin-left: 0;
+    padding-right: 15px;
+}
+/*topsliderdiv code*/
+.topsliderdiv .bx-wrapper {
+    margin: 0 auto;
+}
+.topsliderdiv ul li div.imgdiv {
+    margin-right: 0;
+}
+}
+
+ /* Small devices (landscape phones, 300px and up) */
+@media (max-width: 578px) {
+	
+#navbarsExampleDefault{display:none;}
+.navbar-toggleable-md .navbar-collapse{width:100%;}	
+	#custom-search-input {
+    margin-top: -5px;
+    width: 97%;
+}
+ .container {
+    margin-left: -15px;
+    margin-right: -15px;
+    width: 100%;
+}
+/* .container-fluid .row{margin-right:-4px;} */
+.mobile_search_icon {
+    cursor: pointer;
+    font-size: 25px;
+    position: absolute;
+    right: 0;
+    top: 20px;
+}
+.headerbg {
+    background: #f8f8f8 none repeat scroll 0 0;
+    padding-left: 15px;
+    padding-right: 0;
+}
+
+.mob-he-br{margin-bottom:4px;}
+
+.leaderviews .card{min-width:100%;}
+.leaderviews .card-block {
+    min-height: 280px;
+	
+}
+/* hambruger code */
+.mini-submenu {
+    background-color: rgba(0, 0, 0, 0);
+    float: left;
+    padding: 9px;
+    width: 42px;
+}
+.mini-submenu:hover{
+  cursor: pointer;
+}
+
+.mini-submenu .icon-bar {
+  border-radius: 1px;
+  display: block;
+  height: 2px;
+  width: 22px;
+  margin-top: 3px;
+}
+
+.mini-submenu .icon-bar {
+  background-color: #000;
+}
+
+.list-group {
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+    background: #1e4a93 none repeat scroll 0 0;
+    flex-direction: column;
+    margin-bottom: 0;
+    overflow: hidden;
+    padding: 2rem 1.5rem;
+    position: absolute;
+    z-index: 99999;
+}
+#slide-submenu {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border-radius: 4px;
+    color: #26a9e1;
+    cursor: pointer;
+    display: block;
+    font-size: 20px;
+    padding: 0 8px;
+    position: absolute;
+    right: 2px;
+    text-align: right;
+    top: 1px;
+    z-index: 999;
+}
+.list-group li.list-group-item {
+    border: 1px solid #26a9e1;
+	border-right:none;
+	border-left:none;
+    color: #ffffff;
+    display:flex;
+    margin-bottom: -1px;
+    padding: 0.55rem 2.35rem 0.55rem 1px;
+    position: relative;
+	background:unset;
+}
+#slide-submenu + .list-group-item,.list-group .list-group-item:last-child {
+    border: medium none;
+}
+
+.list-group li.list-group-item > a,.list-group li.list-group-item > a.active {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+/* hambruger code */
+#navbarsExampleDefault {
+    background: #eaeaea none repeat scroll 0 0;
+    bottom: -8px;
+    margin-right: -15px;
+    overflow: hidden;
+    padding-right: 15px;
+    position: relative;
+}
+.cus-caption2,.cus-caption1{
+	left:10%;
+}
+.cus-mob-mustread .row{
+	margin-left:0px;
+	margin-right:0px;	
+}
+.container.cus-mob-mustread {
+    margin-left: 0;
+}
+
+.leaderviews h3, .advisoryboard h3,h3{font-size:1.5rem !important;}
+.leaderviews .container {
+    margin-left: 15px;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 15px;
+}
+.listingdiv .cus-img{padding-left:0px !important;}
+.leaderviews .col-sm-4 {
+    margin-bottom: 15px;
+}
+.leaderviews .row {
+    margin-left: 0;
+    margin-right: 0px;
+}
+.card-img-top {
+    height: 100%;
+    width: 100%;
+}
+ .h3 {
+    font-size: 1.5rem;
+}
+.listingdiv img{width:100% !important;height:100% !important;}
+/* banner code */
+.imgdiv{height:unset;}
+/* banner code */
+ /* listingdiv code */
+ .listingdiv .row {
+    margin-left: 0;
+}
+ .listingdiv .card-block {
+    margin-bottom: 15px;
+}
+.listingdiv .cus-text {
+    margin-left: 15px;
+}
+.listingdiv .cus-img {
+    padding-left: 15px;
+}
+ /* listingdiv code */
+ .advisoryboard .container{margin-left:0px;}
+ .advisoryboard .bx-wrapper .bx-viewport{border:none;box-shadow:unset;left:0px;}
+.advisoryboard .bx-wrapper img{display:inline;}
+.advisoryboard .bx-wrapper ul li{text-align:center;}
+.advisoryboard .bx-wrapper .bx-prev {
+    left:15px;
+}
+.advisoryboard .bx-wrapper .bx-next {
+    right:5px;
+}
+.advisoryboard .bx-wrapper img {
+    max-width: 70%;
+}
+
+.newsletter-section .container {
+    margin-left: 0;
+}
+.services-text{text-align:center;display:block;}
+.main-footer .container.py-3 {
+    margin-left: 15px;
+}
+.main-footer .row.py-3 {
+    width: 100%;
+}
+.footer-content {
+    display: block;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-top: 0;
+    padding-right: 20px;
+    text-align: center;
+	margin-top:5px;
+}
+.cus-logos {
+    float: right;
+    text-align: right;
+    width: 42%;
+}	
+.cus-logos.float-left{text-align:left;}
+
+/* insidepage css */
+.insidepage .container{margin-left:0px;margin-right:0px;}
+.insidepage  .cus-mb .imgdiv{margin-right:0px;}
+/* insidepage css */
+/* listingpage css */
+.listingdiv .list-caption > a h3 {
+    color: #ffffff;
+    margin: 0 auto;
+    width: 90%;
+}
+.listingimg {
+    height: 183px;
+}
+.listingdiv .cus-mb .col-md-12 {
+    padding-left: 0;
+}
+.list-caption{top:5%;}
+.listingimg.imgdiv {
+    margin-right: 0;
+}
+.listingimg.imgdiv img{
+	object-fit:fill;
+}
+.listingdiv .card-block {
+    margin-bottom: 15px;
+    margin-top: 12px;
+}
+/* listingpage css */
+}
+
+/* Small devices (landscape phones, 544px and up) */
+@media (min-width: 544px) {  
+
+
+ 
+}
+ 
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {  
+ 
+}
+ 
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+ 
+}
+ 
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  
+    
+}
+ 
+ 
+ 
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Custom media queries
+*/
+ 
+/* Set width to make card deck cards 100% width */
+@media (max-width: 950px) { 
+ 
+}

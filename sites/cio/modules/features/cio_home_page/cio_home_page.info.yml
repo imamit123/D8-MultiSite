@@ -1,0 +1,9 @@
+name: 'CIO home page'
+type: module
+core: 8.x
+dependencies:
+  - common_content
+  - field
+  - node
+  - paragraphs
+version: 8.x-2.0

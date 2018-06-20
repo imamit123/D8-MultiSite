@@ -1,0 +1,51 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_index
+    - field.field.node.editors_pick.body
+    - field.field.node.editors_pick.comment
+    - field.field.node.editors_pick.field_editor_type
+    - field.field.node.editors_pick.field_guid
+    - field.field.node.editors_pick.field_layout
+    - field.field.node.editors_pick.field_local_guid
+    - field.field.node.editors_pick.field_new_guid
+    - field.field.node.editors_pick.field_node_as_block
+    - field.field.node.editors_pick.field_publish_site
+    - field.field.node.editors_pick.field_teaser
+    - field.field.node.editors_pick.field_top_story
+    - field.field.node.editors_pick.field_top_story_node_ref
+    - field.field.node.editors_pick.upload
+    - node.type.editors_pick
+  module:
+    - user
+id: node.editors_pick.search_index
+targetEntityType: node
+bundle: editors_pick
+mode: search_index
+content:
+  field_editor_type:
+    label: above
+    weight: 40
+    type: number_integer
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden:
+  body: true
+  comment: true
+  field_guid: true
+  field_layout: true
+  field_local_guid: true
+  field_new_guid: true
+  field_node_as_block: true
+  field_publish_site: true
+  field_teaser: true
+  field_top_story: true
+  field_top_story_node_ref: true
+  upload: true

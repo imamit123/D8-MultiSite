@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_node_as_block
+  content:
+    - 'node:editors_pick:d4752ada-c41e-4c7d-9e21-59ecd7655ebd'
+  module:
+    - block_class
+    - entityblock
+  theme:
+    - cio
+third_party_settings:
+  block_class:
+    classes: ''
+id: slideshow
+theme: cio
+region: sidebar_second
+weight: -20
+provider: null
+plugin: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|d4752ada-c41e-4c7d-9e21-59ecd7655ebd|0'
+settings:
+  id: 'entityblock_block:e7b53a00-546e-4b52-91f8-ec066247b979|d4752ada-c41e-4c7d-9e21-59ecd7655ebd|0'
+  label: 'Slide show'
+  provider: entityblock
+  label_display: visible
+  label_override: 0
+visibility: {  }

@@ -1,0 +1,70 @@
+/**
+ * @file
+ * Styles for csoonline buttons.
+ */
+
+ .button {
+  &:hover {
+
+  }
+  &:active {
+
+  }
+  &:focus {
+
+  }
+  &:visited {
+
+  }
+ }
+
+.common-detail-pages {
+	.views-field-field-webform {
+		clear: both;
+	}
+}
+
+.webform-submission-form {
+	margin-top: 10px;
+	label {
+		display: block;
+		font-family: 'OpenSansBold', sans-serif;
+	}
+	input {
+		height: 21px;
+    font-size: 13px;
+    @media all and (max-width: 767px) {
+    	width: 100%;
+    }	
+	}
+	input[type="submit"] {
+		height: auto;
+		font-size: 13px;
+		@media all and (max-width: 767px) {
+    	width: auto;
+    }
+	}		
+	.description {
+		font-size: 13px;
+    margin-top: 5px;
+	}
+	.form-type-webform-markup {
+		font-family: "OpenSansRegular", sans-serif;
+    font-size: 18px;
+    &:empty {
+    	display: none;
+    }
+	}
+}
+
+.download-btn {
+	background: $color-btn;
+  color: $color-white;
+  padding: 10px 15px;
+  margin-top: 10px;
+  display: inline-block;
+  float: right;
+  &:hover, &:focus {
+  	background: $color-secondary;
+  }
+}

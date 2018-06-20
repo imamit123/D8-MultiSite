@@ -1,0 +1,14 @@
+idg-styling:
+  css:
+    main:
+      css/style.css: {}
+    normalize:
+      css/normalize.css: {}
+    vendor:
+      css/enscroll.css: {}  
+  js:
+    js/enscroll-0.6.2.min.js: {}
+    js/jquery.pikachoose.min.js: {}
+    js/jquery.jcarousel.min.js: {}
+    js/custom.js: {}
+   

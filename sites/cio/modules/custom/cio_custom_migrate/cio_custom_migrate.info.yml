@@ -1,0 +1,8 @@
+name: CIO Custom migrate
+type: module
+description: Defines custom migration for CIO.
+core: 8.x
+package: Custom
+dependencies:
+  - migrate_drupal
+  - migrate_plus

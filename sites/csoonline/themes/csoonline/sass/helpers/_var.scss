@@ -1,0 +1,69 @@
+/* variables for the IDG site */
+
+$container: 1080px;
+
+/* colors */
+$color-black: #000;
+$color-white: #fff;
+$color-lightblack: #2d2d2d;
+$color-grey: #333;
+$color-blue: #00aeef;
+
+$color-bg-one: #e4e4e4;
+$color-bg-two: #ed1c24;
+$color-bg-three: #f9f9f9;
+$color-border: #d1d1d1;
+$color-border-2: #e1e1e1;
+$color-border-3: #e19000;
+$color-primary: #444;
+$color-secondary: #c32d36;
+$color-secondary-1: #e39a29;
+$color-footer-bg: #f2f2f2;
+$quick-link-bg: #e4e4e4;
+$main-menu-bg: #ed1c24;
+$color-body-text: #666;
+$color-lightblue: #1f8bed;
+
+$color-btn: #2d388c;
+$body-bg: #f9f9f9;
+$link: '';
+$visit:'';
+$hover: '';
+$active: '';
+
+/* fonts */
+$font-primary: 'RobotoSlabRegular', serif;
+$font-primary-light: 'RobotoSlabLight', serif;
+$font-secondary: 'OpenSansRegular', sans-serif;
+$font-robotobold: 'RobotoSlabBold', serif;
+$font-secondary-bold: 'OpenSansBold', sans-serif;
+$font-scondary-semiBold: 'OpenSansSemiBold', sans-serif;
+$font-scondary-light: 'OpenSansLight', sans-serif;
+$font-basicsize: 16px;
+$font-weight-base: '';
+$line-height-base: 1.2;
+$h1-font-size: '';
+$h2-font-size: '';
+$h3-font-size: '';
+$h4-font-size: '';
+$h5-font-size: '';
+$h6-font-size: '';
+$headings-margin-bottom: '';
+$headings-font-family: '';
+$headings-font-weight: '';
+$headings-line-height: '';
+$headings-color: '';
+
+/* images */
+$url: "../images";
+$background-image: url('#{$url}');
+$social-icons: url('../images/Sprite.png') no-repeat;
+
+/**** break points ****/
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;

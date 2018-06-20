@@ -1,0 +1,21 @@
+{% set parent_node = node.field_partner_reference.entity.label %}
+{% set knowledge_ref = parent_node.entity.field_knowledge_vault_navigation %}
+
+<div class="special-pages">
+  {% if bg_image is not empty %}
+  <a href="/node/{{ pc_id }}">
+    <img src="{{ file_url(bg_image)}}"></a>
+  {% endif %}
+  <div class="tabs-content">
+    <div class="field-content">
+      <div>
+        <a href="/node/{{ pc_id }}" style="background:{{ tab_color }}">Home</a>
+        {% for item in pc_node.field_knowledge_vault_navigation %}
+          <a href="/node/{{item.entity.field_partner_label[0].entity.nid[0].value}}" style="background:{{ tab_color }}">
+            {{item.entity.field_partner_label.value}}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

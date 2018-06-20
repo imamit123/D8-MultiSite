@@ -1,0 +1,112 @@
+/*
+** style for image right text.
+*/
+.listing-page-style {
+	.views-row {
+		border-bottom: 1px solid $color-border-2;
+		position: relative;
+		@at-root .event-partner-list#{&} {
+			border-bottom: none;
+			display: inline-block;
+			margin-bottom: 14px;
+			width: 100%;
+			@media all and (max-width: 767px) {
+				border-bottom: 1px solid $color-border-2;
+			}
+		}
+		&:empty {
+      display: none;
+    }	
+	}
+	.wrap-sponsored {
+		position: absolute;
+    right: 0;
+    top: -15px;
+	}
+	.image-right-text {
+		@include flexbox;
+		margin-top: 20px;
+		margin-bottom: 20px;
+		@at-root .event-partner-list#{&} {
+			margin-top: 4px;
+		}	
+		.image-left {
+			@include flex(1 1 25%);
+			@media all and (max-width: 767px) {
+				@include flex(1);
+				margin-right: 1em;
+				@at-root .event-partner-list#{&} {
+					@include flex(1 1 100%);
+					margin-right: 0;
+					text-align: center;
+					img {
+						width: 225px;
+					}
+				}
+			}
+			@media all and (min-width: 768px) and (max-width: 1024px) {
+				margin-right: 1em;
+			}
+			&:empty {
+				display: none;
+			}
+			&:empty + .wrap-right-text {
+				@include flex(1 1 100%);
+				margin-left: 0;
+			}
+		}
+		.wrap-right-text {
+			@include flex(1 1 70%);
+			@media all and (max-width: 767px) {
+				@include flex(1 1 50%);
+				@at-root .event-partner-list#{&} {
+					@include flex(1 1 100%);
+					margin-top: 5px;
+					text-align: center;
+				}	
+			}
+			@media all and (min-width: 768px) and (max-width: 1024px) {
+				@include flex(1 1 68%);
+			}
+			a {
+				font-family: $font-robotobold;
+			}
+		}
+		.body-desc {
+			color: $color-body-text;
+			margin-top: 10px;
+			word-break: break-word;
+			@at-root .event-partner-list#{&} {
+				color: $color-primary;
+				font-family: $font-secondary;
+				@media all and (max-width: 767px) {
+					display: block;
+					padding: 0 10px;
+					text-align: left;
+				}
+			}
+			@media all and (max-width: 767px) {
+				display: none;
+			}
+		}
+		a {
+			@at-root .event-partner-list#{&} {
+				font-size: 19px;
+			}	
+			&:hover,
+			&:focus {
+				color: $color-black;
+			}
+		}
+	}
+}
+.partner-text {
+	background: $color-black;
+	color: $color-secondary-1;
+	font-family: $font-primary;
+	font-size: 10px;
+	padding: 2px;
+	&:empty {
+		display: none;
+	}
+}

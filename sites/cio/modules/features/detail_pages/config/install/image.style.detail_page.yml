@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: detail_page
+label: 'detail page'
+effects:
+  c01a23d6-bdaa-4aaf-952d-0e9163b67f3b:
+    uuid: c01a23d6-bdaa-4aaf-952d-0e9163b67f3b
+    id: image_scale
+    weight: 1
+    data:
+      width: 352
+      height: 264
+      upscale: false

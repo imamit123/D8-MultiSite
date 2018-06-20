@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: detailpage
+label: 'detail page'
+effects:
+  92a8b68b-041a-481f-9a32-d8d97a8e9c6c:
+    uuid: 92a8b68b-041a-481f-9a32-d8d97a8e9c6c
+    id: image_scale
+    weight: 1
+    data:
+      width: 352
+      height: 264
+      upscale: false
